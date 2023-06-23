@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from '@containers/app';
+import { App } from '@@containers/app';
 
 import '@vkontakte/vkui/dist/vkui.css';
 import './index.scss';

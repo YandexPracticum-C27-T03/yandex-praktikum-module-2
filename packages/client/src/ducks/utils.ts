@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GLOBAL_ACTION_PREFIX } from '@constants';
+import { GLOBAL_ACTION_PREFIX } from '@@constants';
 import { createAction, PrepareAction, PayloadActionCreator } from '@reduxjs/toolkit';
 import { IThunkDispatch, RootState } from './types';
 

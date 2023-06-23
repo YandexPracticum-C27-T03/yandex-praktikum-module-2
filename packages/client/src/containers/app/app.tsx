@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
-import { configureReduxStore } from '@ducks/store';
-import { useTheme } from '@hooks/useTheme';
-import { Initial } from '@pages/initial';
-import { cn } from '@utils/bem';
+import { configureReduxStore } from '@@ducks/store';
+import { useTheme } from '@@hooks/useTheme';
+import { Initial } from '@@pages/initial';
+import { cn } from '@@utils/bem';
 
 import './styles.scss';
 

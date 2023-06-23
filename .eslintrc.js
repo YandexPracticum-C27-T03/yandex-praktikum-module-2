@@ -5,7 +5,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  plugins: ['@typescript-eslint', 'react-hooks', 'import'],
+  plugins: ['import', '@typescript-eslint', 'react-hooks'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -31,6 +31,7 @@ module.exports = {
     },
   },
   rules: {
+    'import/no-unresolved': 0,
     '@typescript-eslint/ban-ts-comment': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'warn',
     '@typescript-eslint/no-explicit-any': 'warn',
@@ -47,7 +48,6 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'no-prototype-builtins': 1,
     'no-debugger': 'warn',
-    'import/no-unresolved': 0,
     'import/order': [
       'error',
       {
@@ -73,34 +73,50 @@ module.exports = {
           //   group: 'external',
           //   position: 'after',
           // },
+          // {
+          //   pattern: '**',
+          //   group: 'internal',
+          //   position: 'before',
+          // },
           {
-            pattern: '@components/**',
-            group: 'internal',
-          },
-          {
-            pattern: '@containers/**',
-            group: 'internal',
-          },
-          {
-            pattern: '@ducks/**',
-            group: 'internal',
-          },
-          {
-            pattern: '@hooks/**',
-            group: 'internal',
-          },
-          {
-            pattern: '@pages/**',
-            group: 'internal',
-          },
-          {
-            pattern: '@types/**',
+            pattern: '@@constants/**',
             group: 'internal',
             position: 'after',
           },
           {
-            pattern: '@utils/**',
+            pattern: '@@components/**',
             group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@@containers/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@@ducks/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@@hooks/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@@pages/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@@types/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@@utils/**',
+            group: 'internal',
+            position: 'after',
           },
         ],
         pathGroupsExcludedImportTypes: ['react'],

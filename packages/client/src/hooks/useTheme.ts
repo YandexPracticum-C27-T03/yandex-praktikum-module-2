@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { AppearanceType } from '@vkontakte/vk-bridge';
-import { toggleTheme } from '@ducks/settings/actions';
-import { isDarkThemeSelector } from '@ducks/settings/selectors';
-import { makeMapDispatch, makeMapState, useMapDispatch, useMapState } from '@ducks/utils';
+import { toggleTheme } from '@@ducks/settings/actions';
+import { isDarkThemeSelector } from '@@ducks/settings/selectors';
+import { makeMapDispatch, makeMapState, useMapDispatch, useMapState } from '@@ducks/utils';
 
 type IUseTheme = () => [AppearanceType, boolean, () => void];
 

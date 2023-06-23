@@ -1,6 +1,6 @@
 import { Button } from '@vkontakte/vkui';
-import { useTheme } from '@hooks/useTheme';
-import { cn } from '@utils/bem';
+import { useTheme } from '@@hooks/useTheme';
+import { cn } from '@@utils/bem';
 
 const cnInitial = cn('Initial');
 export const Initial = () => {
