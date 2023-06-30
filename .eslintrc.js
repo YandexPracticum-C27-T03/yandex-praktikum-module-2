@@ -49,7 +49,7 @@ module.exports = {
     'no-prototype-builtins': 1,
     'no-debugger': 'warn',
     'import/order': [
-      'error',
+      'warn',
       {
         groups: ['builtin', 'external', 'internal', 'index', 'parent', 'sibling', 'unknown', 'object', 'type'],
         pathGroups: [

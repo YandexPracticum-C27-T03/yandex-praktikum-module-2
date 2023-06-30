@@ -1,8 +1,9 @@
 import { Outlet } from 'react-router-dom';
+import { useAppSelector } from '@@/shared/lib/model/hooks';
 import { selectCurrentTheme } from '@@entities/theme';
-import { useAppSelector } from '@@shared/lib/model/hooks';
-import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 import { cn } from '@@shared/lib/bem';
+
+import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 
 import './styles.scss';
 
