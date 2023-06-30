@@ -12,7 +12,7 @@ export const MainPage = () => {
 
   return (
     <div>
-      <p>{`Текущая тема: ${theme}`}</p>
+      <p data-test-id="main">{`Текущая тема: ${theme}`}</p>
       <Button appearance="accent" onClick={onToggleTheme}>
         ToggleTheme
       </Button>
