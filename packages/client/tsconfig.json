@@ -20,7 +20,7 @@
       "@@*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "types"],
   "exclude": ["dist", "node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
