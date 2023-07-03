@@ -44,4 +44,4 @@ const routerConfig = [
   },
 ];
 
-export const appRouter = () => createBrowserRouter(routerConfig);
+export const appRouter = createBrowserRouter(routerConfig);

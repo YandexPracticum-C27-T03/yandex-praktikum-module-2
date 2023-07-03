@@ -1,6 +1,6 @@
 import * as process from 'process';
 import { configureStore } from '@reduxjs/toolkit';
-import { reducer } from './rootReducer';
+import { reducer } from './root-reducer';
 
 const configureReduxStore = () => {
   const store = configureStore({

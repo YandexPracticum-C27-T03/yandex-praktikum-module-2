@@ -1,3 +1,3 @@
-import { initialazeApp } from '@@app/appEntry';
+import { initialazeApp } from '@@app/app-entry';
 
 initialazeApp();
