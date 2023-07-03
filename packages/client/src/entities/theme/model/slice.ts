@@ -14,11 +14,13 @@ export const themeSlice = createSlice({
   name: 'entities/theme',
   initialState,
   reducers: {
-    setCurrentTheme(state, actions: PayloadAction<Theme>) {
-      const { payload } = actions;
-      state.theme = payload === THEMES.light ? THEMES.dark : THEMES.light;
+    toggleTheme(state) {
+      state.theme = state.theme === THEMES.light ? THEMES.dark : THEMES.light;
+    },
+    setCurrentTheme(state, action: PayloadAction<Theme>) {
+      state.theme = action.payload;
     },
   },
 });
 
-export const { setCurrentTheme } = themeSlice.actions;
+export const { setCurrentTheme, toggleTheme } = themeSlice.actions;

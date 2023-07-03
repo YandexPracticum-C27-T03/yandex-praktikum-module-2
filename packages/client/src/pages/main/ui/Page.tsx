@@ -1,19 +1,24 @@
-import { selectCurrentTheme, setCurrentTheme } from '@@entities/theme';
-import { useAppDispatch, useAppSelector } from '@@shared/lib/model/hooks';
+import { selectCurrentTheme } from '@@entities/theme';
+import { toggleTheme } from '@@entities/theme/model/slice';
+import { makeMapDispatch, makeMapState, useMapDispatch, useMapState } from '@@shared/lib/model/hooks';
 import { Button } from '@vkontakte/vkui';
 
-export const MainPage = () => {
-  const theme = useAppSelector(selectCurrentTheme);
-  const dispatch = useAppDispatch();
+const mapState = makeMapState((state) => ({
+  currentTheme: selectCurrentTheme(state),
+}));
 
-  function onToggleTheme() {
-    dispatch(setCurrentTheme(theme));
-  }
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  toggleTheme: () => dispatch(toggleTheme()),
+}));
+
+export const MainPage = () => {
+  const { currentTheme } = useMapState(mapState);
+  const { toggleTheme } = useMapDispatch(mapDispatch);
 
   return (
     <div>
-      <p data-test-id="main">{`Текущая тема: ${theme}`}</p>
-      <Button appearance="accent" onClick={onToggleTheme}>
+      <p data-test-id="main">{`Текущая тема: ${currentTheme}`}</p>
+      <Button appearance="accent" onClick={toggleTheme}>
         ToggleTheme
       </Button>
     </div>
