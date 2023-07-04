@@ -1,0 +1,10 @@
+.Form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &-body {
+    width: 300px;
+  }
+}
