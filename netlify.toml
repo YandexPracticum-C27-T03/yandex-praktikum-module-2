@@ -1,0 +1,8 @@
+[build]
+  publish = "packages/client/dist/"
+  command = "echo y | yarn bootstrap && yarn build:client"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
