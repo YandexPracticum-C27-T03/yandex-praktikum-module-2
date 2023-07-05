@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { useForm, Controller, FieldValues, Path } from 'react-hook-form';
 import { IForm } from '@@shared/lib/types';
 import { cn } from '@bem-react/classname';
@@ -16,6 +17,7 @@ import {
   Input,
   Button,
   FormLayout,
+  InputProps,
 } from '@vkontakte/vkui';
 
 type Props<T> = {
@@ -36,6 +38,10 @@ export const Form = function <T extends FieldValues>({ cb, fields, title, button
 
   const onSubmit = handleSubmit(cb);
 
+  const RefInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+    return <Input {...props} getRef={ref} />;
+  });
+
   return (
     <SplitLayout header={<PanelHeader separator={false} />}>
       <SplitCol autoSpaced>
@@ -52,6 +58,7 @@ export const Form = function <T extends FieldValues>({ cb, fields, title, button
 
                       return (
                         <Controller
+                          key={name}
                           control={control}
                           name={name as Path<T>}
                           rules={rules}
@@ -62,7 +69,7 @@ export const Form = function <T extends FieldValues>({ cb, fields, title, button
                               top={label}
                               htmlFor={name}
                             >
-                              <Input id={name} {...field} {...input} />
+                              <RefInput id={name} {...field} {...input} />
                             </FormItem>
                           )}
                         />

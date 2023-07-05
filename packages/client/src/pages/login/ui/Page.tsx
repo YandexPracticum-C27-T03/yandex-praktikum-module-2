@@ -1,15 +1,19 @@
+import { login } from '@@entities/user';
+import { UserLogin } from '@@entities/user/model/types';
 import { loginFormFields } from '@@shared/lib/constants/login-form-fields';
+import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { Form } from '@@shared/ui/Form';
 
-export interface Data {
-  login: string;
-  password: string;
-}
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  login: (data: UserLogin) => dispatch(login(data)),
+}));
 
 export const LoginPage = () => {
-  const onSubmit = async (data: Data) => {
-    // Регистрируем
+  const { login } = useMapDispatch(mapDispatch);
+
+  const onSubmit = async (data: UserLogin) => {
+    login(data);
   };
 
-  return <Form<Data> title="Авторизация" fields={loginFormFields} cb={onSubmit} buttonValue="Войти" />;
+  return <Form<UserLogin> title="Авторизация" fields={loginFormFields} cb={onSubmit} buttonValue="Войти" />;
 };
