@@ -7,7 +7,7 @@ const configureReduxStore = () => {
     reducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-        serializableCheck: true,
+        serializableCheck: false,
         immutableCheck: true,
       }),
     devTools: process.env.NODE_ENV === 'development',
