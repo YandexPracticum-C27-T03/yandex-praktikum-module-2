@@ -6,7 +6,7 @@ import { appRouter } from '@@app/app-router';
 import { appStore } from '@@app/app-store';
 
 import '@vkontakte/vkui/dist/vkui.css';
-import { AuthProvider } from './auth-provider';
+import { AuthProvider } from './providers/AuthProvider';
 
 const container = document.getElementById('root');
 

@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { axiosInstance } from './axios-config';
 
-export default abstract class http {
+export abstract class http {
   protected http: AxiosInstance;
 
   protected constructor(endpoint: string) {

@@ -1,3 +1,4 @@
+import { AuthLayout } from '@@app/layouts/AuthLayout';
 import { login } from '@@entities/user';
 import { UserLogin } from '@@entities/user/model/types';
 import { loginFormFields } from '@@shared/lib/constants/login-form-fields';
@@ -11,9 +12,11 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
 export const LoginPage = () => {
   const { login } = useMapDispatch(mapDispatch);
 
-  const onSubmit = async (data: UserLogin) => {
-    login(data);
-  };
+  const onSubmit = async (data: UserLogin) => login(data);
 
-  return <Form<UserLogin> title="Авторизация" fields={loginFormFields} cb={onSubmit} buttonValue="Войти" />;
+  return (
+    <AuthLayout title="Авторизация">
+      <Form<UserLogin> fields={loginFormFields} cb={onSubmit} buttonValue="Войти" />
+    </AuthLayout>
+  );
 };

@@ -1,3 +1,4 @@
+import { AuthLayout } from '@@app/layouts/AuthLayout';
 import { registration } from '@@entities/user';
 import { UserRegistration } from '@@entities/user/model/types';
 import { registerFormFields } from '@@shared/lib/constants/register-form-fields';
@@ -11,16 +12,11 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
 export const RegistrationPage = () => {
   const { registration } = useMapDispatch(mapDispatch);
 
-  const onSubmit = async (data: UserRegistration) => {
-    registration(data);
-  };
+  const onSubmit = async (data: UserRegistration) => registration(data);
 
   return (
-    <Form<UserRegistration>
-      title="Регистрация"
-      fields={registerFormFields}
-      cb={onSubmit}
-      buttonValue="Зарегистрироваться"
-    />
+    <AuthLayout title="Регистрация">
+      <Form<UserRegistration> fields={registerFormFields} cb={onSubmit} buttonValue="Зарегистрироваться" />
+    </AuthLayout>
   );
 };

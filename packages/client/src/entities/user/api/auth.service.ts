@@ -19,4 +19,4 @@ class AuthService extends http {
   }
 }
 
-export default new AuthService();
+export const authService = new AuthService();

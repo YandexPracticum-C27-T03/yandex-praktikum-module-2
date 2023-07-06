@@ -1,4 +1,4 @@
-import { userSlice } from '@@entities/user/model/slice';
+import { userSlice } from '@@entities/user';
 import { combineReducers } from '@reduxjs/toolkit';
 import { themeSlice } from '../entities/theme';
 

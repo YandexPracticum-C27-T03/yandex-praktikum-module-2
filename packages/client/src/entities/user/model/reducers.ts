@@ -1,4 +1,4 @@
-import authService from '@@entities/user/api/auth.service';
+import { authService } from '@@entities/user';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { UserLogin, UserRegistration } from './types';
 

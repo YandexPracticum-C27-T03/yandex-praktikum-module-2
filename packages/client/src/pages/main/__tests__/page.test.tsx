@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
 import { themeSlice } from '@@entities/theme';
 import { THEMES } from '@@entities/theme/model/contants';
-import { userSlice } from '@@entities/user/model/slice';
+import { userSlice } from '@@entities/user';
 import { configureStore } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { MainPage } from '../ui/Page';
