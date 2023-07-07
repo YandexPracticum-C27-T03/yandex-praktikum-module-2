@@ -13,3 +13,8 @@ export type TopicWithComments = {
   topic: Topic;
   comments: Comment[];
 };
+
+export type CardProps = {
+  title: string;
+  content: string;
+};

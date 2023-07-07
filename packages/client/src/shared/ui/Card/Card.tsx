@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card as VKUICard, Div } from '@vkontakte/vkui';
-import './Card.styles.css';
+import { CardProps } from '@@entities/forum/model/types';
 
-const Card = ({ title, content }) => {
+const Card: React.FC<CardProps> = ({ title, content }) => {
   return (
     <VKUICard mode="shadow" className="card">
       <Div>
