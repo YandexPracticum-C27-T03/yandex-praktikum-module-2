@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Panel, PanelHeader, Group } from '@vkontakte/vkui';
-import TopicList from '../TopicList/TopicList';
-import CreateTopicForm from '../CreateTopicForm/CreateTopicForm';
+import { View, Panel, PanelHeader, Group, Link } from '@vkontakte/vkui';
+import TopicList from '../TopicList/topic-list';
 
 export const ForumPage = () => {
   return (
@@ -9,7 +8,7 @@ export const ForumPage = () => {
       <Panel id="forum">
         <PanelHeader>Форум</PanelHeader>
         <Group>
-          <CreateTopicForm />
+          <Link href="/forum/create-topic">Создать топик</Link>
         </Group>
         <Group>
           <TopicList />

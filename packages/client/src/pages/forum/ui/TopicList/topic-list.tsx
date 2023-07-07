@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardGrid, Card, Div, Button } from '@vkontakte/vkui';
+import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
 
 const TopicList = () => {
   const topics = [
@@ -16,9 +16,11 @@ const TopicList = () => {
             <h3>{topic.title}</h3>
             <p>{topic.summary}</p>
           </Div>
-          <Button size="l" mode="tertiary">
-            Добавить комментарий
-          </Button>
+          <Link href={`/forum/topic/${topic.id}`}>
+            <Button size="l" mode="tertiary">
+              Добавить комментарий
+            </Button>
+          </Link>
         </Card>
       ))}
     </CardGrid>

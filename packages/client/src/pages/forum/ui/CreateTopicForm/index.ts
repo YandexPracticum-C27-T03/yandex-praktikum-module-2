@@ -1,1 +1,1 @@
-export { default } from './CreateTopicForm';
+export { CreateTopicForm } from './create-topic-form';

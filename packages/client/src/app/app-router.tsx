@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { ForumPage } from '@@pages/forum';
+import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { LeaderBoardPage } from '@@pages/leaderboard';
 import { LoginPage } from '@@pages/login';
@@ -39,6 +39,14 @@ const routerConfig = [
       {
         path: '/forum',
         element: <ForumPage />,
+      },
+      {
+        path: '/forum/create-topic',
+        element: <CreateTopicForm />,
+      },
+      {
+        path: '/forum/topic/:id',
+        element: <SingleTopic />,
       },
     ],
   },
