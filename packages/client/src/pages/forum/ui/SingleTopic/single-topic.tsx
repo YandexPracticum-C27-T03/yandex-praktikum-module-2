@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Panel, PanelHeader, Group, Card, Div, Button, Spinner } from '@vkontakte/vkui';
+import { Comment } from '@@entities/forum/model/types';
+import { View, Panel, PanelHeader, Group, Card, Div, Spinner } from '@vkontakte/vkui';
 import { AddCommentForm } from '../AddCommentForm';
 import CommentList from '../CommentList';
 
@@ -13,10 +14,10 @@ export const SingleTopic = () => {
     content: 'Содержание топика 1',
   };
 
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]); // Использование типа Comment[] для комментариев
 
-  const handleSubmitComment = (comment: any) => {
-    const newComment = {
+  const handleSubmitComment = (comment: string) => {
+    const newComment: Comment = {
       id: comments.length + 1,
       text: comment,
     };

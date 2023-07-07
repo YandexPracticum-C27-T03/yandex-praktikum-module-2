@@ -1,7 +1,8 @@
 import React from 'react';
+import { Comment } from '@@entities/forum/model/types';
 import { Card, Div } from '@vkontakte/vkui';
 
-const CommentList = ({ comments }: any) => {
+const CommentList = ({ comments }: { comments: Comment[] }) => {
   return (
     <Card>
       {comments.map((comment) => (

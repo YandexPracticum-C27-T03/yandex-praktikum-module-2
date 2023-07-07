@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { View, Panel, PanelHeader, Group, FormLayout, Input, Textarea, Button } from '@vkontakte/vkui';
 
 export const CreateTopicForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Отправляем запрос на создание топика
   };
@@ -18,9 +18,7 @@ export const CreateTopicForm = () => {
           <FormLayout onSubmit={handleSubmit}>
             <Input type="text" placeholder="Заголовок" value={title} onChange={(e) => setTitle(e.target.value)} />
             <Textarea placeholder="Содержание" value={content} onChange={(e) => setContent(e.target.value)} />
-            <Button sizes="xl" type="submit">
-              Создать
-            </Button>
+            <Button type="submit">Создать</Button>
           </FormLayout>
         </Group>
       </Panel>

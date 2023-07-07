@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { FormLayout, Textarea, Button } from '@vkontakte/vkui';
 
 export const AddCommentForm = () => {
   const [comment, setComment] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Ваша логика для отправки комментария на сервер
-    // Например, вызов функции для создания комментария
-    // или отправка комментария на сервер с помощью API запроса
+    // Логика для отправки комментария на сервер
   };
 
   return (
