@@ -1,9 +1,9 @@
-import { AuthLayout } from '@@app/layouts/AuthLayout';
 import { login } from '@@entities/user';
 import { UserLogin } from '@@entities/user/model/types';
 import { loginFormFields } from '@@shared/lib/constants/login-form-fields';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { Form } from '@@shared/ui/Form';
+import { AuthLayout } from '@@widgets/auth-layout';
 
 const mapDispatch = makeMapDispatch((dispatch) => ({
   login: (data: UserLogin) => dispatch(login(data)),

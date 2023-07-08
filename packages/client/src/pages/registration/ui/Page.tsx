@@ -1,9 +1,9 @@
-import { AuthLayout } from '@@app/layouts/AuthLayout';
 import { registration } from '@@entities/user';
 import { UserRegistration } from '@@entities/user/model/types';
 import { registerFormFields } from '@@shared/lib/constants/register-form-fields';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { Form } from '@@shared/ui/Form';
+import { AuthLayout } from '@@widgets/auth-layout';
 
 const mapDispatch = makeMapDispatch((dispatch) => ({
   registration: (data: UserRegistration) => dispatch(registration(data)),

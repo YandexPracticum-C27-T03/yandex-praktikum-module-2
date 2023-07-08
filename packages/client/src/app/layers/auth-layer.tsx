@@ -7,7 +7,7 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
   fetchUser: () => dispatch(fetchUser()),
 }));
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthLayer = ({ children }: { children: React.ReactNode }) => {
   const { fetchUser } = useMapDispatch(mapDispatch);
   const { isAuth, user } = useAuth();
 
