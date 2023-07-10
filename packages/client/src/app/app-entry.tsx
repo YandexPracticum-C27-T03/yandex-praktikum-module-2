@@ -6,7 +6,6 @@ import { appRouter } from '@@app/app-router';
 import { appStore } from '@@app/app-store';
 
 import '@vkontakte/vkui/dist/vkui.css';
-import { AuthProvider } from './providers/AuthProvider';
 
 const container = document.getElementById('root');
 
@@ -16,14 +15,11 @@ if (!container) {
 
 const root = createRoot(container);
 
-export const initialazeApp = () => {
+export const initialazeApp = () =>
   root.render(
     <React.StrictMode>
       <Provider store={appStore}>
-        <AuthProvider>
-          <RouterProvider router={appRouter} />
-        </AuthProvider>
+        <RouterProvider router={appRouter} />
       </Provider>
     </React.StrictMode>,
   );
-};

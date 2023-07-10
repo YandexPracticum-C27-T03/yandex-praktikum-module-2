@@ -1,22 +1,19 @@
-import { AuthLayout } from '@@app/layouts/AuthLayout';
-import { registration } from '@@entities/user';
-import { UserRegistration } from '@@entities/user/model/types';
 import { registerFormFields } from '@@shared/lib/constants/register-form-fields';
-import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { Form } from '@@shared/ui/Form';
 
-const mapDispatch = makeMapDispatch((dispatch) => ({
-  registration: (data: UserRegistration) => dispatch(registration(data)),
-}));
+export interface Data {
+  first_name: string;
+  second_name: string;
+  login: string;
+  email: string;
+  password: string;
+  phone: string;
+}
 
 export const RegistrationPage = () => {
-  const { registration } = useMapDispatch(mapDispatch);
+  const onSubmit = async (data: Data) => {
+    // Регистрируем
+  };
 
-  const onSubmit = async (data: UserRegistration) => registration(data);
-
-  return (
-    <AuthLayout title="Регистрация">
-      <Form<UserRegistration> fields={registerFormFields} cb={onSubmit} buttonValue="Зарегистрироваться" />
-    </AuthLayout>
-  );
+  return <Form<Data> title="Регистрация" fields={registerFormFields} cb={onSubmit} buttonValue="Зарегистрироваться" />;
 };
