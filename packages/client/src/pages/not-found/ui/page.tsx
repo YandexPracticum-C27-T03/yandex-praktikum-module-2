@@ -1,7 +1,8 @@
 import { MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Routes } from '@@features';
 import { cn } from '@@shared/lib/bem';
-import { AuthLayout } from '@@widgets/auth-layout';
+import { HeaderLayout } from '@@widgets/header-layout';
 import { Icon28BillSeparatedOutline } from '@vkontakte/icons';
 import { Div, Card, Text } from '@vkontakte/vkui';
 
@@ -10,14 +11,16 @@ import './styles.scss';
 const cnNotFoundPage = cn('NotFoundPage');
 
 export const NotFoundPage = () => {
+  const navigate = useNavigate();
+
   const onGoBackClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    window.history.back();
+    navigate(-1);
   };
 
   return (
-    <AuthLayout>
+    <HeaderLayout>
       <Card mode="shadow" className={cnNotFoundPage()}>
         <Div className={cnNotFoundPage('header')}>
           <Text weight="1">
@@ -35,6 +38,6 @@ export const NotFoundPage = () => {
           </p>
         </Div>
       </Card>
-    </AuthLayout>
+    </HeaderLayout>
   );
 };

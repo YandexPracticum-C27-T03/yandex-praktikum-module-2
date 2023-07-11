@@ -1,6 +1,6 @@
 import { Routes } from '@@features';
 import { cn } from '@@shared/lib/bem';
-import { AuthLayout } from '@@widgets/auth-layout';
+import { HeaderLayout } from '@@widgets/header-layout';
 import { Icon28BugOutline } from '@vkontakte/icons';
 import { Div, Card, Text } from '@vkontakte/vkui';
 
@@ -10,7 +10,7 @@ const cnNotFoundPage = cn('NotFoundPage');
 
 export const InternalErrorPage = () => {
   return (
-    <AuthLayout>
+    <HeaderLayout>
       <Card mode="shadow" className={cnNotFoundPage()}>
         <Div className={cnNotFoundPage('header')}>
           <Text weight="1">
@@ -26,6 +26,6 @@ export const InternalErrorPage = () => {
           </p>
         </Div>
       </Card>
-    </AuthLayout>
+    </HeaderLayout>
   );
 };
