@@ -3,4 +3,4 @@ export { userSlice } from './model/slice';
 export { registration, login, fetchUser } from './model/reducers';
 export { userAdapter } from './lib/userAdapter';
 export * from './model/selectors';
-export * from './model/types';
+export type { User, UserLogin, UserRegistration } from './model/types';

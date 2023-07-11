@@ -7,5 +7,8 @@ type ProfileAvatarProps = {
 };
 
 export const ProfileAvatar = ({ user, onOpenModal }: ProfileAvatarProps) => {
-  return user && <Avatar src={user.avatar || undefined} onClick={onOpenModal} />;
+  if (!user) {
+    return null;
+  }
+  return <Avatar data-test-id="avatar" src={user.avatar || undefined} onClick={onOpenModal} />;
 };
