@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useAppSelector } from '@@/shared/lib/model/hooks';
 import { selectCurrentTheme } from '@@entities/theme';
 import { cn } from '@@shared/lib/bem';
+import ErrorBoundary from '@@shared/ui/ErrorBoundary/ErrorBoundary';
 
 import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 
@@ -14,11 +15,13 @@ export const BaseLayout = () => {
 
   return (
     <ConfigProvider appearance={theme}>
-      <AdaptivityProvider>
-        <AppRoot className={cnApp()}>
-          <Outlet />
-        </AppRoot>
-      </AdaptivityProvider>
+      <ErrorBoundary fallback={<div>Произошла ошибка</div>}>
+        <AdaptivityProvider>
+          <AppRoot className={cnApp()}>
+            <Outlet />
+          </AppRoot>
+        </AdaptivityProvider>
+      </ErrorBoundary>
     </ConfigProvider>
   );
 };
