@@ -8,6 +8,9 @@ import { ProfilePage } from '@@pages/profile';
 import { RegistrationPage } from '@@pages/registration';
 import { BaseLayout } from './layouts/BaseLayout';
 
+//test_yury@m.ru
+// yury_test_123
+
 const routerConfig = [
   {
     element: <BaseLayout />,

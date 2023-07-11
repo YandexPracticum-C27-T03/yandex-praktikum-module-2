@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@@entities/user';
 import { makeMapState, useMapState } from '../model/hooks';
 
+// НАРУШЕНО НАПРАВЛЕНИЕ ЗАВИСИМОСТЕЙ
 const mapState = makeMapState((state) => ({
   user: getCurrentUser(state),
 }));

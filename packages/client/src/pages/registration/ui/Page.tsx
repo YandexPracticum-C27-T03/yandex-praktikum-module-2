@@ -4,6 +4,7 @@ import { UserRegistration } from '@@entities/user/model/types';
 import { registerFormFields } from '@@shared/lib/constants/register-form-fields';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { Form } from '@@shared/ui/Form';
+// НАРУШЕНО НАПРАВЛЕНИЕ ЗАВИСИМОСТЕЙ!
 
 const mapDispatch = makeMapDispatch((dispatch) => ({
   registration: (data: UserRegistration) => dispatch(registration(data)),

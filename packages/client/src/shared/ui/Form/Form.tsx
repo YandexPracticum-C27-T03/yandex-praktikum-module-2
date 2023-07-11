@@ -1,3 +1,4 @@
+import { PropsWithChildren } from 'react';
 import { useForm, Controller, FieldValues, Path } from 'react-hook-form';
 import { IForm } from '@@shared/lib/types';
 import { cn } from '@bem-react/classname';
@@ -9,12 +10,17 @@ import './styles.scss';
 type Props<T> = {
   fields: IForm[];
   cb: (value: T) => void;
-  buttonValue: string;
+  buttonValue?: string;
 };
 
 const cnForm = cn('Form');
 
-export const Form = function <T extends FieldValues>({ cb, fields, buttonValue }: Props<T>) {
+export const Form = function <T extends FieldValues>({
+  cb,
+  fields,
+  buttonValue,
+  children,
+}: PropsWithChildren<Props<T>>) {
   const {
     control,
     handleSubmit,
@@ -51,7 +57,8 @@ export const Form = function <T extends FieldValues>({ cb, fields, buttonValue }
             );
           })}
           <FormItem>
-            <Button type="submit">{buttonValue}</Button>
+            {children}
+            {buttonValue && <Button type="submit">{buttonValue}</Button>}
           </FormItem>
         </FormLayoutGroup>
       </FormLayout>
