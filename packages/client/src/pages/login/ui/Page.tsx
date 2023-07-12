@@ -12,11 +12,9 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
 export const LoginPage = () => {
   const { login } = useMapDispatch(mapDispatch);
 
-  const onSubmit = async (data: UserLogin) => login(data);
-
   return (
     <HeaderLayout title="Авторизация">
-      <Form<UserLogin> fields={loginFormFields} cb={onSubmit} buttonValue="Войти" />
+      <Form<UserLogin> fields={loginFormFields} cb={login} buttonValue="Войти" />
     </HeaderLayout>
   );
 };

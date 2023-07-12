@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { fetchUser } from '@@entities/user';
-import { useAuth } from '@@shared/lib/hooks/useAuth';
+import { useEffect } from 'react';
+import { useAuth, fetchUser } from '@@entities/user';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 
 const mapDispatch = makeMapDispatch((dispatch) => ({

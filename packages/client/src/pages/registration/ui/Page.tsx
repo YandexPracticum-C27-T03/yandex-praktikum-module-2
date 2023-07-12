@@ -12,11 +12,9 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
 export const RegistrationPage = () => {
   const { registration } = useMapDispatch(mapDispatch);
 
-  const onSubmit = async (data: UserRegistration) => registration(data);
-
   return (
     <HeaderLayout title="Регистрация">
-      <Form<UserRegistration> fields={registerFormFields} cb={onSubmit} buttonValue="Зарегистрироваться" />
+      <Form<UserRegistration> fields={registerFormFields} cb={registration} buttonValue="Зарегистрироваться" />
     </HeaderLayout>
   );
 };
