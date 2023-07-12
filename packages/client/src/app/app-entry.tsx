@@ -4,9 +4,9 @@ import { RouterProvider } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import { appRouter } from '@@app/app-router';
 import { appStore } from '@@app/app-store';
+import { AuthLayer } from '@@app/layers/auth-layer';
 
 import '@vkontakte/vkui/dist/vkui.css';
-import { AuthProvider } from './providers/AuthProvider';
 
 const container = document.getElementById('root');
 
@@ -16,13 +16,13 @@ if (!container) {
 
 const root = createRoot(container);
 
-export const initialazeApp = () => {
+export const initializeApp = () => {
   root.render(
     <React.StrictMode>
       <Provider store={appStore}>
-        <AuthProvider>
+        <AuthLayer>
           <RouterProvider router={appRouter} />
-        </AuthProvider>
+        </AuthLayer>
       </Provider>
     </React.StrictMode>,
   );
