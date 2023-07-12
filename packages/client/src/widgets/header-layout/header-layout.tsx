@@ -5,13 +5,12 @@ import { View, Panel, PanelHeader, Header } from '@vkontakte/vkui';
 import './styles.scss';
 
 type HeaderLayoutProps = {
-  children: React.ReactNode;
   title?: string;
 };
 
 const cnAuthLayout = cn('AuthLayout');
 
-export const HeaderLayout: React.FC<HeaderLayoutProps> = ({ children, title }) => {
+export const HeaderLayout: ReactFCWC<HeaderLayoutProps> = ({ children, title }) => {
   return (
     <View activePanel="main">
       <Panel className={cnAuthLayout('panel')} id="main">
