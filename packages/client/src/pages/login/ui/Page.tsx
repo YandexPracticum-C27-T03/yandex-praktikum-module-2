@@ -1,6 +1,6 @@
 import { login } from '@@entities/user';
 import { UserLogin } from '@@entities/user/model/types';
-import { loginFormFields } from '@@shared/lib/constants/login-form-fields';
+import { loginFormFields } from '@@shared/lib/constants';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { Form } from '@@shared/ui/Form';
 import { HeaderLayout } from '@@widgets/header-layout';

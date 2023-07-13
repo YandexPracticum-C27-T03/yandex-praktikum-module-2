@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth, fetchUser } from '@@entities/user';
+import { Routes } from '@@features';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 
 const mapDispatch = makeMapDispatch((dispatch) => ({
   fetchUser: () => dispatch(fetchUser()),
 }));
 
-export const AuthLayer: ReactFCWC = ({ children }) => {
+export const AuthLayer = ({ children }: { children: React.ReactNode }) => {
   const { fetchUser } = useMapDispatch(mapDispatch);
-  const { isAuth, user } = useAuth();
+  const { isLoading, isAuth, user } = useAuth();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (!isAuth || !user) {
@@ -16,5 +19,7 @@ export const AuthLayer: ReactFCWC = ({ children }) => {
     }
   }, [fetchUser, isAuth, user]);
 
-  return <>{children}</>;
+  const checkPath = pathname === Routes.LOGIN || pathname === Routes.REGISTRATION;
+
+  return (checkPath ? children : !isLoading && children) as JSX.Element;
 };

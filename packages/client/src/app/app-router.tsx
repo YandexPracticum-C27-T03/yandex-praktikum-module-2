@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import { ProtectedRoute } from '@@entities/user/hoc/protected-route';
+import { UNProtectedRoute } from '@@entities/user/hoc/unproteced-route';
 import { Routes } from '@@features';
 import { ForumPage } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
@@ -15,34 +17,52 @@ const routerConfig: RouteObject[] = [
   {
     element: <BaseLayout />,
     children: [
+      // Доступ только для авторизированных
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: Routes.GAME,
+            element: <GamePage />,
+          },
+          {
+            path: Routes.LEADERBOARD,
+            element: <LeaderBoardPage />,
+          },
+          {
+            path: Routes.FORUM,
+            element: <ForumPage />,
+          },
+          {
+            path: Routes.PROFILE,
+            element: <ProfilePage />,
+          },
+        ],
+      },
+      // Доступ только для авторизированных //
+
+      // Блокирует доступ, если пользователь авторизирован
+      {
+        element: <UNProtectedRoute />,
+        children: [
+          {
+            path: Routes.LOGIN,
+            element: <LoginPage />,
+          },
+          {
+            path: Routes.REGISTRATION,
+            element: <RegistrationPage />,
+          },
+        ],
+      },
+      // Блокирует роуты, если пользователь авторизирован //
+
+      // Публичные роуты
       {
         path: Routes.ROOT,
         element: <MainPage />,
       },
-      {
-        path: Routes.LOGIN,
-        element: <LoginPage />,
-      },
-      {
-        path: Routes.REGISTRATION,
-        element: <RegistrationPage />,
-      },
-      {
-        path: Routes.GAME,
-        element: <GamePage />,
-      },
-      {
-        path: Routes.LEADERBOARD,
-        element: <LeaderBoardPage />,
-      },
-      {
-        path: Routes.PROFILE,
-        element: <ProfilePage />,
-      },
-      {
-        path: Routes.FORUM,
-        element: <ForumPage />,
-      },
+
       {
         path: Routes.INTERNAL_ERROR,
         element: <InternalErrorPage />,
@@ -55,6 +75,7 @@ const routerConfig: RouteObject[] = [
         path: '/*',
         element: <NotFoundPage />,
       },
+      // Публичные роуты //
     ],
   },
 ];

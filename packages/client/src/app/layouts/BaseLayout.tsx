@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { useAppSelector } from '@@/shared/lib/model/hooks';
+import { AuthLayer } from '@@app/layers/auth-layer';
 import { selectCurrentTheme } from '@@entities/theme';
 import { cn } from '@@shared/lib/bem';
 
@@ -15,9 +16,11 @@ export const BaseLayout = () => {
   return (
     <ConfigProvider appearance={theme}>
       <AdaptivityProvider>
-        <AppRoot className={cnApp()}>
-          <Outlet />
-        </AppRoot>
+        <AuthLayer>
+          <AppRoot className={cnApp()}>
+            <Outlet />
+          </AppRoot>
+        </AuthLayer>
       </AdaptivityProvider>
     </ConfigProvider>
   );

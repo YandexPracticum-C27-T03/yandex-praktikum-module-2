@@ -4,7 +4,6 @@ import { RouterProvider } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import { appRouter } from '@@app/app-router';
 import { appStore } from '@@app/app-store';
-import { AuthLayer } from '@@app/layers/auth-layer';
 
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -20,9 +19,7 @@ export const initializeApp = () => {
   root.render(
     <React.StrictMode>
       <Provider store={appStore}>
-        <AuthLayer>
-          <RouterProvider router={appRouter} />
-        </AuthLayer>
+        <RouterProvider router={appRouter} />
       </Provider>
     </React.StrictMode>,
   );
