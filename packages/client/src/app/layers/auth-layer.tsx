@@ -8,7 +8,7 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
   fetchUser: () => dispatch(fetchUser()),
 }));
 
-export const AuthLayer = ({ children }: { children: React.ReactNode }) => {
+export const AuthLayer: ReactFCWC = ({ children }) => {
   const { fetchUser } = useMapDispatch(mapDispatch);
   const { isLoading, isAuth, user } = useAuth();
   const { pathname } = useLocation();

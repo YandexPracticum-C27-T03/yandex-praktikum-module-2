@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import { ProtectedRoute } from '@@entities/user/hoc/protected-route';
-import { UNProtectedRoute } from '@@entities/user/hoc/unproteced-route';
+import { UNProtectedRoute } from '@@entities/user';
+import { ProtectedRoute } from '@@entities/user';
 import { Routes } from '@@features';
 import { ForumPage } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
