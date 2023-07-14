@@ -1,11 +1,7 @@
 import React from 'react';
-import { View, Panel, PanelHeader, Group, Cell, Button } from '@vkontakte/vkui';
+import { View, Panel, PanelHeader, Group, Button } from '@vkontakte/vkui';
 
-interface GameStartProps {
-  onStartGame: () => void;
-}
-
-export const GamePage: React.FC<GameStartProps> = ({ onStartGame }) => {
+export const GamePage = () => {
   return (
     <View activePanel="start">
       <Panel id="start">
@@ -21,9 +17,7 @@ export const GamePage: React.FC<GameStartProps> = ({ onStartGame }) => {
         </Group>
         <Group>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button style={{ width: '200px' }} onClick={onStartGame}>
-              Начать игру
-            </Button>
+            <Button style={{ width: '200px' }}>Начать игру</Button>
           </div>
         </Group>
       </Panel>
