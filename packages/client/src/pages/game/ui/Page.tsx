@@ -1,1 +1,3 @@
-export const GamePage = () => <div>GamePage</div>;
+import { GameView } from '@@entities/game';
+
+export const GamePage = () => <GameView />;
