@@ -1,7 +1,7 @@
-import { http } from '@@shared/lib/http';
+import { HTTPTransport } from '@@shared/lib/HTTPTransport';
 import { User, UserLogin, UserRegistration } from '../model/types';
 
-class AuthService extends http {
+class AuthService extends HTTPTransport {
   constructor() {
     super('auth');
   }
