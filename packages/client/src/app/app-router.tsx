@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import { Routes } from '@@features';
 import { ForumPage } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
@@ -9,6 +8,7 @@ import { MainPage } from '@@pages/main';
 import { NotFoundPage } from '@@pages/not-found';
 import { ProfilePage } from '@@pages/profile';
 import { RegistrationPage } from '@@pages/registration';
+import { Routes } from '../shared/config';
 import { BaseLayout } from './layouts/BaseLayout';
 
 const routerConfig: RouteObject[] = [
