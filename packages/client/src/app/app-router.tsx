@@ -1,4 +1,3 @@
-
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { Routes } from '@@features';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
@@ -63,6 +62,7 @@ const routerConfig: RouteObject[] = [
       {
         path: '/forum/topic/:id',
         element: <SingleTopic />,
+      },
     ],
   },
 ];
