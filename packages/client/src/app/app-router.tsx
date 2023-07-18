@@ -1,44 +1,60 @@
-import { createBrowserRouter } from 'react-router-dom';
+
+import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import { Routes } from '@@features';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
+import { InternalErrorPage } from '@@pages/internal-error';
 import { LeaderBoardPage } from '@@pages/leaderboard';
 import { LoginPage } from '@@pages/login';
 import { MainPage } from '@@pages/main';
+import { NotFoundPage } from '@@pages/not-found';
 import { ProfilePage } from '@@pages/profile';
 import { RegistrationPage } from '@@pages/registration';
 import { BaseLayout } from './layouts/BaseLayout';
 
-const routerConfig = [
+const routerConfig: RouteObject[] = [
   {
     element: <BaseLayout />,
     children: [
       {
-        path: '/',
+        path: Routes.ROOT,
         element: <MainPage />,
       },
       {
-        path: '/login',
+        path: Routes.LOGIN,
         element: <LoginPage />,
       },
       {
-        path: '/registration',
+        path: Routes.REGISTRATION,
         element: <RegistrationPage />,
       },
       {
-        path: '/game',
+        path: Routes.GAME,
         element: <GamePage />,
       },
       {
-        path: '/leaderboard',
+        path: Routes.LEADERBOARD,
         element: <LeaderBoardPage />,
       },
       {
-        path: '/profile',
+        path: Routes.PROFILE,
         element: <ProfilePage />,
       },
       {
-        path: '/forum',
+        path: Routes.FORUM,
         element: <ForumPage />,
+      },
+      {
+        path: Routes.INTERNAL_ERROR,
+        element: <InternalErrorPage />,
+      },
+      {
+        path: Routes.NOT_FOUND,
+        element: <NotFoundPage />,
+      },
+      {
+        path: '/*',
+        element: <NotFoundPage />,
       },
       {
         path: '/forum/create-topic',
@@ -47,7 +63,6 @@ const routerConfig = [
       {
         path: '/forum/topic/:id',
         element: <SingleTopic />,
-      },
     ],
   },
 ];

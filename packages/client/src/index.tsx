@@ -1,3 +1,4 @@
-import { initialazeApp } from '@@app/app-entry';
+import { initializeApp } from '@@app/app-entry';
+import './index.scss';
 
-initialazeApp();
+initializeApp();
