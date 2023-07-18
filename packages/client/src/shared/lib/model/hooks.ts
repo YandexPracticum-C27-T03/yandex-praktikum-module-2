@@ -42,15 +42,14 @@ export const useRequest = (createAction: (agrs: unknown) => AnyAction, ...params
 
 export const useTriggerRequest = <T>(
   createAction: AsyncThunk<void, T, object>,
-): [AsyncThunk<void, T, object>, keyof typeof STATUSES] => {
-  const [requestId, setRequestId] = useState<keyof typeof STATUSES>('idle');
+): [AsyncThunk<void, T, object>, string] => {
+  const [requestId, setRequestId] = useState('idle');
   const status = useSelector((state: RootState) => selectRequestStatus(state, requestId));
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as IThunkDispatch;
 
   const trigger = useCallback(
     (params: T) => {
-      // @ts-expect-error
       return setRequestId(dispatch(createAction(params)).requestId);
     },
     [createAction, dispatch],

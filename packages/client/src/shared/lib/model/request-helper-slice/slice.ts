@@ -1,7 +1,13 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { STATUSES } from '../../constants/statuses-request';
 
-const requestEntityAdapter = createEntityAdapter();
+type RequestSlice = {
+  status: string;
+  id: string;
+  error?: string;
+};
+
+const requestEntityAdapter = createEntityAdapter<RequestSlice>();
 
 export const requestSlice = createSlice({
   name: 'request',
@@ -39,5 +45,3 @@ export const requestSlice = createSlice({
       );
   },
 });
-
-export const requestReducer = requestSlice.reducer;

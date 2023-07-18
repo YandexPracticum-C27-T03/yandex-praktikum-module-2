@@ -1,7 +1,8 @@
-import { http } from '@@shared/lib/http';
+import { HTTPTransport } from '@@shared/lib/HTTPTransport';
+
 import { ChangePasswordDTO } from '../types/password-dto';
 
-class ProfileService extends http {
+class ProfileService extends HTTPTransport {
   constructor() {
     super('user');
   }

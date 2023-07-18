@@ -4,7 +4,7 @@ import { getUserData } from '@@entities/user';
 import { ProfileAvatar } from '@@features/profile-avatar';
 import { ProfileChangePassword } from '@@features/profile-change-password';
 import { ProfileUploadAvatar } from '@@features/profile-uploader-avatar-popup';
-import { useControlledPopup } from '@@shared/lib/hooks/useContolledPopup';
+import { useControlledPopup } from '@@shared/hooks/useControlledPopup';
 import { Button } from '@vkontakte/vkui';
 
 export const ProfilePage = () => {

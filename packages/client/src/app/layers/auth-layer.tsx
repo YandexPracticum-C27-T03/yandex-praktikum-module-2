@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
-import { fetchUser } from '@@entities/user';
-import { useAuth } from '@@shared/lib/hooks/useAuth';
+import { useAuth, fetchUser } from '@@entities/user';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 
 const mapDispatch = makeMapDispatch((dispatch) => ({
   fetchUser: () => dispatch(fetchUser()),
 }));
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthLayer: ReactFCWC = ({ children }) => {
   const { fetchUser } = useMapDispatch(mapDispatch);
   const { isAuth, user } = useAuth();
 

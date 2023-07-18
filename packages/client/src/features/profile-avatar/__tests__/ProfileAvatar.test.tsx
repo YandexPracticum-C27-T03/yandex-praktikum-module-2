@@ -3,9 +3,6 @@ import { render, screen } from '@testing-library/react';
 
 import { ProfileAvatar } from '../ui/ProfileAvatar';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-function noop() {}
-
 function hasProps(data: object) {
   return Object.keys(data).length ? data : null;
 }
@@ -22,13 +19,13 @@ const MOCK_USER = userAdapter({
 
 describe('test profile avatar', () => {
   test('render without user data', () => {
-    render(<ProfileAvatar user={null} onOpenModal={noop} />);
+    render(<ProfileAvatar user={null} />);
 
     expect(hasProps(screen.findByTestId('avatar'))).toBeNull();
   });
 
   test('render with user data', () => {
-    render(<ProfileAvatar user={MOCK_USER} onOpenModal={noop} />);
+    render(<ProfileAvatar user={MOCK_USER} />);
 
     expect(screen.findByTestId('avatar')).toBeTruthy();
   });

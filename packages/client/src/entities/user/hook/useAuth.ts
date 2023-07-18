@@ -1,5 +1,5 @@
-import { getCurrentUser } from '@@entities/user';
-import { makeMapState, useMapState } from '../model/hooks';
+import { makeMapState, useMapState } from '@@shared/lib/model/hooks';
+import { getCurrentUser } from '../model/selectors';
 
 // НАРУШЕНО НАПРАВЛЕНИЕ ЗАВИСИМОСТЕЙ
 const mapState = makeMapState((state) => ({

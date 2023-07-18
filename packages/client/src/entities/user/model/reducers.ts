@@ -1,5 +1,4 @@
-import { authService } from '@@entities/user';
-import { RESOURCES_ULR } from '@@shared/lib/constants';
+import { authService, userAdapter } from '@@entities/user';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { UserLogin, UserRegistration } from './types';
 
@@ -14,8 +13,5 @@ export const login = createAsyncThunk('entities/user/login', (data: UserLogin) =
 export const fetchUser = createAsyncThunk('entities/user/fetchUser', async () => {
   const user = await authService.fetchUser();
 
-  return {
-    ...user,
-    ...(Boolean(user.avatar) && { avatar: `${RESOURCES_ULR}${user.avatar}` }),
-  };
+  return userAdapter(user);
 });

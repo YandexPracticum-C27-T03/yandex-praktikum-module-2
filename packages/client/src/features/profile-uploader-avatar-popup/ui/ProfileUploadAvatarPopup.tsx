@@ -1,25 +1,22 @@
 import { FormEventHandler, useCallback, useEffect } from 'react';
 import { User } from '@@entities/user';
+import { cn } from '@@shared/lib/bem';
 import { STATUSES } from '@@shared/lib/constants/statuses-request';
 import { useTriggerRequest } from '@@shared/lib/model/hooks';
 import { Icon24Document } from '@vkontakte/icons';
 import { Avatar, FormItem, ModalDismissButton, PopoutWrapper, File, CardGrid, GridAvatar } from '@vkontakte/vkui';
 import { updateAvatarThunk } from '../model/actions';
 
+import './styles.scss';
+
 type ProfileUploadAvatarProps = {
   user: Nullable<User>;
   onClose: () => void;
 };
 
-const StyleModal = {
-  backgroundColor: 'var(--vkui--color_background_content)',
-  borderRadius: 8,
-  position: 'relative',
-  padding: '12px',
-  width: '400px',
-} as Record<string, string | number>;
-
 const FILE_INDEX = 0;
+
+const cnUploadPopup = cn('UploadPopup');
 
 export const ProfileUploadAvatar = ({ user, onClose }: ProfileUploadAvatarProps) => {
   const [trigger, status] = useTriggerRequest<FormData>(updateAvatarThunk);
@@ -48,7 +45,7 @@ export const ProfileUploadAvatar = ({ user, onClose }: ProfileUploadAvatarProps)
 
   return (
     <PopoutWrapper onClick={onClose}>
-      <div style={StyleModal}>
+      <div className={cnUploadPopup()}>
         <CardGrid>
           <GridAvatar>{user && <Avatar src={user.avatar || undefined} />}</GridAvatar>
 

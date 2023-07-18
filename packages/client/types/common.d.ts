@@ -1,4 +1,9 @@
+import React from 'react';
+
 declare global {
+  export type FunctionalComponentWithChildren<T = unknown> = React.FC<T & { children?: React.ReactNode }>;
+  export type ReactFCWC<T = unknown> = FunctionalComponentWithChildren<T>;
+
   export type ValuesOfObject<T> = T extends { [key: string]: infer R } ? R : never;
 
   // Меняем название ключа в объекте, сохраняя его тип
