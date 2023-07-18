@@ -6,16 +6,20 @@ class AuthService extends HTTPTransport {
     super('auth');
   }
 
-  login(data: UserLogin) {
-    return this.http.post('/signin', data);
+  async login(dto: UserLogin) {
+    const { data } = await this.http.post('/signin', dto);
+
+    return data;
   }
 
-  registration(data: UserRegistration) {
-    return this.http.post('/signup', data);
+  registration(dto: UserRegistration) {
+    return this.http.post('/signup', dto);
   }
 
-  fetchUser() {
-    return this.http.get<User>('/user');
+  async fetchUser() {
+    const { data } = await this.http.get<User>('/user');
+
+    return data;
   }
 }
 

@@ -17,6 +17,8 @@ declare global {
 
   // Указываем конкретные поля в объекте, как NonNullable
   export type Ensure<T, K extends keyof T> = T & RequiredNotNull<Pick<T, K>>;
+
+  export type Nullable<T> = T | null;
 }
 
 export {};

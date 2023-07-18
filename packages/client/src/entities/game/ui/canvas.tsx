@@ -3,8 +3,10 @@ import { CanvasProps } from '../lib/types';
 
 export const Canvas = ({ width, height, draw }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const propsRef = useRef<CanvasProps>({ width, height, draw });
 
   useEffect(() => {
+    const { width, height, draw } = propsRef.current;
     const canvas = canvasRef.current;
 
     if (!canvas) {

@@ -1,6 +1,7 @@
 import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Routes } from '@@features';
+import { Routes } from '@@shared/config';
+
 import { cn } from '@@shared/lib/bem';
 import { HeaderLayout } from '@@widgets/header-layout';
 import { Icon28BillSeparatedOutline } from '@vkontakte/icons';
