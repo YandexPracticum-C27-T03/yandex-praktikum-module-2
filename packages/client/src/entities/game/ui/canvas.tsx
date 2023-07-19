@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { CanvasProps } from '../lib/types';
 
 export const Canvas = ({ width, height, draw }: CanvasProps) => {
+  //const { restart } = useContext(GameContext);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const propsRef = useRef<CanvasProps>({ width, height, draw });
 
