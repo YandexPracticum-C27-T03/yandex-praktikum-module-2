@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth, fetchUser } from '@@entities/user';
-import { Routes } from '@@features';
+import { Routes } from '@@shared/config';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 
 const mapDispatch = makeMapDispatch((dispatch) => ({

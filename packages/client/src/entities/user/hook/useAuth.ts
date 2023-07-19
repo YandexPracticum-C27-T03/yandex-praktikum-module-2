@@ -1,6 +1,7 @@
 import { makeMapState, useMapState } from '@@shared/lib/model/hooks';
 import { getCurrentUser } from '../model/selectors';
 
+// НАРУШЕНО НАПРАВЛЕНИЕ ЗАВИСИМОСТЕЙ
 const mapState = makeMapState((state) => ({
   user: getCurrentUser(state),
 }));

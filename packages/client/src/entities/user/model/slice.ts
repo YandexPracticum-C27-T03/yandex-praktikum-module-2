@@ -21,15 +21,19 @@ const initialState: UserSlice = {
 export const userSlice = createSlice({
   name: 'entities/user',
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, { payload }) => {
+      state.data = payload;
+    },
+  },
   extraReducers: (builder) => {
     // Регистрация
     builder.addCase(registration.pending, (state) => {
       state.isLoading = true;
     });
 
-    builder.addCase(registration.fulfilled, (state, action) => {
-      state.data = action.payload.data;
+    builder.addCase(registration.fulfilled, (state, { payload }) => {
+      state.data = payload;
       state.isAuth = true;
       state.isLoading = false;
       state.error = null;
@@ -44,8 +48,8 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
 
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.data = action.payload.data;
+    builder.addCase(login.fulfilled, (state, { payload }) => {
+      state.data = payload;
       state.isAuth = true;
       state.isLoading = false;
       state.error = null;
@@ -60,8 +64,9 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
 
-    builder.addCase(fetchUser.fulfilled, (state, action) => {
-      state.data = action.payload.data;
+    builder.addCase(fetchUser.fulfilled, (state, { payload }) => {
+      state.data = payload;
+
       state.isAuth = true;
       state.isLoading = false;
       state.error = null;
@@ -75,3 +80,5 @@ export const userSlice = createSlice({
     });
   },
 });
+
+export const { setUser } = userSlice.actions;
