@@ -6,13 +6,15 @@ type UserSlice = {
   data: User | null;
   isAuth: boolean;
   isLoading: boolean;
+  isFetching: boolean;
   error: string | null;
 };
 
 const initialState: UserSlice = {
   data: null,
   isAuth: false,
-  isLoading: false,
+  isLoading: true,
+  isFetching: false,
   error: null,
 };
 
@@ -58,8 +60,13 @@ export const userSlice = createSlice({
     });
 
     // Получение данных о пользователе
+    builder.addCase(fetchUser.pending, (state) => {
+      state.isLoading = true;
+    });
+
     builder.addCase(fetchUser.fulfilled, (state, { payload }) => {
       state.data = payload;
+
       state.isAuth = true;
       state.isLoading = false;
       state.error = null;

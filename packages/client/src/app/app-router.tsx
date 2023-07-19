@@ -1,4 +1,7 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
+
+import { UNProtectedRoute } from '@@entities/user';
+import { ProtectedRoute } from '@@entities/user';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
@@ -15,33 +18,58 @@ const routerConfig: RouteObject[] = [
   {
     element: <BaseLayout />,
     children: [
+      // Доступ только для авторизированных
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: Routes.GAME,
+            element: <GamePage />,
+          },
+          {
+            path: Routes.LEADERBOARD,
+            element: <LeaderBoardPage />,
+          },
+          {
+            path: Routes.FORUM,
+            element: <ForumPage />,
+          },
+          {
+            path: '/forum/create-topic',
+            element: <CreateTopicForm />,
+          },
+          {
+            path: '/forum/topic/:id',
+            element: <SingleTopic />,
+          },
+          {
+            path: Routes.PROFILE,
+            element: <ProfilePage />,
+          },
+        ],
+      },
+      // Доступ только для авторизированных //
+
+      // Блокирует доступ, если пользователь авторизирован
+      {
+        element: <UNProtectedRoute />,
+        children: [
+          {
+            path: Routes.LOGIN,
+            element: <LoginPage />,
+          },
+          {
+            path: Routes.REGISTRATION,
+            element: <RegistrationPage />,
+          },
+        ],
+      },
+      // Блокирует роуты, если пользователь авторизирован //
+
+      // Публичные роуты
       {
         path: Routes.ROOT,
         element: <MainPage />,
-      },
-      {
-        path: Routes.LOGIN,
-        element: <LoginPage />,
-      },
-      {
-        path: Routes.REGISTRATION,
-        element: <RegistrationPage />,
-      },
-      {
-        path: Routes.GAME,
-        element: <GamePage />,
-      },
-      {
-        path: Routes.LEADERBOARD,
-        element: <LeaderBoardPage />,
-      },
-      {
-        path: Routes.PROFILE,
-        element: <ProfilePage />,
-      },
-      {
-        path: Routes.FORUM,
-        element: <ForumPage />,
       },
       {
         path: Routes.INTERNAL_ERROR,
@@ -55,14 +83,7 @@ const routerConfig: RouteObject[] = [
         path: '/*',
         element: <NotFoundPage />,
       },
-      {
-        path: '/forum/create-topic',
-        element: <CreateTopicForm />,
-      },
-      {
-        path: '/forum/topic/:id',
-        element: <SingleTopic />,
-      },
+      // Публичные роуты //
     ],
   },
 ];

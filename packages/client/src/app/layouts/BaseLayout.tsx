@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { useAppSelector } from '@@/shared/lib/model/hooks';
+import { AuthLayer } from '@@app/layers/auth-layer';
 import { selectCurrentTheme } from '@@entities/theme';
 import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 
@@ -9,9 +10,11 @@ export const BaseLayout = () => {
   return (
     <ConfigProvider appearance={theme}>
       <AdaptivityProvider>
-        <AppRoot>
-          <Outlet />
-        </AppRoot>
+        <AuthLayer>
+          <AppRoot>
+            <Outlet />
+          </AppRoot>
+        </AuthLayer>
       </AdaptivityProvider>
     </ConfigProvider>
   );
