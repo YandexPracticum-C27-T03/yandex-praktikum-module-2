@@ -1,0 +1,19 @@
+.UserViewer {
+  width: 70%;
+  margin: 0 auto;
+
+  &-avatar {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+  }
+
+  &-title {
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+}
