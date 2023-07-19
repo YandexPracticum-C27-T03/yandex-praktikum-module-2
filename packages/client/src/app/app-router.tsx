@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import { ForumPage } from '@@pages/forum';
+import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
 import { LeaderBoardPage } from '@@pages/leaderboard';
@@ -54,6 +54,14 @@ const routerConfig: RouteObject[] = [
       {
         path: '/*',
         element: <NotFoundPage />,
+      },
+      {
+        path: '/forum/create-topic',
+        element: <CreateTopicForm />,
+      },
+      {
+        path: '/forum/topic/:id',
+        element: <SingleTopic />,
       },
     ],
   },
