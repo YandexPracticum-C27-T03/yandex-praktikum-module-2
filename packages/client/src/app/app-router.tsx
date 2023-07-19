@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
+
 import { UNProtectedRoute } from '@@entities/user';
 import { ProtectedRoute } from '@@entities/user';
-import { ForumPage } from '@@pages/forum';
+import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
 import { LeaderBoardPage } from '@@pages/leaderboard';
@@ -34,6 +35,14 @@ const routerConfig: RouteObject[] = [
             element: <ForumPage />,
           },
           {
+            path: '/forum/create-topic',
+            element: <CreateTopicForm />,
+          },
+          {
+            path: '/forum/topic/:id',
+            element: <SingleTopic />,
+          },
+          {
             path: Routes.PROFILE,
             element: <ProfilePage />,
           },
@@ -62,7 +71,6 @@ const routerConfig: RouteObject[] = [
         path: Routes.ROOT,
         element: <MainPage />,
       },
-
       {
         path: Routes.INTERNAL_ERROR,
         element: <InternalErrorPage />,
