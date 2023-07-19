@@ -1,1 +1,1 @@
-export { FullScreenContainer } from './FullScreenContainer';
+export { FullScreenContainer } from './FullscreenContainer';
