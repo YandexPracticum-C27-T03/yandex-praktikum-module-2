@@ -25,7 +25,6 @@ export const registerServiceWorker = () => {
       .then((registration) => {
         // Отправляем список загруженных ресурсов в сервисный работник
         registration?.active?.postMessage(getLoadedResources());
-        console.log('Service Worker registered:', registration);
       })
       .catch((error) => {
         console.error('Error registering Service Worker:', error);

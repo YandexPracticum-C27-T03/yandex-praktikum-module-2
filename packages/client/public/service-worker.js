@@ -1,37 +1,23 @@
-function getLoadedResources() {
-  const resources = performance.getEntriesByType('resource');
-
-  const result = [
-    '/',
-    '/index.html',
-  ];
-
-  resources.forEach((resource) => {
-    if (resource.initiatorType === 'script' || resource.initiatorType === 'link' || resource.initiatorType === 'img') {
-      result.push(resource.name);
-    }
-  });
-
-  return result;
-}
-
-const staticAssets = getLoadedResources();
-
-console.log(staticAssets);
+let staticAssets = [];
 
 const STATIC_CACHE_NAME = 'static-data';
 const DYNAMIC_CACHE_NAME = 'dynamic-data';
 
 self.addEventListener('install', async event => {
-  //self.skipWaiting();
   const cache = await caches.open(STATIC_CACHE_NAME);
-  console.log('install');
   cache.addAll(staticAssets);
 });
 
 self.addEventListener('activate', e => {
-  console.log('activate');
   return self.clients.claim();
+});
+
+self.addEventListener('message', event => {
+  // Получаем список загруженных ресурсов из веб-страницы
+  const messageData = event.data;
+  if (Array.isArray(messageData)) {
+    staticAssets = messageData;
+  }
 });
 
 
