@@ -6,7 +6,7 @@ import { GameContext } from '../context/game-context';
 import './styles.scss';
 
 export const GameStart = () => {
-  const record = localStorage.getItem('score') || '';
+  const record = localStorage.getItem('score') || 0;
 
   const { gameStatus, start, reset, score } = useContext(GameContext);
 

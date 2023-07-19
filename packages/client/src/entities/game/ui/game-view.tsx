@@ -154,7 +154,7 @@ export const GameView = () => {
 
   // Если рекорд - обновляем
   useEffect(() => {
-    const currentRecord = parseInt(record as string);
+    const currentRecord = parseInt(record as string) || 0;
 
     if (gameStatus === GAME_STATUS.RESTART && currentRecord < score) {
       localStorage.setItem('score', score.toString());
