@@ -13,3 +13,4 @@ export const PLAYER_SIZE = 256;
 export const GRAVITY = 1.2;
 export const PLAYER_JUMP_VELOCITY = 48;
 export const SPIKES_VELOCITY = 10;
+export const INITIAL_SCORE = 1;

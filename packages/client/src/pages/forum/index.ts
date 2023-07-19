@@ -1,1 +1,1 @@
-export { ForumPage } from './ui/Page';
+export { ForumPage, SingleTopic, CreateTopicForm } from './ui/';
