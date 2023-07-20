@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { GameStart, GameScore } from './';
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -14,15 +13,17 @@ import {
   SPIKES_VELOCITY,
 } from '../lib/constants/game-options';
 import { GAME_STATUS } from '../lib/constants/game-status';
+import { GameContext } from '../lib/context/game-context';
 import { randomRangeInt, fill, fillRect } from '../lib/utils';
 import { Entity, Player, Rectangle } from '../model';
 import { Canvas } from './canvas';
-import { GameContext } from './context/game-context';
+import { GameHeader } from './game-header';
+import { GameStart } from './game-start';
 
 export const GameView = () => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.STOP);
   const [score, setScore] = useState(INITIAL_SCORE);
-  const record = localStorage.getItem('score') || '';
+  const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;
 
   // Глобальные переменные
   const player = new Player(PLAYER_START_X, CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE);
@@ -129,7 +130,7 @@ export const GameView = () => {
     player.draw({ ctx, color: COLORS.PLAYER });
   };
 
-  const init = (ctx: CanvasRenderingContext2D) => {
+  const init = useCallback((ctx: CanvasRenderingContext2D) => {
     // Инициализация объектов
     player.acceleration.y = GRAVITY;
 
@@ -142,7 +143,7 @@ export const GameView = () => {
     });
 
     draw(ctx);
-  };
+  }, []);
 
   // Обновляем счетчик
   useEffect(() => {
@@ -159,20 +160,15 @@ export const GameView = () => {
 
   // Если рекорд - обновляем
   useEffect(() => {
-    const currentRecord = parseInt(record as string) || 0;
-
-    if (gameStatus === GAME_STATUS.RESTART && currentRecord < score) {
+    if (gameStatus === GAME_STATUS.RESTART && record < score) {
       localStorage.setItem('score', score.toString());
     }
   }, [gameStatus, record, score]);
 
   return (
     <GameContext.Provider value={{ gameStatus, start, reset, score }}>
-      <GameScore />
+      <GameHeader />
       <GameStart />
-
-      {/* <GameSettings /> */}
-      {/* <GameMenu /> */}
       <Canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} draw={init} />
     </GameContext.Provider>
   );
