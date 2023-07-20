@@ -16,7 +16,6 @@ export const GamePage = () => {
       <FullScreenContainer handle={handle}>
         {gameStart ? (
           <>
-            <Button onClick={handle.enter}>Fullscreen</Button>
             <GameView />
           </>
         ) : (
