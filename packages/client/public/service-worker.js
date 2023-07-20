@@ -1,7 +1,19 @@
-let staticAssets = [];
+const assetManifest = self.__WB_MANIFEST || [];
 
 const STATIC_CACHE_NAME = 'static-data';
 const DYNAMIC_CACHE_NAME = 'dynamic-data';
+
+const manifestURLs = assetManifest.map(
+  (entry) => {
+    return entry.url
+  }
+)
+
+const staticAssets = [
+  '/',
+  ...manifestURLs
+];
+
 
 self.addEventListener('install', async event => {
   const cache = await caches.open(STATIC_CACHE_NAME);
@@ -10,14 +22,6 @@ self.addEventListener('install', async event => {
 
 self.addEventListener('activate', e => {
   return self.clients.claim();
-});
-
-self.addEventListener('message', event => {
-  // Получаем список загруженных ресурсов из веб-страницы
-  const messageData = event.data;
-  if (Array.isArray(messageData)) {
-    staticAssets = messageData;
-  }
 });
 
 
