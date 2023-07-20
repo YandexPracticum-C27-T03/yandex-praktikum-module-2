@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { GameView } from '@@entities/game';
 import { useFullscreen } from '@@shared/hooks/useFullscreen';
 import { FullScreenContainer } from '@@shared/ui/Fullscreen';
-import { Button } from '@vkontakte/vkui';
+import { Button, Div } from '@vkontakte/vkui';
 import { GamePreview } from './game-preview';
 
 export const GamePage = () => {
@@ -11,7 +11,7 @@ export const GamePage = () => {
   const handleStartGame = () => setGameStart(true);
 
   return (
-    <div style={{ height: '100vh', overflow: 'hidden' }}>
+    <Div style={{ height: '100%', width: '100%', overflow: 'hidden', padding: 0 }}>
       <FullScreenContainer handle={handle}>
         {gameStart ? (
           <>
@@ -27,7 +27,7 @@ export const GamePage = () => {
           <GamePreview handleStartGame={handleStartGame} />
         )}
       </FullScreenContainer>
-    </div>
+    </Div>
   );
 };
 
