@@ -43,7 +43,7 @@ export const useRequest = (createAction: (agrs: unknown) => AnyAction, ...params
 export const useTriggerRequest = <T>(
   createAction: AsyncThunk<void, T, object>,
 ): [AsyncThunk<void, T, object>, string] => {
-  const [requestId, setRequestId] = useState('idle');
+  const [requestId, setRequestId] = useState(STATUSES.idle);
   const status = useSelector((state: RootState) => selectRequestStatus(state, requestId));
 
   const dispatch = useDispatch() as IThunkDispatch;
