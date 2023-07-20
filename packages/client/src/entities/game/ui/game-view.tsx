@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { GameStart, GameScore } from './';
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -6,26 +7,35 @@ import {
   FLOOR_HEIGHT,
   FPS,
   GRAVITY,
+  INITIAL_SCORE,
   PLAYER_JUMP_VELOCITY,
   PLAYER_SIZE,
   PLAYER_START_X,
   SPIKES_VELOCITY,
 } from '../lib/constants/game-options';
+import { GAME_STATUS } from '../lib/constants/game-status';
 import { randomRangeInt, fill, fillRect } from '../lib/utils';
 import { Entity, Player, Rectangle } from '../model';
 import { Canvas } from './canvas';
+import { GameContext } from './context/game-context';
 
 export const GameView = () => {
+  const [gameStatus, setGameStatus] = useState(GAME_STATUS.STOP);
+  const [score, setScore] = useState(INITIAL_SCORE);
+  const record = localStorage.getItem('score') || '';
+
   // Глобальные переменные
   const player = new Player(PLAYER_START_X, CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE);
   let spikes: Entity[] = [];
   let spawnSpikeID: NodeJS.Timer | null = null;
   let updateID: NodeJS.Timer | null = null;
-  let score = 0;
+  let progress = 0;
 
   // Каждые несколько секунд за кадром появляется препятствия
   const spawnSpike = () => {
-    spawnSpikeID = setTimeout(spawnSpike, randomRangeInt({ min: 3000, max: 6000 }));
+    progress = progress + 0.5;
+
+    spawnSpikeID = setTimeout(spawnSpike, randomRangeInt({ min: 1000, max: 2000 }));
 
     // Создает препятствия
     const width = randomRangeInt({ min: 32, max: 64 });
@@ -33,7 +43,8 @@ export const GameView = () => {
     const spike = new Entity(CANVAS_WIDTH, CANVAS_HEIGHT - FLOOR_HEIGHT - height, width, height);
 
     // Инициализация скорости препятствия
-    spike.velocity.x = -SPIKES_VELOCITY;
+    // Увеличиваем скорость по мере прогресса
+    spike.velocity.x = -SPIKES_VELOCITY - progress;
 
     // Пушит в массив препятствие
     spikes.push(spike);
@@ -68,7 +79,10 @@ export const GameView = () => {
   };
 
   // Возвращает параметры игры к исходному состоянию
-  const reset = () => {
+  const reset = useCallback(() => {
+    // Обновляем состояние игры
+    setGameStatus(GAME_STATUS.START);
+
     // Сброс игрока
     player.y = CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE;
     player.velocity.y = 0;
@@ -76,29 +90,28 @@ export const GameView = () => {
     // Удаление препятсвий
     spikes = [];
 
+    // Сброс таймера до начального
+    setScore(INITIAL_SCORE);
+
     // Запускает обновления
     update();
     spawnSpike();
-  };
-
-  // Сброс
-  const tryReset = (e: KeyboardEvent) => {
-    if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'Space') {
-      // Удаляет события рестарта
-      document.removeEventListener('keydown', tryReset);
-      // Рестартит игру
-      reset();
-    }
-  };
+  }, []);
 
   // Останавливает игру, и ждет рестарта
-  const stop = () => {
+  const stop = useCallback(() => {
+    setGameStatus(GAME_STATUS.RESTART);
     clearTimeout(updateID as NodeJS.Timer);
     clearTimeout(spawnSpikeID as NodeJS.Timer);
+    progress = 0;
+  }, []);
 
-    // Добавляет события для рестрата игры
-    document.addEventListener('keydown', tryReset);
-  };
+  // Запускает игру
+  const start = useCallback(() => {
+    setGameStatus(GAME_STATUS.START);
+    update();
+    spawnSpike();
+  }, []);
 
   const draw = (ctx: CanvasRenderingContext2D) => {
     requestAnimationFrame(() => draw(ctx));
@@ -111,10 +124,6 @@ export const GameView = () => {
 
     // Рисует препятствие
     spikes.forEach((spike) => spike.draw({ ctx, color: COLORS.SPIKES }));
-
-    // Рисует очки
-    ctx.font = '30px Arial';
-    ctx.fillText(score.toString(), 10, 50);
 
     // Рисует игрока
     player.draw({ ctx, color: COLORS.PLAYER });
@@ -132,18 +141,39 @@ export const GameView = () => {
       }
     });
 
-    update();
     draw(ctx);
-    spawnSpike();
   };
 
+  // Обновляем счетчик
   useEffect(() => {
     const timer = setInterval(() => {
-      score++;
+      setScore((prev) => prev + 1);
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, [score]);
+    if (gameStatus === GAME_STATUS.STOP || gameStatus === GAME_STATUS.RESTART) {
+      clearInterval(timer);
+    }
 
-  return <Canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} draw={init} />;
+    return () => clearInterval(timer);
+  }, [score, gameStatus]);
+
+  // Если рекорд - обновляем
+  useEffect(() => {
+    const currentRecord = parseInt(record as string) || 0;
+
+    if (gameStatus === GAME_STATUS.RESTART && currentRecord < score) {
+      localStorage.setItem('score', score.toString());
+    }
+  }, [gameStatus, record, score]);
+
+  return (
+    <GameContext.Provider value={{ gameStatus, start, reset, score }}>
+      <GameScore />
+      <GameStart />
+
+      {/* <GameSettings /> */}
+      {/* <GameMenu /> */}
+      <Canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} draw={init} />
+    </GameContext.Provider>
+  );
 };
