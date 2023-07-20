@@ -7,16 +7,16 @@ import { View, Panel, PanelHeader, Group, Button } from '@vkontakte/vkui';
 export const GamePage = () => {
   const handle = useFullscreen();
   const [gameStart, setGameStart] = useState(false);
-  const handleStartGame = () => {
-    setGameStart(true);
-  };
+  const handleStartGame = () => setGameStart(true);
 
   return (
     <>
       <FullScreenContainer handle={handle}>
         {gameStart ? (
           <>
-            <Button onClick={handle.enter}>Fullscreen</Button>
+            <Button style={{ position: 'absolute', top: '2%', left: '1%', background: '#000' }} onClick={handle.enter}>
+              Fullscreen
+            </Button>
             <GameView />
           </>
         ) : (
