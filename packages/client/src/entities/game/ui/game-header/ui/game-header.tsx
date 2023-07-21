@@ -1,14 +1,10 @@
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import { GameRecord } from './game-record';
 import { GameScore } from './game-score';
 
 import './styles.scss';
 
-type GameHeaderProps = {
-  children: ReactNode | ReactNode[];
-};
-
-export const GameHeader = ({ children }: GameHeaderProps) => {
+export const GameHeader = ({ children }: PropsWithChildren) => {
   return (
     <div className="Game-header">
       {children}

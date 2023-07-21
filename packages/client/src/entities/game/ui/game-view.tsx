@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from 'react';
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -20,11 +20,7 @@ import { Canvas } from './canvas';
 import { GameHeader } from './game-header';
 import { GameStart } from './game-start';
 
-type GameViewProps = {
-  children: ReactNode | ReactNode[];
-};
-
-export const GameView = ({ children }: GameViewProps) => {
+export const GameView = ({ children }: PropsWithChildren) => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.STOP);
   const [score, setScore] = useState(INITIAL_SCORE);
   const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;

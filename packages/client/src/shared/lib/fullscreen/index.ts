@@ -56,7 +56,7 @@ const vendor =
   (ms[0] in document && ms) ||
   [];
 
-export const fscren = {
+export const fscreen = {
   requestFullscreen: (element: HTMLElement) => element.requestFullscreen(),
 
   async exitFullscreen() {

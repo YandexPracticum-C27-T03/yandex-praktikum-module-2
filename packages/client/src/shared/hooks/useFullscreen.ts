@@ -1,36 +1,47 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 
-import { fscren } from '@@shared/lib/fullscreen';
+import { fscreen } from '@@shared/lib/fullscreen';
 
-export function useFullscreen() {
+export type UseFullscreen = {
+  active: boolean;
+  enter: () => Promise<void>;
+  exit: () => Promise<void> | Promise<() => Promise<void>>;
+  root: React.RefObject<HTMLDivElement>;
+};
+
+export function useFullscreen(): UseFullscreen {
   const [active, setActive] = useState(false);
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function onChange() {
-      setActive(root.current === fscren.fullscreenElement);
+      setActive(root.current === fscreen.fullscreenElement);
     }
 
-    fscren.addEventListener('fullscreenchange', onChange);
+    fscreen.addEventListener('fullscreenchange', onChange);
 
-    return () => fscren.removeEventListener('fullscreenchange', onChange);
+    return () => fscreen.removeEventListener('fullscreenchange', onChange);
   }, []);
 
-  const enter = useCallback(() => {
-    if (fscren.fullscreenElement) {
-      return fscren.exitFullscreen().then(() => {
+  const enter = useCallback(async () => {
+    try {
+      if (fscreen.fullscreenElement) {
+        await fscreen.exitFullscreen();
+
         if (root.current) {
-          return fscren.requestFullscreen(root.current);
+          return fscreen.requestFullscreen(root.current);
         }
-      });
-    } else if (root.current) {
-      return fscren.requestFullscreen(root.current);
+      } else if (root.current) {
+        return fscreen.requestFullscreen(root.current);
+      }
+    } catch (error) {
+      console.warn('[browser dosent suppert fullscreen]');
     }
   }, []);
 
   const exit = useCallback(() => {
-    if (fscren.fullscreenElement === root.current) {
-      return fscren.exitFullscreen();
+    if (fscreen.fullscreenElement === root.current) {
+      return fscreen.exitFullscreen();
     }
     return Promise.resolve();
   }, []);
@@ -43,5 +54,19 @@ export function useFullscreen() {
       root,
     }),
     [active, enter, exit],
+  );
+}
+
+export function useFullscreenMock(active = false): UseFullscreen {
+  const root = useRef<HTMLDivElement>(null);
+
+  return useMemo(
+    () => ({
+      active,
+      enter: () => Promise.resolve(),
+      exit: () => Promise.resolve(),
+      root,
+    }),
+    [active],
   );
 }

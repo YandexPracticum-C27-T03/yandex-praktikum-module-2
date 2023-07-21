@@ -1,13 +1,21 @@
 import { PropsWithChildren } from 'react';
-import { useFullscreen } from '@@shared/hooks/useFullscreen';
+import { UseFullscreen } from '@@shared/hooks/useFullscreen';
+import { cn } from '@@shared/lib/bem';
 
 type FullScreenProps = {
-  handle: ReturnType<typeof useFullscreen>;
+  controller: UseFullscreen;
 };
 
-export const FullScreenContainer = ({ handle, children }: PropsWithChildren<FullScreenProps>) => {
+const cnFullscreenContainer = cn('FullscreenContainer');
+
+export const FullScreenContainer = ({ controller, children }: PropsWithChildren<FullScreenProps>) => {
   return (
-    <div ref={handle.root} style={handle.active ? { height: '100%', width: '100%' } : undefined}>
+    <div
+      ref={controller.root}
+      className={cnFullscreenContainer({
+        active: controller.active,
+      })}
+    >
       {children}
     </div>
   );
