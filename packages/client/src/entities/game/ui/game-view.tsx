@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
-import { GameStart, GameScore } from './';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -14,25 +13,34 @@ import {
   SPIKES_VELOCITY,
 } from '../lib/constants/game-options';
 import { GAME_STATUS } from '../lib/constants/game-status';
+import { GameContext } from '../lib/context/game-context';
 import { randomRangeInt, fill, fillRect } from '../lib/utils';
 import { Entity, Player, Rectangle } from '../model';
 import { Canvas } from './canvas';
-import { GameContext } from './context/game-context';
+import { GameHeader } from './game-header';
+import { GameStart } from './game-start';
 
-export const GameView = () => {
+type GameViewProps = {
+  children: ReactNode | ReactNode[];
+};
+
+export const GameView = ({ children }: GameViewProps) => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.STOP);
   const [score, setScore] = useState(INITIAL_SCORE);
-  const record = localStorage.getItem('score') || '';
+  const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;
 
   // Глобальные переменные
   const player = new Player(PLAYER_START_X, CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE);
   let spikes: Entity[] = [];
   let spawnSpikeID: NodeJS.Timer | null = null;
   let updateID: NodeJS.Timer | null = null;
+  let progress = 0;
 
   // Каждые несколько секунд за кадром появляется препятствия
   const spawnSpike = () => {
-    spawnSpikeID = setTimeout(spawnSpike, randomRangeInt({ min: 3000, max: 6000 }));
+    progress = progress + 0.5;
+
+    spawnSpikeID = setTimeout(spawnSpike, randomRangeInt({ min: 1000, max: 2000 }));
 
     // Создает препятствия
     const width = randomRangeInt({ min: 32, max: 64 });
@@ -40,7 +48,8 @@ export const GameView = () => {
     const spike = new Entity(CANVAS_WIDTH, CANVAS_HEIGHT - FLOOR_HEIGHT - height, width, height);
 
     // Инициализация скорости препятствия
-    spike.velocity.x = -SPIKES_VELOCITY;
+    // Увеличиваем скорость по мере прогресса
+    spike.velocity.x = -SPIKES_VELOCITY - progress;
 
     // Пушит в массив препятствие
     spikes.push(spike);
@@ -99,6 +108,7 @@ export const GameView = () => {
     setGameStatus(GAME_STATUS.RESTART);
     clearTimeout(updateID as NodeJS.Timer);
     clearTimeout(spawnSpikeID as NodeJS.Timer);
+    progress = 0;
   }, []);
 
   // Запускает игру
@@ -124,7 +134,7 @@ export const GameView = () => {
     player.draw({ ctx, color: COLORS.PLAYER });
   };
 
-  const init = (ctx: CanvasRenderingContext2D) => {
+  const init = useCallback((ctx: CanvasRenderingContext2D) => {
     // Инициализация объектов
     player.acceleration.y = GRAVITY;
 
@@ -137,7 +147,7 @@ export const GameView = () => {
     });
 
     draw(ctx);
-  };
+  }, []);
 
   // Обновляем счетчик
   useEffect(() => {
@@ -154,19 +164,15 @@ export const GameView = () => {
 
   // Если рекорд - обновляем
   useEffect(() => {
-    const currentRecord = parseInt(record as string) || 0;
-
-    if (gameStatus === GAME_STATUS.RESTART && currentRecord < score) {
+    if (gameStatus === GAME_STATUS.RESTART && record < score) {
       localStorage.setItem('score', score.toString());
     }
   }, [gameStatus, record, score]);
 
   return (
     <GameContext.Provider value={{ gameStatus, start, reset, score }}>
-      <GameScore />
+      <GameHeader>{children}</GameHeader>
       <GameStart />
-      {/* <GameSettings /> */}
-      {/* <GameMenu /> */}
       <Canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} draw={init} />
     </GameContext.Provider>
   );

@@ -5,7 +5,7 @@ import { FullScreenContainer } from '@@shared/ui/Fullscreen';
 import { View, Panel, PanelHeader, Group, Button } from '@vkontakte/vkui';
 
 export const GamePage = () => {
-  const handle = useFullscreen();
+  const fullscreenController = useFullscreen();
   const [gameStart, setGameStart] = useState(false);
   const handleStartGame = () => {
     setGameStart(true);
@@ -13,10 +13,12 @@ export const GamePage = () => {
 
   return (
     <>
-      <FullScreenContainer handle={handle}>
+      <FullScreenContainer handle={fullscreenController}>
         {gameStart ? (
           <>
-            <GameView />
+            <GameView>
+              {!fullscreenController.active && <Button onClick={fullscreenController.enter}>Полный экран</Button>}
+            </GameView>
           </>
         ) : (
           <View activePanel="start">
