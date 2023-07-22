@@ -1,1 +1,1 @@
-export { InternalErrorPage } from './page';
+export { InternalErrorPage } from './internal-error';

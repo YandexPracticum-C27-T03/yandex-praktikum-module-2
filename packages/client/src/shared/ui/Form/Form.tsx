@@ -7,7 +7,8 @@ import { FormInput } from './FormInput';
 
 import './styles.scss';
 
-type Props<T> = {
+type FormProps<T> = {
+  className?: string;
   fields: IForm[];
   cb: (value: T) => void;
   buttonValue?: string;
@@ -16,11 +17,12 @@ type Props<T> = {
 const cnForm = cn('Form');
 
 export const Form = function <T extends FieldValues>({
+  className = '',
   cb,
   fields,
   buttonValue,
   children,
-}: PropsWithChildren<Props<T>>) {
+}: PropsWithChildren<FormProps<T>>) {
   const {
     control,
     handleSubmit,
@@ -30,7 +32,7 @@ export const Form = function <T extends FieldValues>({
   const onSubmit = handleSubmit(cb);
 
   return (
-    <Group mode="card" className={cnForm('body')}>
+    <Group mode="card" className={cnForm('', [className])}>
       <FormLayout onSubmit={onSubmit}>
         <FormLayoutGroup>
           {fields.map(({ name, rules, label, ...input }) => {

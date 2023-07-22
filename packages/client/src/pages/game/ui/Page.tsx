@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { GameView } from '@@entities/game';
+import { Div } from '@vkontakte/vkui';
 import { GamePreview } from './game-preview';
 
 export const GamePage = () => {
@@ -7,7 +8,7 @@ export const GamePage = () => {
   const handleStartGame = () => setGameStart(true);
 
   return (
-    <div style={{ height: '100vh', overflow: 'hidden' }}>
+    <Div style={{ height: '100%', width: '100%', overflow: 'hidden', padding: 0 }}>
       {gameStart ? (
         <>
           <GameView />
@@ -15,7 +16,7 @@ export const GamePage = () => {
       ) : (
         <GamePreview handleStartGame={handleStartGame} />
       )}
-    </div>
+    </Div>
   );
 };
 

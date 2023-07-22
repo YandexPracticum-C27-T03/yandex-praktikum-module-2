@@ -2,7 +2,7 @@ import { Routes } from '@@shared/config';
 import { cn } from '@@shared/lib/bem';
 import { HeaderLayout } from '@@widgets/header-layout';
 import { Icon28BugOutline } from '@vkontakte/icons';
-import { Div, Card, Text } from '@vkontakte/vkui';
+import { Div, Card, Text, Link } from '@vkontakte/vkui';
 
 import './styles.scss';
 
@@ -10,7 +10,7 @@ const cnNotFoundPage = cn('NotFoundPage');
 
 export const InternalErrorPage = () => {
   return (
-    <HeaderLayout>
+    <HeaderLayout title="Страница ошибки">
       <Card mode="shadow" className={cnNotFoundPage()}>
         <Div className={cnNotFoundPage('header')}>
           <Text weight="1">
@@ -21,7 +21,7 @@ export const InternalErrorPage = () => {
           <p>
             Ой. У нас что-то сломалось, но мы уже стараемся починить. <br />
             Вы можете попробовать повторить действие <i>позднее</i>, либо перейти на&nbsp;
-            <a href={Routes.ROOT}>главную страницу</a>
+            <Link href={Routes.ROOT}>главную страницу</Link>
             &nbsp;сайта.
           </p>
         </Div>
