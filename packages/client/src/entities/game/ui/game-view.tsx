@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  BACKGROUND_SPEED_COEF,
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
   COLORS,
@@ -79,8 +80,8 @@ export const GameView: React.FC<GameViewProps> = ({ resourceLoader }) => {
   const update = () => {
     updateID = setTimeout(update, 1 / FPS);
 
-    backgroundXRef.current.x1 -= SPIKES_VELOCITY / 2 + progressRef.current;
-    backgroundXRef.current.x2 -= SPIKES_VELOCITY / 2 + progressRef.current;
+    backgroundXRef.current.x1 -= Math.ceil((SPIKES_VELOCITY + progressRef.current) * BACKGROUND_SPEED_COEF);
+    backgroundXRef.current.x2 -= Math.ceil((SPIKES_VELOCITY + progressRef.current) * BACKGROUND_SPEED_COEF);
 
     // Обновляет игрока
     player.update();

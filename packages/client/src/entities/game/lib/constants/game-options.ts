@@ -14,6 +14,7 @@ export const PLAYER_SIZE_Y = 176;
 export const GRAVITY = 1.2;
 export const PLAYER_JUMP_VELOCITY = 42;
 export const SPIKES_VELOCITY = 5;
+export const BACKGROUND_SPEED_COEF = 0.2;
 export const INITIAL_SCORE = 1;
 
 export enum ImageNames {
