@@ -1,4 +1,3 @@
-import { Fill } from '../lib/types';
 import { fillRect } from '../lib/utils';
 import { Entity } from './Entity';
 import { Player } from './Player';
@@ -16,7 +15,7 @@ export class Rectangle {
     this.h = h;
   }
 
-  draw({ ctx, color }: Fill) {
+  draw(ctx: CanvasRenderingContext2D, color?: string) {
     fillRect({ ctx, x: this.x, y: this.y, w: this.w, h: this.h, color });
   }
 
