@@ -13,8 +13,10 @@ export const GamePage = () => {
 
   useEffect(() => {
     // TODO: Добавить спиннер или что-то такое, что отобразит состояние загрузки ресурсов
-    resourceLoader.on(ResourceLoaderEvents.Success, onLoad).load(30000);
+    // void -для того, чтобы среда разработки не указывала на не перехваченный промис(он нам не нужен)
+    void resourceLoader.on(ResourceLoaderEvents.Success, onLoad).load(30000);
 
+    // void - для того, чтобы TS не ругался на тип возвращаемых данных(ResourceLoader, а не void)
     return () => void resourceLoader.off(ResourceLoaderEvents.Success, onLoad);
   }, [onLoad]);
 

@@ -19,24 +19,23 @@ export class ResourceLoader extends EventEmitter {
     this._imageAssetMap = ImageResourcesMap;
   }
 
-  load(timeout = 5000) {
+  async load(timeout = 5000) {
     const assetNames = Object.keys(this._imageAssetMap);
     const assetPromises = assetNames.map((assetName) => this.loadAsset(assetName, this._imageAssetMap[assetName]));
 
     const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Load timeout')), timeout));
 
-    Promise.race([Promise.all(assetPromises), timeoutPromise])
-      .then(() => {
-        if (this.errorOccurred) {
-          this.emit(ResourceLoaderEvents.Error);
-        } else {
-          this.emit(ResourceLoaderEvents.Success);
-        }
-      })
-      .catch(() => {
-        this.errorOccurred = true;
+    try {
+      await Promise.race([Promise.all(assetPromises), timeoutPromise]);
+      if (this.errorOccurred) {
         this.emit(ResourceLoaderEvents.Error);
-      });
+      } else {
+        this.emit(ResourceLoaderEvents.Success);
+      }
+    } catch (err) {
+      this.errorOccurred = true;
+      this.emit(ResourceLoaderEvents.Error);
+    }
 
     return this;
   }
