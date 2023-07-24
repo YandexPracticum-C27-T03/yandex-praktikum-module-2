@@ -1,7 +1,13 @@
+import React from 'react';
 import { HeaderLayout } from '@@widgets/header-layout';
 import { Text, Group, Button, Div, Header } from '@vkontakte/vkui';
 
-export const GamePreview = ({ handleStartGame }: { handleStartGame: () => void }) => {
+type GamePreviewProps = {
+  handleStartGame: () => void;
+  startActive: boolean;
+};
+
+export const GamePreview: React.FC<GamePreviewProps> = ({ handleStartGame, startActive }) => {
   return (
     <HeaderLayout>
       <>
@@ -20,7 +26,14 @@ export const GamePreview = ({ handleStartGame }: { handleStartGame: () => void }
           </Div>
         </Group>
         <Div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button style={{ width: '200px' }} onClick={handleStartGame} stretched mode="primary" size="l">
+          <Button
+            style={{ width: '200px' }}
+            disabled={!startActive}
+            onClick={handleStartGame}
+            stretched
+            mode="primary"
+            size="l"
+          >
             Начать игру
           </Button>
         </Div>
