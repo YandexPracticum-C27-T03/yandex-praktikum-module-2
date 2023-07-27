@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import {
   BACKGROUND_SPEED_COEF,
   CANVAS_HEIGHT,
@@ -27,7 +27,7 @@ type GameViewProps = {
   resourceLoader: ResourceLoader;
 };
 
-export const GameView: React.FC<GameViewProps> = ({ resourceLoader }) => {
+export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceLoader, children }) => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.STOP);
   const [score, setScore] = useState(INITIAL_SCORE);
   const backgroundXRef = useRef({ x1: 0, x2: CANVAS_WIDTH });
@@ -226,7 +226,7 @@ export const GameView: React.FC<GameViewProps> = ({ resourceLoader }) => {
 
   return (
     <GameContext.Provider value={{ gameStatus, start, reset, score }}>
-      <GameHeader />
+      <GameHeader>{children}</GameHeader>
       <GameStart />
       <Canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} draw={init} />
     </GameContext.Provider>

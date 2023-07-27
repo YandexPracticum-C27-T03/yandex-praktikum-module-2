@@ -1,10 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { GameView } from '@@entities/game';
 import { resourceLoader, ResourceLoaderEvents } from '@@entities/game';
+import { useFullscreen } from '@@shared/hooks/useFullscreen';
+import { FullScreenContainer } from '@@shared/ui/Fullscreen';
+import { Button } from '@vkontakte/vkui';
 import { Div } from '@vkontakte/vkui';
 import { GamePreview } from './game-preview';
 
 export const GamePage = () => {
+  const fullscreenController = useFullscreen();
+
   const [gameStart, setGameStart] = useState(false);
   const [resourceLoaded, setResourceLoaded] = useState(false);
   const handleStartGame = () => setGameStart(true);
@@ -21,15 +26,17 @@ export const GamePage = () => {
   }, [onLoad]);
 
   return (
-    <Div style={{ height: '100%', width: '100%', overflow: 'hidden', padding: 0 }}>
-      {gameStart ? (
-        <>
-          <GameView resourceLoader={resourceLoader} />
-        </>
-      ) : (
-        <GamePreview handleStartGame={handleStartGame} startActive={resourceLoaded} />
-      )}
-    </Div>
+    <FullScreenContainer controller={fullscreenController}>
+      <Div style={{ height: '100%', width: '100%', overflow: 'hidden', padding: 0 }}>
+        {gameStart ? (
+          <GameView resourceLoader={resourceLoader}>
+            <Button onClick={fullscreenController.enter}>Полный экран</Button>
+          </GameView>
+        ) : (
+          <GamePreview handleStartGame={handleStartGame} startActive={resourceLoaded} />
+        )}
+      </Div>
+    </FullScreenContainer>
   );
 };
 
