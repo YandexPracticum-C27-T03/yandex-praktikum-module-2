@@ -1,11 +1,10 @@
 import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '@@shared/config';
-
 import { cn } from '@@shared/lib/bem';
 import { HeaderLayout } from '@@widgets/header-layout';
 import { Icon28BillSeparatedOutline } from '@vkontakte/icons';
-import { Div, Card, Text } from '@vkontakte/vkui';
+import { Div, Card, Text, Link } from '@vkontakte/vkui';
 
 import './styles.scss';
 
@@ -21,21 +20,21 @@ export const NotFoundPage = () => {
   };
 
   return (
-    <HeaderLayout>
+    <HeaderLayout title="Страница ошибки">
       <Card mode="shadow" className={cnNotFoundPage()}>
         <Div className={cnNotFoundPage('header')}>
           <Text weight="1">
             <Icon28BillSeparatedOutline /> Ошибка 404. Файл не найден
           </Text>
         </Div>
-        <Div className={cnNotFoundPage('content')}>
+        <Div className={cnNotFoundPage('body')}>
           <p>
             Возможно, Вы ошиблись при наборе адреса, или ссылка, по которой Вы прошли, устарела. <br />
             Вы можете попробовать&nbsp;
-            <a href="#" onClick={onGoBackClick}>
+            <Link href="#" onClick={onGoBackClick}>
               вернуться назад
-            </a>
-            &nbsp;или перейти на <a href={Routes.ROOT}>главную страницу</a> сайта.
+            </Link>
+            &nbsp;или перейти на <Link href={Routes.ROOT}>главную страницу</Link> сайта.
           </p>
         </Div>
       </Card>

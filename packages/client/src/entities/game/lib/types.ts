@@ -8,10 +8,17 @@ export type FillRect = {
   y?: number;
   w?: number;
   h?: number;
-  color: string;
+  color?: string;
 };
 
-export type Fill = Omit<FillRect, 'x' | 'y' | 'w' | 'h'>;
+export type DrawImage = Omit<FillRect, 'color'> & {
+  image: HTMLImageElement;
+};
+
+export type DrawBackground = Pick<FillRect, 'ctx'> & {
+  xShift: number;
+  image: HTMLImageElement;
+};
 
 export type RandomRange = {
   min: number;

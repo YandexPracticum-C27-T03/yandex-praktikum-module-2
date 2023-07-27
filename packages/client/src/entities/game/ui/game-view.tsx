@@ -1,58 +1,87 @@
-import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import {
+  BACKGROUND_SPEED_COEF,
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
   COLORS,
   FLOOR_HEIGHT,
   FPS,
   GRAVITY,
+  ImageNames,
   INITIAL_SCORE,
   PLAYER_JUMP_VELOCITY,
-  PLAYER_SIZE,
+  PLAYER_SIZE_X,
+  PLAYER_SIZE_Y,
   PLAYER_START_X,
   SPIKES_VELOCITY,
 } from '../lib/constants/game-options';
 import { GAME_STATUS } from '../lib/constants/game-status';
 import { GameContext } from '../lib/context/game-context';
-import { randomRangeInt, fill, fillRect } from '../lib/utils';
-import { Entity, Player, Rectangle } from '../model';
+import { randomRangeInt, fillRect, ResourceLoader, drawBackground } from '../lib/utils';
+import { Player, Rectangle, SpriteEntity } from '../model';
 import { Canvas } from './canvas';
 import { GameHeader } from './game-header';
 import { GameStart } from './game-start';
 
-export const GameView = ({ children }: PropsWithChildren) => {
+type GameViewProps = {
+  resourceLoader: ResourceLoader;
+};
+
+export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceLoader, children }) => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.STOP);
   const [score, setScore] = useState(INITIAL_SCORE);
+  const backgroundXRef = useRef({ x1: 0, x2: CANVAS_WIDTH });
+  const spikesRef = useRef<SpriteEntity[]>([]);
+  const progressRef = useRef<number>(0);
+
   const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;
 
+  const backgroundImg = resourceLoader.getResourceByName(ImageNames.Background);
+  const playerWalk1Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk1);
+  const playerWalk2Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk2);
+
   // Глобальные переменные
-  const player = new Player(PLAYER_START_X, CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE);
-  let spikes: Entity[] = [];
+  const player = new Player(
+    PLAYER_START_X,
+    CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE_Y,
+    PLAYER_SIZE_X,
+    PLAYER_SIZE_Y,
+    [playerWalk1Img, playerWalk2Img],
+  );
   let spawnSpikeID: NodeJS.Timer | null = null;
   let updateID: NodeJS.Timer | null = null;
-  let progress = 0;
 
   // Каждые несколько секунд за кадром появляется препятствия
   const spawnSpike = () => {
-    progress = progress + 0.5;
+    const spikeImages = [
+      resourceLoader.getResourceByName(ImageNames.Tree1),
+      resourceLoader.getResourceByName(ImageNames.Tree2),
+      resourceLoader.getResourceByName(ImageNames.Tree3),
+      resourceLoader.getResourceByName(ImageNames.Tree4),
+    ];
+    progressRef.current = progressRef.current + 0.5;
 
     spawnSpikeID = setTimeout(spawnSpike, randomRangeInt({ min: 1000, max: 2000 }));
 
     // Создает препятствия
     const width = randomRangeInt({ min: 32, max: 64 });
     const height = randomRangeInt({ min: 128, max: 256 });
-    const spike = new Entity(CANVAS_WIDTH, CANVAS_HEIGHT - FLOOR_HEIGHT - height, width, height);
+    const spikeImage = spikeImages[randomRangeInt({ min: 0, max: spikeImages.length - 1 })];
+    const spike = new SpriteEntity(CANVAS_WIDTH, CANVAS_HEIGHT - FLOOR_HEIGHT - height, width, height, spikeImage);
 
     // Инициализация скорости препятствия
     // Увеличиваем скорость по мере прогресса
-    spike.velocity.x = -SPIKES_VELOCITY - progress;
+    spike.velocity.x = -SPIKES_VELOCITY - progressRef.current;
 
     // Пушит в массив препятствие
-    spikes.push(spike);
+    spikesRef.current.push(spike);
   };
 
   const update = () => {
     updateID = setTimeout(update, 1 / FPS);
+
+    backgroundXRef.current.x1 -= Math.ceil((SPIKES_VELOCITY + progressRef.current) * BACKGROUND_SPEED_COEF);
+    backgroundXRef.current.x2 -= Math.ceil((SPIKES_VELOCITY + progressRef.current) * BACKGROUND_SPEED_COEF);
 
     // Обновляет игрока
     player.update();
@@ -64,11 +93,15 @@ export const GameView = ({ children }: PropsWithChildren) => {
     }
 
     // Препятствия
-    spikes.forEach((spike) => {
+    spikesRef.current.forEach((spike) => {
+      // TODO: Fix this; Тут костыль, чтоб ускорение работало для всех препятствий, а не так, что одно быстрее приближается :)
+      // Нужно сделать общую скорость и её повышение
+      spike.velocity.x = -SPIKES_VELOCITY - progressRef.current;
+
       // Обновляет препятствие
       spike.update();
 
-      // Проверяет столкнулся ли игрок с препятствием
+      // Проверка: произошло ли столкновение игрока с препятствием
       if (Rectangle.areColliding({ player, spike })) {
         // Game over
         stop();
@@ -76,7 +109,7 @@ export const GameView = ({ children }: PropsWithChildren) => {
     });
 
     // Удаляет препятствиея за границей экрана
-    spikes = spikes.filter((spike) => spike.x > -spike.w);
+    spikesRef.current = spikesRef.current.filter((spike) => spike.x > -spike.w);
   };
 
   // Возвращает параметры игры к исходному состоянию
@@ -85,11 +118,11 @@ export const GameView = ({ children }: PropsWithChildren) => {
     setGameStatus(GAME_STATUS.START);
 
     // Сброс игрока
-    player.y = CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE;
+    player.y = CANVAS_HEIGHT - FLOOR_HEIGHT - PLAYER_SIZE_Y;
     player.velocity.y = 0;
 
-    // Удаление препятсвий
-    spikes = [];
+    // Удаление препятствий
+    spikesRef.current = [];
 
     // Сброс таймера до начального
     setScore(INITIAL_SCORE);
@@ -104,7 +137,7 @@ export const GameView = ({ children }: PropsWithChildren) => {
     setGameStatus(GAME_STATUS.RESTART);
     clearTimeout(updateID as NodeJS.Timer);
     clearTimeout(spawnSpikeID as NodeJS.Timer);
-    progress = 0;
+    progressRef.current = 0;
   }, []);
 
   // Запускает игру
@@ -114,20 +147,46 @@ export const GameView = ({ children }: PropsWithChildren) => {
     spawnSpike();
   }, []);
 
+  const drawInfinityBackground = (ctx: CanvasRenderingContext2D) => {
+    // Если первое изображение полностью вышло за пределы экрана помещаем его в конец экрана
+    if (backgroundXRef.current.x1 <= -ctx.canvas.width) {
+      backgroundXRef.current.x1 = ctx.canvas.width;
+    }
+
+    // Если второе изображение полностью вышло за пределы экрана помещаем его в конец экрана
+    if (backgroundXRef.current.x2 <= -ctx.canvas.width) {
+      backgroundXRef.current.x2 = ctx.canvas.width;
+    }
+
+    // Рисуем фон #1
+    drawBackground({
+      ctx,
+      image: backgroundImg,
+      xShift: backgroundXRef.current.x1,
+    });
+
+    // Рисуем фон #2
+    drawBackground({
+      ctx,
+      image: backgroundImg,
+      xShift: backgroundXRef.current.x2,
+    });
+  };
+
   const draw = (ctx: CanvasRenderingContext2D) => {
     requestAnimationFrame(() => draw(ctx));
 
-    // Рисует фон
-    fill({ ctx, color: COLORS.BACKGROUND });
+    // Рисует бесконечный фон
+    drawInfinityBackground(ctx);
 
     // Рисует пол
     fillRect({ ctx, x: 0, y: CANVAS_HEIGHT - FLOOR_HEIGHT, w: CANVAS_WIDTH, h: FLOOR_HEIGHT, color: COLORS.FLOOR });
 
     // Рисует препятствие
-    spikes.forEach((spike) => spike.draw({ ctx, color: COLORS.SPIKES }));
+    spikesRef.current.forEach((spike) => spike.draw(ctx));
 
     // Рисует игрока
-    player.draw({ ctx, color: COLORS.PLAYER });
+    player.draw(ctx);
   };
 
   const init = useCallback((ctx: CanvasRenderingContext2D) => {

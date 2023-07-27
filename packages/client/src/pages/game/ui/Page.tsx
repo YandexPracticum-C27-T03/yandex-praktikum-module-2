@@ -1,54 +1,42 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { GameView } from '@@entities/game';
+import { resourceLoader, ResourceLoaderEvents } from '@@entities/game';
 import { useFullscreen } from '@@shared/hooks/useFullscreen';
 import { FullScreenContainer } from '@@shared/ui/Fullscreen';
-import { View, Panel, PanelHeader, Group, Button } from '@vkontakte/vkui';
+import { Button } from '@vkontakte/vkui';
+import { Div } from '@vkontakte/vkui';
+import { GamePreview } from './game-preview';
 
 export const GamePage = () => {
   const fullscreenController = useFullscreen();
-  const [gameStart, setGameStart] = useState(false);
 
-  const handleStartGame = () => {
-    setGameStart(true);
-  };
+  const [gameStart, setGameStart] = useState(false);
+  const [resourceLoaded, setResourceLoaded] = useState(false);
+  const handleStartGame = () => setGameStart(true);
+
+  const onLoad = useCallback(() => setResourceLoaded(true), []);
+
+  useEffect(() => {
+    // TODO: Добавить спиннер или что-то такое, что отобразит состояние загрузки ресурсов
+    // void -для того, чтобы среда разработки не указывала на не перехваченный промис(он нам не нужен)
+    void resourceLoader.on(ResourceLoaderEvents.Success, onLoad).load(30000);
+
+    // void - для того, чтобы TS не ругался на тип возвращаемых данных(ResourceLoader, а не void)
+    return () => void resourceLoader.off(ResourceLoaderEvents.Success, onLoad);
+  }, [onLoad]);
 
   return (
-    <>
-      <FullScreenContainer controller={fullscreenController}>
+    <FullScreenContainer controller={fullscreenController}>
+      <Div style={{ height: '100%', width: '100%', overflow: 'hidden', padding: 0 }}>
         {gameStart ? (
-          <>
-            <GameView>
-              {!fullscreenController.active && <Button onClick={fullscreenController.enter}>Полный экран</Button>}
-            </GameView>
-          </>
+          <GameView resourceLoader={resourceLoader}>
+            <Button onClick={fullscreenController.enter}>Полный экран</Button>
+          </GameView>
         ) : (
-          <View activePanel="start">
-            <Panel id="start">
-              <PanelHeader>2D Runner</PanelHeader>
-              <>
-                <Group title="Описание игры">
-                  Добро пожаловать в захватывающий мир нашего 2D раннера! В этой игре ваша реакция и ловкость будут
-                  стоять на испытании. Вам предстоит стать героем, который должен перепрыгивать разнообразные
-                  препятствия, преодолевая трудности на своем пути. Вам нужно проявить отличную координацию движений,
-                  чтобы перепрыгивать через преграды, которые будут появляться на вашем пути. Ваша задача - собрать как
-                  можно больше бонусов и монет, чтобы получить максимальный счет. Используйте свои навыки и реакцию,
-                  чтобы избегать столкновений. Не забывайте, что каждое препятствие будет появляться все быстрее и
-                  быстрее, поэтому ваше внимание должно быть постоянно направлено на игровое поле. Постарайтесь достичь
-                  высочайшего счета, ставьте рекорды.
-                </Group>
-                <Group>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button style={{ width: '200px' }} onClick={handleStartGame}>
-                      Начать игру
-                    </Button>
-                  </div>
-                </Group>
-              </>
-            </Panel>
-          </View>
+          <GamePreview handleStartGame={handleStartGame} startActive={resourceLoaded} />
         )}
-      </FullScreenContainer>
-    </>
+      </Div>
+    </FullScreenContainer>
   );
 };
 

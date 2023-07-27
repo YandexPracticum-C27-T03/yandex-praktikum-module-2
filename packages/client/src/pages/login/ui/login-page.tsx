@@ -4,6 +4,11 @@ import { loginFormFields } from '@@shared/lib/constants';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { Form } from '@@shared/ui/Form';
 import { HeaderLayout } from '@@widgets/header-layout';
+import { cn } from '@bem-react/classname';
+
+import './styles.scss';
+
+const cnLoginPage = cn('LoginPage');
 
 const mapDispatch = makeMapDispatch((dispatch) => ({
   login: (data: UserLogin) => dispatch(login(data)),
@@ -14,7 +19,7 @@ export const LoginPage = () => {
 
   return (
     <HeaderLayout title="Авторизация">
-      <Form<UserLogin> fields={loginFormFields} cb={login} buttonValue="Войти" />
+      <Form<UserLogin> className={cnLoginPage()} fields={loginFormFields} cb={login} buttonValue="Войти" />
     </HeaderLayout>
   );
 };

@@ -1,3 +1,3 @@
-export { fill } from './fill';
-export { fillRect } from './fill-rect';
+export * from './canvas';
 export { randomRangeInt } from './random-range-int';
+export { ResourceLoader, resourceLoader, ResourceLoaderEvents } from './resource-loader';
