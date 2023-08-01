@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import { useAppSelector } from '@@/shared/lib/model/hooks';
 import { AuthLayer } from '@@app/layers/auth-layer';
 import { selectCurrentTheme } from '@@entities/theme';
+import { useAppSelector } from '@@shared/lib/model/hooks';
 import { ErrorBoundary } from '@@shared/ui/ErrorBoundary/ErrorBoundary';
 import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 

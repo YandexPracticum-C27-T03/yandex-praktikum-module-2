@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "esnext",
+    "module": "CommonJS",
     "lib": ["dom", "dom.iterable", "esnext"],
     "useDefineForClassFields": true,
     "allowJs": false,
@@ -20,7 +20,7 @@
       "@@*": ["./src/*"]
     }
   },
-  "include": ["src", "types"],
+  "include": ["src", "types", "ssr.tsx"],
   "exclude": ["dist", "node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

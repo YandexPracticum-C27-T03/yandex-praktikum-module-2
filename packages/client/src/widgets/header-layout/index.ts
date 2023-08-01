@@ -1,1 +1,1 @@
-export { HeaderLayout } from 'src/widgets/header-layout/header-layout';
+export { HeaderLayout } from '@@widgets/header-layout/header-layout';

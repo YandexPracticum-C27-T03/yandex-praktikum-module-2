@@ -1,6 +1,6 @@
-import { createBrowserRouter, RouteObject } from 'react-router-dom';
-
-import { UNProtectedRoute } from '@@entities/user';
+import React from 'react';
+import { Route, RouteObject, Routes } from 'react-router-dom';
+import { UNProtectedRoute, fetchUser } from '@@entities/user';
 import { ProtectedRoute } from '@@entities/user';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
@@ -11,27 +11,32 @@ import { MainPage } from '@@pages/main';
 import { NotFoundPage } from '@@pages/not-found';
 import { ProfilePage } from '@@pages/profile';
 import { RegistrationPage } from '@@pages/registration';
-import { Routes } from '../shared/config';
+import { Routes as Pages } from '../shared/config';
+
 import { BaseLayout } from './layouts/BaseLayout';
 
-const routerConfig: RouteObject[] = [
+export const routerConfig = [
   {
     element: <BaseLayout />,
+
+    id: 'root',
+
     children: [
       // Доступ только для авторизированных
       {
         element: <ProtectedRoute />,
+
         children: [
           {
-            path: Routes.GAME,
+            path: Pages.GAME,
             element: <GamePage />,
           },
           {
-            path: Routes.LEADERBOARD,
+            path: Pages.LEADERBOARD,
             element: <LeaderBoardPage />,
           },
           {
-            path: Routes.FORUM,
+            path: Pages.FORUM,
             element: <ForumPage />,
           },
           {
@@ -43,7 +48,7 @@ const routerConfig: RouteObject[] = [
             element: <SingleTopic />,
           },
           {
-            path: Routes.PROFILE,
+            path: Pages.PROFILE,
             element: <ProfilePage />,
           },
         ],
@@ -55,11 +60,11 @@ const routerConfig: RouteObject[] = [
         element: <UNProtectedRoute />,
         children: [
           {
-            path: Routes.LOGIN,
+            path: Pages.LOGIN,
             element: <LoginPage />,
           },
           {
-            path: Routes.REGISTRATION,
+            path: Pages.REGISTRATION,
             element: <RegistrationPage />,
           },
         ],
@@ -68,24 +73,41 @@ const routerConfig: RouteObject[] = [
 
       // Публичные роуты
       {
-        path: Routes.ROOT,
+        path: Pages.ROOT,
         element: <MainPage />,
       },
       {
-        path: Routes.INTERNAL_ERROR,
+        path: Pages.INTERNAL_ERROR,
         element: <InternalErrorPage />,
       },
       {
-        path: Routes.NOT_FOUND,
+        path: Pages.NOT_FOUND,
         element: <NotFoundPage />,
       },
       {
         path: '/*',
         element: <NotFoundPage />,
       },
-      // Публичные роуты //
     ],
   },
 ];
 
-export const appRouter = createBrowserRouter(routerConfig);
+function createRouter(router: RouteObject[]) {
+  function renderChild(children: RouteObject['children']) {
+    if (!Array.isArray(children) || !children.length) {
+      return <></>;
+    }
+
+    return createRouter(children);
+  }
+
+  return router.map(({ children, path, element, loader }, index) => (
+    <React.Fragment key={`${path}__${index}`}>
+      <Route path={path} element={element} loader={loader} children={<Route>{renderChild(children)}</Route>} />
+    </React.Fragment>
+  ));
+}
+
+export function AppRouter() {
+  return <Routes>{createRouter(routerConfig)}</Routes>;
+}
