@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, RouteObject, Routes } from 'react-router-dom';
-import { UNProtectedRoute, fetchUser } from '@@entities/user';
+import { UNProtectedRoute } from '@@entities/user';
 import { ProtectedRoute } from '@@entities/user';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
