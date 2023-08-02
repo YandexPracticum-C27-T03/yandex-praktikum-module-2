@@ -1,5 +1,5 @@
 import React from 'react';
-import { Comment } from '@@entities/forum/model/types';
+import { Comment } from '@@entities/forum';
 import { Card, Div } from '@vkontakte/vkui';
 
 const CommentList = ({ comments }: { comments: Comment[] }) => {

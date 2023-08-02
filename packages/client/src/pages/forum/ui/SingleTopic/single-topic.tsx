@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Comment } from '@@entities/forum/model/types';
+import { Comment } from '@@entities/forum';
 import { View, Panel, PanelHeader, Group, Card, Div, Spinner } from '@vkontakte/vkui';
 import { AddCommentForm } from '../AddCommentForm';
 import CommentList from '../CommentList';
