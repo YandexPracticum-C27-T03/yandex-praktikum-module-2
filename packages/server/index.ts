@@ -1,20 +1,21 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { createClientAndConnect } from './db';
+
+import ssr from './middlewares/ssr';
+
 dotenv.config();
 
-const app = express();
-app.use(cors());
-const port = Number(process.env.SERVER_PORT) || 3001;
+async function startServer() {
+  const app = express();
+  app.use(cors());
+  const port = Number(process.env.SERVER_PORT) || 3001;
 
-void createClientAndConnect();
+  const middlewareSsr = await ssr(app);
 
-app.get('/', (_, res) => {
-  res.json('👋 Howdy from the server :)');
-});
+  app.use('*', async (req, res, next) => await middlewareSsr(req, res, next));
 
-app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`  ➜ 🎸 Server is listening on port: ${port}`);
-});
+  app.listen(port, () => console.log(`Server is listening on port: ${port}`));
+}
+
+startServer();
