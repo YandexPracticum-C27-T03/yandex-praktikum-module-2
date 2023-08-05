@@ -32,15 +32,14 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
 
-    builder.addCase(registration.fulfilled, (state, { payload }) => {
-      state.data = payload;
+    builder.addCase(registration.fulfilled, (state) => {
       state.isAuth = true;
       state.isLoading = false;
       state.error = null;
     });
 
-    builder.addCase(registration.rejected, (state, action) => {
-      state.error = action.error.message as string;
+    builder.addCase(registration.rejected, (state) => {
+      state.isAuth = false;
     });
 
     // Авторизация
@@ -48,9 +47,7 @@ export const userSlice = createSlice({
       state.isLoading = true;
     });
 
-    builder.addCase(login.fulfilled, (state, { payload }) => {
-      state.data = payload;
-      state.isAuth = true;
+    builder.addCase(login.fulfilled, (state) => {
       state.isLoading = false;
       state.error = null;
     });
@@ -65,7 +62,9 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(fetchUser.fulfilled, (state, { payload }) => {
-      state.data = payload;
+      if (payload) {
+        state.data = payload;
+      }
 
       state.isAuth = true;
       state.isLoading = false;

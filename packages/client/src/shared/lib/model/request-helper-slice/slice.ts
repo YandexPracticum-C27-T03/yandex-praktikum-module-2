@@ -35,11 +35,10 @@ export const requestSlice = createSlice({
       )
       .addMatcher(
         (action) => action.type.endsWith('/rejected'),
-        (state, { error, meta }) => {
+        (state, { meta }) => {
           requestEntityAdapter.setOne(state, {
             id: meta.requestId,
             status: STATUSES.failed,
-            error,
           });
         },
       );

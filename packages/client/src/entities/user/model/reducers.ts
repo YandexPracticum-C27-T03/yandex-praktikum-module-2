@@ -1,25 +1,61 @@
-import { authService, getCurrentUser, userAdapter } from '@@entities/user';
+import { authService, getUserData, userAdapter } from '@@entities/user';
+import { ServiceFactory } from '@@services/service-factory';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import { UserLogin, UserRegistration } from './types';
 
-export const registration = createAsyncThunk('entities/user/register', (data: UserRegistration) => {
-  return authService.registration(data).then(() => authService.fetchUser());
-});
+type LoginThunkParams = {
+  data: UserLogin;
+  onRedirect: () => void;
+};
 
-export const login = createAsyncThunk('entities/user/login', (data: UserLogin) => {
-  return authService.login(data).then(() => authService.fetchUser());
-});
-
-export const fetchUser = createAsyncThunk('entities/user/fetchUser', async (_, { getState }) => {
-  const state = getState() as RootState;
-
-  const slice = getCurrentUser(state);
-
-  if (!slice.data) {
-    const user = await authService.fetchUser();
-
-    return userAdapter(user);
+export const registration = createAsyncThunk('entities/user/register', async (data: UserRegistration, { dispatch }) => {
+  try {
+    await authService.registration(data);
+    await dispatch(fetchUser());
+  } catch (error) {
+    return Promise.reject(error);
   }
-
-  return slice.data;
 });
+
+export const login = createAsyncThunk(
+  'entities/user/login',
+  async ({ data, onRedirect }: LoginThunkParams, { dispatch }) => {
+    try {
+      await authService.login(data);
+      await dispatch(fetchUser());
+
+      onRedirect();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+);
+
+export const fetchUser = createAsyncThunk(
+  'entities/user/fetchUser',
+  async (_, { getState, extra, rejectWithValue }) => {
+    try {
+      const state = getState() as RootState;
+      const user = getUserData(state);
+
+      if (!user) {
+        const sevice = extra as ServiceFactory;
+
+        const user = await sevice.getService('user').getUser();
+
+        return userAdapter(user);
+      }
+
+      return userAdapter(user);
+    } catch (error) {
+      const { response } = error as AxiosError;
+
+      if (response?.status === 401) {
+        return rejectWithValue('unautorized');
+      }
+
+      return rejectWithValue('error');
+    }
+  },
+);

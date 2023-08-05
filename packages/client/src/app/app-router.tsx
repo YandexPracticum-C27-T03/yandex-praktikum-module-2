@@ -1,7 +1,9 @@
 import React from 'react';
 import { Route, RouteObject, Routes } from 'react-router-dom';
-import { UNProtectedRoute } from '@@entities/user';
+import { setLeaderUser } from '@@entities/leader-board';
+import { fetchUser } from '@@entities/user';
 import { ProtectedRoute } from '@@entities/user';
+import { isClient } from '@@shared/lib/common';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
@@ -15,11 +17,17 @@ import { Routes as Pages } from '../shared/config';
 
 import { BaseLayout } from './layouts/BaseLayout';
 
-export const routerConfig = [
+function getUserRouteLoader(dispatch: AppDispatch) {
+  return !isClient() && dispatch(fetchUser()).unwrap();
+}
+
+export const routerConfig = (dispatch: AppDispatch): RouteObject[] => [
   {
     element: <BaseLayout />,
 
-    id: 'root',
+    loader: () => {
+      return getUserRouteLoader(dispatch);
+    },
 
     children: [
       // Доступ только для авторизированных
@@ -34,6 +42,8 @@ export const routerConfig = [
           {
             path: Pages.LEADERBOARD,
             element: <LeaderBoardPage />,
+            // Cделано исключительно для демострации работы loader'а на сервере
+            loader: () => !isClient() && dispatch(setLeaderUser({ id: '1', name: 'SSR PRELOAD WORK' })),
           },
           {
             path: Pages.FORUM,
@@ -57,17 +67,12 @@ export const routerConfig = [
 
       // Блокирует доступ, если пользователь авторизирован
       {
-        element: <UNProtectedRoute />,
-        children: [
-          {
-            path: Pages.LOGIN,
-            element: <LoginPage />,
-          },
-          {
-            path: Pages.REGISTRATION,
-            element: <RegistrationPage />,
-          },
-        ],
+        path: Pages.LOGIN,
+        element: <LoginPage />,
+      },
+      {
+        path: Pages.REGISTRATION,
+        element: <RegistrationPage />,
       },
       // Блокирует роуты, если пользователь авторизирован //
 
@@ -98,16 +103,16 @@ function createRouter(router: RouteObject[]) {
       return <></>;
     }
 
-    return createRouter(children);
+    return <Route>{createRouter(children)}</Route>;
   }
 
   return router.map(({ children, path, element, loader }, index) => (
     <React.Fragment key={`${path}__${index}`}>
-      <Route path={path} element={element} loader={loader} children={<Route>{renderChild(children)}</Route>} />
+      <Route path={path} element={element} loader={loader} children={renderChild(children)} />
     </React.Fragment>
   ));
 }
 
-export function AppRouter() {
-  return <Routes>{createRouter(routerConfig)}</Routes>;
+export function AppRouter({ dispatch }: { dispatch: AppDispatch }) {
+  return <Routes>{createRouter(routerConfig(dispatch))}</Routes>;
 }
