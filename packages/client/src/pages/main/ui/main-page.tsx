@@ -7,6 +7,7 @@ import { Spacing, Header, Group, Div, Text, CellButton } from '@vkontakte/vkui';
 
 export const MainPage = () => {
   useSetPageName('Главная страница');
+
   const navigate = useNavigate();
 
   const goToProfile = () => navigate(Routes.PROFILE);

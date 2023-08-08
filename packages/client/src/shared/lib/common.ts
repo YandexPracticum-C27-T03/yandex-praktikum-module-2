@@ -9,3 +9,5 @@ export const hasOwnProperty: (object: unknown, key: PropertyKey) => boolean = Fu
 export const isDefined = <T>(p: T): p is Exclude<T, undefined> => p !== undefined;
 
 export const isNotNil = <T>(p: T): p is Exclude<T, undefined | null> => isDefined(p) && p !== null;
+
+export const isClient = () => typeof document !== 'undefined';

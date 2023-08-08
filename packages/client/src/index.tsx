@@ -4,4 +4,3 @@ import './index.scss';
 
 initializeApp();
 registerServiceWorker();
-// handleServiceWorkerUpdate();

@@ -13,6 +13,8 @@ export default async function ssr(app: Express) {
   const distPath = path.dirname(require.resolve('client/dist/index.html'));
   const srcPath = path.dirname(require.resolve('client'));
   const ssrDist = require.resolve('client/ssr-dist/ssr.cjs');
+  const serviveWorkerPath = path.resolve(distPath, 'service-worker.js');
+  const manifestJSON = path.resolve(distPath, 'manifest.webmanifest');
 
   if (isDev()) {
     vite = await createViteServer({
@@ -26,6 +28,8 @@ export default async function ssr(app: Express) {
 
   if (!isDev()) {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')));
+    app.use('/service-worker', express.static(serviveWorkerPath));
+    app.use('/manifest', express.static(manifestJSON));
   }
 
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -49,12 +53,15 @@ export default async function ssr(app: Express) {
         mod = await import(ssrDist);
       }
 
-      const [serverApp] = await mod!.render(req.originalUrl);
+      const [serverApp, intialState] = await mod!.render(req, res);
 
-      const html = () => template.replace(`<!--ssr-outlet-->`, serverApp);
+      const state = JSON.stringify(intialState);
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(html());
+      const html = template.replace(`<!--ssr-outlet-->`, serverApp).replace('<!--ssr-store-->', state);
+
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
     } catch (error) {
+      console.log(error);
       vite?.ssrFixStacktrace(error as Error);
 
       next();

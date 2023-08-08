@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { AuthLayer } from '@@app/layers/auth-layer';
+import { AuthGuard } from '@@app/layers/auth-layer';
 import { selectCurrentTheme } from '@@entities/theme';
 import { useAppSelector } from '@@shared/lib/model/hooks';
 import { ErrorBoundary } from '@@shared/ui/ErrorBoundary/ErrorBoundary';
@@ -12,11 +12,11 @@ export const BaseLayout = () => {
     <ConfigProvider appearance={theme}>
       <AdaptivityProvider>
         <ErrorBoundary fallback={<div>Произошла ошибка</div>}>
-          <AuthLayer>
+          <AuthGuard>
             <AppRoot>
               <Outlet />
             </AppRoot>
-          </AuthLayer>
+          </AuthGuard>
         </ErrorBoundary>
       </AdaptivityProvider>
     </ConfigProvider>
