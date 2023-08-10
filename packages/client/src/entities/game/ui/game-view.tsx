@@ -34,6 +34,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
   const backgroundXRef = useRef({ x1: 0, x2: CANVAS_WIDTH });
   const spikesRef = useRef<SpriteEntity[]>([]);
   const progressRef = useRef<number>(0);
+  const { showNotification } = useNotificationContext();
 
   const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;
 
@@ -223,19 +224,11 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     if (gameStatus === GAME_STATUS.RESTART && record < score) {
       localStorage.setItem('score', score.toString());
     }
-  }, [gameStatus, record, score]);
-  const { showNotification } = useNotificationContext();
 
-  useEffect(() => {
-    setTimeout(() => {
-      showNotification('test1', 'test1');
-      showNotification('test2', 'test2');
-      showNotification('test3', 'test3');
-      showNotification('test4', 'test4');
-      showNotification('test5', 'test5');
-      showNotification('test6', 'test6');
-    }, 2000);
-  }, []);
+    if (gameStatus === GAME_STATUS.RESTART) {
+      showNotification('Игра окончена', `Вы набрали ${score.toString()}`);
+    }
+  }, [gameStatus, record, score]);
 
   return (
     <GameContext.Provider value={{ gameStatus, start, reset, score }}>
