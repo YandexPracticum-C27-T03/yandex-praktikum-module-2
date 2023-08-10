@@ -1,18 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+export interface NotificationData {
+  title: string;
+  body: string;
+}
 
 const useNotification = () => {
+  const [notificationQueue, setNotificationQueue] = useState<NotificationData[]>([]);
   const [isNotificationVisible, setNotificationVisible] = useState(false);
+  const [currentNotification, setCurrentNotification] = useState<NotificationData | null>(null);
+
+  useEffect(() => {
+    if (notificationQueue.length > 0 && !isNotificationVisible) {
+      const [nextNotification, ...remainingNotifications] = notificationQueue;
+      setCurrentNotification(nextNotification);
+      setNotificationQueue(remainingNotifications);
+      setNotificationVisible(true);
+      if (document.visibilityState !== 'visible') {
+        displayBrowserNotification(nextNotification.title, nextNotification.body);
+      }
+      setTimeout(() => {
+        setNotificationVisible(false);
+      }, 3000);
+    }
+  }, [notificationQueue, isNotificationVisible]);
 
   const showNotification = (title: string, body: string) => {
-    if (document.visibilityState != 'visible') {
-      displayBrowserNotification(title, body);
-    }
-
-    setNotificationVisible(true);
-
-    setTimeout(() => {
-      setNotificationVisible(false);
-    }, 3000); // Показываем кастомное уведомление в течение 3 секунд
+    setNotificationQueue((prevQueue) => [...prevQueue, { title, body }]);
   };
 
   const displayBrowserNotification = (title: string, body: string) => {
@@ -34,7 +48,7 @@ const useNotification = () => {
     }
   };
 
-  return { showNotification, isNotificationVisible };
+  return { showNotification, isNotificationVisible, notificationData: currentNotification };
 };
 
 export default useNotification;

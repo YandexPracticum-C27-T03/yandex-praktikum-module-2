@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
-import { useNotification, Notification } from '@@features/notifications';
+import { useNotificationContext } from '@@features/notifications';
 import {
   BACKGROUND_SPEED_COEF,
   CANVAS_HEIGHT,
@@ -34,8 +34,6 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
   const backgroundXRef = useRef({ x1: 0, x2: CANVAS_WIDTH });
   const spikesRef = useRef<SpriteEntity[]>([]);
   const progressRef = useRef<number>(0);
-
-  const { showNotification, isNotificationVisible } = useNotification();
 
   const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;
 
@@ -225,17 +223,25 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     if (gameStatus === GAME_STATUS.RESTART && record < score) {
       localStorage.setItem('score', score.toString());
     }
-    if (gameStatus === GAME_STATUS.RESTART) {
-      showNotification('Игра окончена', `  Вы набрали: ${score}`);
-    }
   }, [gameStatus, record, score]);
+  const { showNotification } = useNotificationContext();
+
+  useEffect(() => {
+    setTimeout(() => {
+      showNotification('test1', 'test1');
+      showNotification('test2', 'test2');
+      showNotification('test3', 'test3');
+      showNotification('test4', 'test4');
+      showNotification('test5', 'test5');
+      showNotification('test6', 'test6');
+    }, 2000);
+  }, []);
 
   return (
     <GameContext.Provider value={{ gameStatus, start, reset, score }}>
       <GameHeader>{children}</GameHeader>
       <GameStart />
       <Canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} draw={init} />
-      {isNotificationVisible && <Notification title={'Игра окончена'} message={`Вы набрали: ${score} `} />}
     </GameContext.Provider>
   );
 };
