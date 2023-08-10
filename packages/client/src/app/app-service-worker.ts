@@ -1,7 +1,7 @@
 export const registerServiceWorker = () => {
   const isProduction = process.env.NODE_ENV === 'production';
   if ('serviceWorker' in navigator && isProduction) {
-    navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+    navigator.serviceWorker.register('./service-worker.js').catch((error) => {
       console.error('Error registering Service Worker:', error);
     });
   }

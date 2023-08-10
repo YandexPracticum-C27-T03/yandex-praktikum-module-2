@@ -15,6 +15,10 @@ export default defineConfig({
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
 
+  build: {
+    sourcemap: true,
+  },
+
   plugins: [
     tsconfigPaths(),
     react(),
@@ -31,8 +35,4 @@ export default defineConfig({
       workbox: {},
     }),
   ],
-
-  resolve: {
-    alias: [{ find: /^@vkontakte\/vkui$/, replacement: '@vkontakte/vkui/dist/cssm' }],
-  },
 });

@@ -5,6 +5,6 @@ export abstract class HTTPTransport {
   protected http: AxiosInstance;
 
   protected constructor(endpoint: string) {
-    this.http = axiosInstance(endpoint);
+    this.http = axiosInstance(endpoint, {});
   }
 }

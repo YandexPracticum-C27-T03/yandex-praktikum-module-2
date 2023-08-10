@@ -1,20 +1,23 @@
 import { useEffect } from 'react';
-import { useAuth, fetchUser } from '@@entities/user';
-import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '@@entities/user';
+import { Routes as Pages } from '@@shared/config/constants';
 
-const mapDispatch = makeMapDispatch((dispatch) => ({
-  fetchUser: () => dispatch(fetchUser()),
-}));
+export const AuthGuard: ReactFCWC = ({ children }) => {
+  const navigate = useNavigate();
+  const { isAuth } = useAuth();
 
-export const AuthLayer: ReactFCWC = ({ children }) => {
-  const { fetchUser } = useMapDispatch(mapDispatch);
-  const { isAuth, user } = useAuth();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    if (!isAuth || !user) {
-      fetchUser();
+    function redirect() {
+      if (isAuth && (pathname === Pages.LOGIN || pathname === Pages.REGISTRATION)) {
+        return navigate('/');
+      }
     }
-  }, [fetchUser, isAuth, user]);
+
+    redirect();
+  }, [navigate, pathname, isAuth]);
 
   return children as JSX.Element;
 };

@@ -11,6 +11,8 @@ const aliases = {
   '@@pages': 'src/pages',
   '@@shared': 'src/shared',
   '@@widgets': 'src/widgets',
+  '@@services': 'src/services',
+  '@@repositories': 'src/repositories',
 };
 
 const resolvedAliases = Object.fromEntries(
