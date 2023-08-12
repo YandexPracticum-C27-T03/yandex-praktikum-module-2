@@ -1,9 +1,8 @@
 import React from 'react';
-import { Route, RouteObject, Routes } from 'react-router-dom';
+import { Route, Routes, RouteObject } from 'react-router-dom';
 import { setLeaderUser } from '@@entities/leader-board';
 import { fetchUser } from '@@entities/user';
 import { ProtectedRoute } from '@@entities/user';
-import { isClient } from '@@shared/lib/common';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
@@ -17,17 +16,20 @@ import { Routes as Pages } from '../shared/config';
 
 import { BaseLayout } from './layouts/BaseLayout';
 
-function getUserRouteLoader(dispatch: AppDispatch) {
-  return !isClient() && dispatch(fetchUser()).unwrap();
-}
+export type AppRoute = {
+  element: RouteObject['element'];
+  path?: RouteObject['path'];
+  loadData?: (dispatch: AppDispatch) => Promise<void | unknown> | void;
+  children?: AppRoute[];
+};
 
-export const routerConfig = (dispatch: AppDispatch): RouteObject[] => [
+export const routerConfig: AppRoute[] = [
   {
     element: <BaseLayout />,
 
-    loader: () => {
-      return getUserRouteLoader(dispatch);
-    },
+    path: '/',
+
+    loadData: (dispatch: AppDispatch) => dispatch(fetchUser()).unwrap(),
 
     children: [
       // Доступ только для авторизированных
@@ -42,11 +44,14 @@ export const routerConfig = (dispatch: AppDispatch): RouteObject[] => [
           {
             path: Pages.LEADERBOARD,
             element: <LeaderBoardPage />,
-            // Cделано исключительно для демострации работы loader'а на сервере
-            loader: () => !isClient() && dispatch(setLeaderUser({ id: '1', name: 'SSR PRELOAD WORK' })),
+            // Cделано исключительно для демострации работы loadData на сервере
+            loadData: (dispatch: AppDispatch) => {
+              dispatch(setLeaderUser({ id: '1', name: 'SSR PRELOAD WORK' }));
+            },
           },
           {
             path: Pages.FORUM,
+
             element: <ForumPage />,
           },
           {
@@ -59,6 +64,7 @@ export const routerConfig = (dispatch: AppDispatch): RouteObject[] => [
           },
           {
             path: Pages.PROFILE,
+
             element: <ProfilePage />,
           },
         ],
@@ -97,8 +103,8 @@ export const routerConfig = (dispatch: AppDispatch): RouteObject[] => [
   },
 ];
 
-function createRouter(router: RouteObject[]) {
-  function renderChild(children: RouteObject['children']) {
+function createRouter(router: AppRoute[]) {
+  function renderChild(children: AppRoute['children']) {
     if (!Array.isArray(children) || !children.length) {
       return <></>;
     }
@@ -106,13 +112,22 @@ function createRouter(router: RouteObject[]) {
     return <Route>{createRouter(children)}</Route>;
   }
 
-  return router.map(({ children, path, element, loader }, index) => (
+  return router.map(({ children, path, element }, index) => (
     <React.Fragment key={`${path}__${index}`}>
-      <Route path={path} element={element} loader={loader} children={renderChild(children)} />
+      <Route path={path} element={element} children={renderChild(children)} />
     </React.Fragment>
   ));
 }
 
-export function AppRouter({ dispatch }: { dispatch: AppDispatch }) {
-  return <Routes>{createRouter(routerConfig(dispatch))}</Routes>;
+export function AppRouter() {
+  return <Routes>{createRouter(routerConfig)}</Routes>;
+}
+
+export function flatRouter(router: AppRoute[]) {
+  return router.reduce((acc: AppRoute[], route: AppRoute) => {
+    if (route.children && Array.isArray(route.children)) {
+      acc = acc.concat(flatRouter(route.children));
+    }
+    return acc.concat(route);
+  }, []);
 }

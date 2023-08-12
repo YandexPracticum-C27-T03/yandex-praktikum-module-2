@@ -21,7 +21,7 @@ export const initializeApp = () => {
     <React.StrictMode>
       <Provider store={appStore}>
         <BrowserRouter>
-          <AppRouter dispatch={appStore.dispatch} />
+          <AppRouter />
         </BrowserRouter>
       </Provider>
     </React.StrictMode>,
