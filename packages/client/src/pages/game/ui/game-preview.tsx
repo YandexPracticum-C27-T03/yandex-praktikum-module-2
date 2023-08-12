@@ -1,4 +1,6 @@
 import React from 'react';
+import { getLeaderBoardSelecotr } from '@@entities/leader-board/model/selectors';
+import { makeMapState, useMapState } from '@@shared/lib/model/hooks';
 import { HeaderLayout } from '@@widgets/header-layout';
 import { Text, Group, Button, Div, Header } from '@vkontakte/vkui';
 
@@ -7,7 +9,15 @@ type GamePreviewProps = {
   startActive: boolean;
 };
 
+const mapState = makeMapState((state) => ({
+  leaderboard: getLeaderBoardSelecotr(state),
+}));
+
 export const GamePreview: React.FC<GamePreviewProps> = ({ handleStartGame, startActive }) => {
+  const {
+    leaderboard: { isLoading },
+  } = useMapState(mapState);
+
   return (
     <HeaderLayout>
       <>
@@ -28,7 +38,7 @@ export const GamePreview: React.FC<GamePreviewProps> = ({ handleStartGame, start
         <Div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button
             style={{ width: '200px' }}
-            disabled={!startActive}
+            disabled={!startActive && isLoading}
             onClick={handleStartGame}
             stretched
             mode="primary"
