@@ -5,34 +5,48 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { flatRouter, AppRouter, routerConfig } from '@@app/app-router';
 import { configureReduxStore } from '@@app/app-store';
+import { fetchUser } from '@@entities/user';
 import { ServerRepository } from '@@repositories/server.repository';
 import { SSRWrapper } from '@vkontakte/vkui';
 import * as express from 'express';
 import { UserAgent } from 'express-useragent';
 
-export async function render(request: express.Request<UserAgent>) {
-  const appStore = configureReduxStore(new ServerRepository(request.headers['cookie']));
+const isDev = () => process.env.NODE_ENV === 'development';
 
-  // в родителе по дефолту есть лоадер для получения контекста пользователя
-  const root = routerConfig.find(({ path }) => path && matchPath('/', path));
+async function getUser(dispatch: AppDispatch) {
+  try {
+    await dispatch(fetchUser()).unwrap();
+  } catch (error) {
+    // если выкидывать эксешн мидлвара рендера выбросит в кетч и будет пустой экран бразуера
+    return '[not autorized] - error';
+  }
+}
 
-  // делает вложенный роутер - плоским и ищем нужный роут по пути
-  const current = flatRouter(routerConfig).find(({ path }) => path && matchPath(request.originalUrl, path));
+export async function render(
+  request: express.Request<UserAgent>,
+): Promise<[ReturnType<typeof renderToString>, RootState]> {
+  // прокидываем в редакс стора репозиторий для работы с сетью на сервере
+  const appStore = configureReduxStore<RootState>(new ServerRepository(request.headers['cookie']));
 
-  if (root && root.loadData) {
-    const { loadData: me } = root;
+  const flat = flatRouter(routerConfig);
 
-    await me(appStore.dispatch);
+  // получаем пользователя
+  await getUser(appStore.dispatch);
 
-    // если у найденого роута есть лоадер -> прокидываем диспатч стора и запускаем экшн
-    if (current && current.loadData) {
-      const { loadData } = current;
-      await loadData(appStore.dispatch);
-    }
+  const currentRoute = flat.find(({ path }) => path && matchPath(request.originalUrl, path));
+
+  // если у найденого роута есть лоадер -> прокидываем диспатч стора и запускаем экшн
+  if (currentRoute && currentRoute.loadData) {
+    const { loadData } = currentRoute;
+    loadData(appStore.dispatch);
   }
 
   // получаем начальное состояние и возвращем его вместе с статикой приложения в миддлвар для последующего рендера
   const initalState = appStore.getState();
+
+  if (isDev()) {
+    console.info('[initial-state-app]', initalState);
+  }
 
   const html = renderToString(
     <React.StrictMode>
@@ -46,5 +60,5 @@ export async function render(request: express.Request<UserAgent>) {
     </React.StrictMode>,
   );
 
-  return [html, initalState];
+  return [html, initalState as RootState];
 }
