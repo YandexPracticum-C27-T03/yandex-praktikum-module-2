@@ -6,7 +6,6 @@ import { isClient } from '@@shared/lib/common';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
-import { LeaderBoardPage } from '@@pages/leaderboard';
 import { LoginPage } from '@@pages/login';
 import { MainPage } from '@@pages/main';
 import { NotFoundPage } from '@@pages/not-found';
@@ -37,12 +36,6 @@ export const routerConfig = (dispatch: AppDispatch): RouteObject[] => [
           {
             path: Pages.GAME,
             element: <GamePage />,
-          },
-          {
-            path: Pages.LEADERBOARD,
-            element: <LeaderBoardPage />,
-            // Cделано исключительно для демострации работы loader'а на сервере
-            // loader: () => !isClient() && dispatch(setLeaderUser({ id: '1', name: 'SSR PRELOAD WORK' })),
           },
           {
             path: Pages.FORUM,

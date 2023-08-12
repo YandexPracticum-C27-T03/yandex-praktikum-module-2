@@ -12,7 +12,6 @@ export const MainPage = () => {
 
   const goToProfile = () => navigate(Routes.PROFILE);
   const goToGame = () => navigate(Routes.GAME);
-  const goToLeaderboard = () => navigate(Routes.LEADERBOARD);
   const goToForum = () => navigate(Routes.FORUM);
 
   return (
@@ -22,7 +21,6 @@ export const MainPage = () => {
           <Div className={''}>
             <CellButton onClick={goToProfile}>Профиль</CellButton>
             <CellButton onClick={goToGame}>К игре</CellButton>
-            <CellButton onClick={goToLeaderboard}>Страница лидеров</CellButton>
             <CellButton onClick={goToForum}>Форум игры</CellButton>
           </Div>
         </Group>
