@@ -1,5 +1,6 @@
 import { HTTPTransport } from '@@shared/lib/HTTPTransport';
 import { TEAM_NAME } from '@@shared/lib/constants';
+import { userRecord } from '../model/slice';
 
 export type UserData = {
   name: string;
@@ -22,7 +23,7 @@ class LeaderboardService extends HTTPTransport {
   public getLeaderBoard(limited?: number) {
     const limit = limited || 100;
 
-    return this.http.post(`leaderboard/${TEAM_NAME}`, {
+    return this.http.post<userRecord[]>(`leaderboard/${TEAM_NAME}`, {
       ratingFieldName: 'score',
       limit,
       cursor: 0,
