@@ -1,4 +1,10 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
+import { updateScore } from '@@entities/leader-board/model/reducers';
+
+import { getLeaderBoardSelecotr } from '@@entities/leader-board/model/selectors';
+import { useAuth } from '@@entities/user';
+import { makeMapDispatch, makeMapState, useMapDispatch, useMapState } from '@@shared/lib/model/hooks';
+import { UserData } from '../../leader-board/api/leaderboard.service';
 import {
   BACKGROUND_SPEED_COEF,
   CANVAS_HEIGHT,
@@ -27,18 +33,31 @@ type GameViewProps = {
   resourceLoader: ResourceLoader;
 };
 
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  updateScore: (data: UserData) => dispatch(updateScore(data)),
+}));
+
+const mapState = makeMapState((state) => ({
+  leaderboard: getLeaderBoardSelecotr(state),
+}));
+
 export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceLoader, children }) => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.STOP);
   const [score, setScore] = useState(INITIAL_SCORE);
+  const [record, setRecord] = useState(INITIAL_SCORE);
   const backgroundXRef = useRef({ x1: 0, x2: CANVAS_WIDTH });
   const spikesRef = useRef<SpriteEntity[]>([]);
   const progressRef = useRef<number>(0);
-
-  const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;
+  const { user } = useAuth();
+  const { updateScore } = useMapDispatch(mapDispatch);
 
   const backgroundImg = resourceLoader.getResourceByName(ImageNames.Background);
   const playerWalk1Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk1);
   const playerWalk2Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk2);
+
+  const {
+    leaderboard: { isLoading, recordList },
+  } = useMapState(mapState);
 
   // Глобальные переменные
   const player = new Player(
@@ -130,6 +149,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     // Запускает обновления
     update();
     spawnSpike();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Останавливает игру, и ждет рестарта
@@ -138,6 +158,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     clearTimeout(updateID as NodeJS.Timer);
     clearTimeout(spawnSpikeID as NodeJS.Timer);
     progressRef.current = 0;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Запускает игру
@@ -145,6 +166,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     setGameStatus(GAME_STATUS.START);
     update();
     spawnSpike();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const drawInfinityBackground = (ctx: CanvasRenderingContext2D) => {
@@ -202,6 +224,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     });
 
     draw(ctx);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Обновляем счетчик
@@ -219,13 +242,31 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
 
   // Если рекорд - обновляем
   useEffect(() => {
-    if (gameStatus === GAME_STATUS.RESTART && record < score) {
-      localStorage.setItem('score', score.toString());
+    if (gameStatus === GAME_STATUS.RESTART && user) {
+      updateScore({
+        avatar: user.avatar || '',
+        name: user.login,
+        id: user.id,
+        score,
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameStatus, record, score]);
 
+  useEffect(() => {
+    if (isLoading || !user) {
+      return;
+    }
+
+    const currentRecord = recordList.find((item) => item.data.id === user.id);
+
+    setRecord(currentRecord?.data.score as number);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
   return (
-    <GameContext.Provider value={{ gameStatus, start, reset, score }}>
+    <GameContext.Provider value={{ gameStatus, start, reset, score, record, recordList }}>
       <GameHeader>{children}</GameHeader>
       <GameStart />
       <Canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} draw={init} />

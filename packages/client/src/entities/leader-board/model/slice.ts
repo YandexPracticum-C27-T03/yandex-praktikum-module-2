@@ -1,26 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getLeaderBoard } from './reducers';
 
-type MockFromTest = {
-  id: number;
-  name: string;
+export type userRecord = {
+  data: {
+    id: number;
+    avatar: string;
+    name: string;
+    score: number;
+  };
 };
 
 type LeaderBoardState = {
-  leaderboard: MockFromTest[];
+  recordList: userRecord[];
+  isLoading: boolean;
+  error: string | null;
 };
 
 const initialState: LeaderBoardState = {
-  leaderboard: [],
+  recordList: [],
+  isLoading: true,
+  error: null,
 };
 
 export const leaderBoardSlice = createSlice({
   name: 'leaderboard',
   initialState,
-  reducers: {
-    setLeaderUser(state, { payload }) {
-      state.leaderboard.push(payload);
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getLeaderBoard.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getLeaderBoard.fulfilled, (state, { payload }) => {
+      state.recordList = payload.data;
+      state.isLoading = false;
+    });
+    builder.addCase(getLeaderBoard.rejected, (state, { error }) => {
+      state.error = error.message as string;
+    });
   },
 });
-
-export const { setLeaderUser } = leaderBoardSlice.actions;

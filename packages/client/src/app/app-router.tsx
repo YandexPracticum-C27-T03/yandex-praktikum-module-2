@@ -1,19 +1,16 @@
 import React from 'react';
-import { Route, Routes, RouteObject } from 'react-router-dom';
-import { setLeaderUser } from '@@entities/leader-board';
+import { Route, RouteObject, Routes } from 'react-router-dom';
 import { fetchUser } from '@@entities/user';
 import { ProtectedRoute } from '@@entities/user';
 import { ForumPage, CreateTopicForm, SingleTopic } from '@@pages/forum';
 import { GamePage } from '@@pages/game';
 import { InternalErrorPage } from '@@pages/internal-error';
-import { LeaderBoardPage } from '@@pages/leaderboard';
 import { LoginPage } from '@@pages/login';
 import { MainPage } from '@@pages/main';
 import { NotFoundPage } from '@@pages/not-found';
 import { ProfilePage } from '@@pages/profile';
 import { RegistrationPage } from '@@pages/registration';
 import { Routes as Pages } from '../shared/config';
-
 import { BaseLayout } from './layouts/BaseLayout';
 
 export type AppRoute = {
@@ -35,19 +32,10 @@ export const routerConfig: AppRoute[] = [
       // Доступ только для авторизированных
       {
         element: <ProtectedRoute />,
-
         children: [
           {
             path: Pages.GAME,
             element: <GamePage />,
-          },
-          {
-            path: Pages.LEADERBOARD,
-            element: <LeaderBoardPage />,
-            // Cделано исключительно для демострации работы loadData на сервере
-            loadData: (dispatch: AppDispatch) => {
-              dispatch(setLeaderUser({ id: '1', name: 'SSR PRELOAD WORK' }));
-            },
           },
           {
             path: Pages.FORUM,
