@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
 
 const TopicList = () => {
