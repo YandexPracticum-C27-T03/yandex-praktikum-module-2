@@ -10,6 +10,7 @@ type ProfileViewerProps = {
   avatar: ReactNode;
   avatarUpload: ReactNode;
   changePassoword: ReactNode;
+  logoutButton: ReactNode;
 };
 
 const userViewerCn = cn('UserViewer');
@@ -20,6 +21,7 @@ export const UserViewer = ({
   avatarUpload,
   children,
   changePassoword,
+  logoutButton,
 }: PropsWithChildren<ProfileViewerProps>) => {
   if (!user) {
     return null;
@@ -37,7 +39,7 @@ export const UserViewer = ({
                   {user.dispay_name}
                 </Title>
               )}
-
+              <br />
               {children}
             </Gradient>
 
@@ -50,6 +52,8 @@ export const UserViewer = ({
               <SimpleCell indicator={user.email}>Email</SimpleCell>
             </Group>
           </Group>
+
+          {logoutButton}
 
           {avatarUpload}
           {changePassoword}

@@ -3,11 +3,17 @@ import { User, UserLogin, UserRegistration } from '../model/types';
 
 class AuthService extends HTTPTransport {
   constructor() {
-    super('auth');
+    super('/auth');
   }
 
   async login(dto: UserLogin) {
     const { data } = await this.http.post('/signin', dto);
+
+    return data;
+  }
+
+  async logout() {
+    const { data } = await this.http.post('/logout', {});
 
     return data;
   }

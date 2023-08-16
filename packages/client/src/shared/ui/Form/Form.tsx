@@ -58,10 +58,8 @@ export const Form = function <T extends FieldValues>({
               />
             );
           })}
-          <FormItem>
-            {children}
-            {buttonValue && <Button type="submit">{buttonValue}</Button>}
-          </FormItem>
+          <FormItem>{buttonValue && <Button type="submit">{buttonValue}</Button>}</FormItem>
+          {children}
         </FormLayoutGroup>
       </FormLayout>
     </Group>
