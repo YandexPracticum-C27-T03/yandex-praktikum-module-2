@@ -1,4 +1,4 @@
-import { leaderBoardSlice } from '@@entities/leader-board/model/slice';
+import { leaderBoardSlice } from '@@entities/leader-board';
 import { serviceValuesSlice } from '@@entities/service-values';
 import { themeSlice } from '@@entities/theme';
 import { userSlice } from '@@entities/user';

@@ -1,6 +1,8 @@
-import { INITIAL_SCORE } from '@@entities/game/lib/constants/game-options';
+import { useContext } from 'react';
+import { GameContext } from '@@entities/game/lib/context/game-context';
 
 export const GameRecord = () => {
-  const record = (localStorage.getItem('score') || INITIAL_SCORE) as number;
+  const { record } = useContext(GameContext);
+
   return <div className="Game-score">РЕКОРД: {record}</div>;
 };
