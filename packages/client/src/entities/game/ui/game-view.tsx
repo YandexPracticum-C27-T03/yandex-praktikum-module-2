@@ -254,7 +254,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     if (gameStatus === GAME_STATUS.RESTART) {
       showNotification('Игра окончена', `Вы набрали ${score.toString()}`);
     }
-
+    //React Hook useEffect has missing dependencies: 'showNotification', 'updateScore', and 'user'. Either include them or remove the dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameStatus, record, score]);
 
@@ -267,6 +267,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
 
     setRecord(currentRecord?.data.score as number);
 
+    //React Hook useEffect has missing dependencies: 'recordList' and 'user'. Either include them or remove the dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
