@@ -1,16 +1,28 @@
 import cookieParser, { CookieParseOptions } from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { Express } from 'express';
 
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { useExpressServer } from 'routing-controllers';
 import ssr from './middlewares/ssr';
+import { dbConnect } from './init';
+
+import { AuthMiddleware, AuthGuard } from './middlewares';
+import { TopicController } from './controllers/TopicController';
+import { CommentController } from './controllers/CommentController';
 
 dotenv.config();
 
 async function startServer() {
   const app = express();
   app.use(cors());
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useExpressServer(app, {
+    routePrefix: '/api',
+    controllers: [TopicController, CommentController],
+    middlewares: [AuthMiddleware, AuthGuard],
+  });
   app.use(
     '/api/v2',
     createProxyMiddleware({
@@ -24,6 +36,7 @@ async function startServer() {
   const port = Number(process.env.SERVER_PORT) || 3000;
 
   const middlewareSsr = await ssr(app);
+  await dbConnect();
 
   app.use(
     '*',

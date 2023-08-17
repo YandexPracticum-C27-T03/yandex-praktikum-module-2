@@ -5,6 +5,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
@@ -16,8 +18,9 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
+    "strictPropertyInitialization": false,
     "lib": ["DOM", "es2019", "esnext.asynciterable"],
-    "types": ["node", "jest"],
+    "types": ["node", "jest", "reflect-metadata"],
     "baseUrl": ".",
     "paths": {
       "*": ["types/*"]

@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon index.ts",
-    "build": "rm -rf dist && tsc --p ./tsconfig.prod.json",
-    "preview": "node ./dist/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon",
+    "build": "rm -rf ./dist && tsc --p ./tsconfig.prod.json",
+    "preview": "node ./dist/src/index.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "jest ."
   },
   "dependencies": {
     "axios": "^1.4.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -20,6 +22,10 @@
     "express-useragent": "^1.0.15",
     "http-proxy-middleware": "^2.0.6",
     "pg": "^8.8.0",
+    "reflect-metadata": "^0.1.13",
+    "routing-controllers": "^0.10.4",
+    "sequelize": "^6.32.1",
+    "sequelize-typescript": "^2.1.5",
     "vite": "^4.4.9"
   },
   "devDependencies": {
