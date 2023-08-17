@@ -14,7 +14,7 @@ export default defineConfig({
   define: {
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
-
+  envPrefix: 'REACT_APP_',
   build: {
     sourcemap: true,
   },

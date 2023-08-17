@@ -11,3 +11,8 @@ export type User = {
 
 export type UserLogin = Omit<User, 'phone' | 'email' | 'second_name' | 'first_name'>;
 export type UserRegistration = Required<User & { password: string }>;
+
+export type OpenAuthLogin = {
+  code: string;
+  redirect_uri: string;
+};

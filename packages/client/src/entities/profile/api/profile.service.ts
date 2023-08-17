@@ -1,10 +1,9 @@
+import { ChangePasswordDTO } from '@@entities/profile';
 import { HTTPTransport } from '@@shared/lib/HTTPTransport';
-
-import { ChangePasswordDTO } from '../types/password-dto';
 
 class ProfileService extends HTTPTransport {
   constructor() {
-    super('user');
+    super('/user');
   }
 
   async updateAvatar(file: FormData) {

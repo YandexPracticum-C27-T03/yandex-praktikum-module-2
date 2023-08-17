@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUser, login, registration } from './reducers';
+import { fetchUser, login, logout, openAuthLogin, registration } from './reducers';
 import { User } from './types';
 
 type UserSlice = {
@@ -55,6 +55,36 @@ export const userSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.error = action.error.message as string;
     });
+
+    // Авторизация OAuth
+    builder.addCase(openAuthLogin.pending, (state) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(openAuthLogin.fulfilled, (state) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+
+    builder.addCase(openAuthLogin.rejected, (state, action) => {
+      state.error = action.error.message as string;
+    });
+
+    // Выход пользователя
+    builder.addCase(logout.pending, (state) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(logout.fulfilled, (state) => {
+      state.isLoading = false;
+      state.data = null;
+      state.isAuth = false;
+    });
+
+    builder.addCase(logout.rejected, (state) => {
+      state.isLoading = false;
+    });
+    // Выход пользователя
 
     // Получение данных о пользователе
     builder.addCase(fetchUser.pending, (state) => {

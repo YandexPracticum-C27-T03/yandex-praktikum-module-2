@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { API_ROOT } from '../constants';
 
-const isDev = typeof document !== 'undefined' ? API_ROOT : 'https://ya-praktikum.tech';
+type AxiosRequestOptions = {
+  cookie?: string[];
+};
 
-export const axiosInstance = (endpoint: string, options: any) => {
+export const axiosInstance = (baseUrl: string, options: AxiosRequestOptions) => {
   return axios.create({
-    baseURL: `${isDev}/api/v2/${endpoint}`,
+    baseURL: baseUrl,
     timeout: 1000,
     withCredentials: true,
     headers: {

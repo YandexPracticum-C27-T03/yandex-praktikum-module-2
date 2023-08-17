@@ -34,4 +34,6 @@ async function startServer() {
   app.listen(port, () => console.warn(`Server is listening on port: ${port}`));
 }
 
-startServer();
+void startServer();
+
+export {};
