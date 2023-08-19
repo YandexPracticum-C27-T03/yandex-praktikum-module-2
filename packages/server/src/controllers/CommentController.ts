@@ -1,19 +1,32 @@
-import { Controller, Param, Body, Get, Post, Put, Delete } from 'routing-controllers';
+import { Controller, Param, Get, Post, Delete, Req } from 'routing-controllers';
+
+import CommentService from '../services/CommentService';
+import UserService from '../services/UserService';
+
+import type { Comment } from '../models/comment';
+import type { User } from '../models/user';
 
 @Controller('/comments')
 export class CommentController {
   @Post('/')
-  post() {
-    return 'Posted comment';
+  async post(@Req() request: { body: Comment; user: User }) {
+    const userData = await UserService.findOrCreate(request.user);
+    const result = await CommentService.create(request.body, userData.id);
+
+    return result;
   }
 
   @Delete('/:id')
-  remove(@Param('id') id: number) {
-    return 'Deleted comment';
+  async remove(@Param('id') id: number, @Req() request: { user: User }) {
+    const deletedComment = await CommentService.delete(id, request.user.id);
+
+    return deletedComment;
   }
 
   @Get('/:topicId')
-  getAll(@Param('topicId') id: number) {
-    return 'All comments by topic';
+  async getAll(@Param('topicId') id: number) {
+    const comments = await CommentService.findAllByTopicId(id);
+
+    return comments;
   }
 }

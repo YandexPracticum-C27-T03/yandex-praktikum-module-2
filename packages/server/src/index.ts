@@ -1,27 +1,31 @@
+import bodyParser from 'body-parser';
 import cookieParser, { CookieParseOptions } from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import express, { Express } from 'express';
-
+import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { useExpressServer } from 'routing-controllers';
-import ssr from './middlewares/ssr';
+
+import { CommentController } from './controllers/CommentController';
+import { TopicController } from './controllers/TopicController';
+
 import { dbConnect } from './init';
 
-import { AuthMiddleware, AuthGuard } from './middlewares';
-import { TopicController } from './controllers/TopicController';
-import { CommentController } from './controllers/CommentController';
+import { AuthMiddleware, AuthGuard, ErrorHandler } from './middlewares';
+import ssr from './middlewares/ssr';
 
 dotenv.config();
 
 async function startServer() {
   const app = express();
   app.use(cors());
+  app.use(bodyParser.json());
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useExpressServer(app, {
     routePrefix: '/api',
     controllers: [TopicController, CommentController],
-    middlewares: [AuthMiddleware, AuthGuard],
+    middlewares: [AuthMiddleware, AuthGuard, ErrorHandler],
+    defaultErrorHandler: false,
   });
   app.use(
     '/api/v2',
