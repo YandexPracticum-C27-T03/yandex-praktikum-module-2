@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import { updateScore } from '@@entities/leader-board/model/reducers';
 import { getLeaderBoardSelecotr } from '@@entities/leader-board/model/selectors';
+import { selectCurrentTheme } from '@@entities/theme';
 import { useAuth } from '@@entities/user';
 import { useNotificationContext } from '@@features/notifications';
 import { makeMapDispatch, makeMapState, useMapDispatch, useMapState } from '@@shared/lib/model/hooks';
@@ -39,6 +40,7 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
 
 const mapState = makeMapState((state) => ({
   leaderboard: getLeaderBoardSelecotr(state),
+  currentTheme: selectCurrentTheme(state),
 }));
 
 export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceLoader, children }) => {
@@ -51,13 +53,15 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
   const { user } = useAuth();
   const { updateScore } = useMapDispatch(mapDispatch);
   const { showNotification } = useNotificationContext();
-  const backgroundImg = resourceLoader.getResourceByName(ImageNames.Background);
-  const playerWalk1Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk1);
-  const playerWalk2Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk2);
 
   const {
     leaderboard: { isLoading, recordList },
+    currentTheme,
   } = useMapState(mapState);
+
+  const backgroundImg = resourceLoader.getResourceByName(ImageNames.Background);
+  const playerWalk1Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk1);
+  const playerWalk2Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk2);
 
   // Глобальные переменные
   const player = new Player(
@@ -202,7 +206,14 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     drawInfinityBackground(ctx);
 
     // Рисует пол
-    fillRect({ ctx, x: 0, y: CANVAS_HEIGHT - FLOOR_HEIGHT, w: CANVAS_WIDTH, h: FLOOR_HEIGHT, color: COLORS.FLOOR });
+    fillRect({
+      ctx,
+      x: 0,
+      y: CANVAS_HEIGHT - FLOOR_HEIGHT,
+      w: CANVAS_WIDTH,
+      h: FLOOR_HEIGHT,
+      color: COLORS.FLOOR[currentTheme],
+    });
 
     // Рисует препятствие
     spikesRef.current.forEach((spike) => spike.draw(ctx));
@@ -266,10 +277,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
     const currentRecord = recordList.find((item) => item.data.id === user.id);
 
     setRecord(currentRecord?.data.score as number);
-
-    //React Hook useEffect has missing dependencies: 'recordList' and 'user'. Either include them or remove the dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [isLoading, recordList, user]);
 
   return (
     <GameContext.Provider value={{ gameStatus, start, reset, score, record, recordList }}>

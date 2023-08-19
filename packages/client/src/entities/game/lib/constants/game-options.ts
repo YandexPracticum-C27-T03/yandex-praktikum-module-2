@@ -2,7 +2,10 @@ export const CANVAS_WIDTH = 3840;
 export const CANVAS_HEIGHT = 2160;
 export const COLORS = {
   BACKGROUND: 'white',
-  FLOOR: '#d8b9aa',
+  FLOOR: {
+    light: '#d8b9aa',
+    dark: '#0a0a0a',
+  },
   PLAYER: '#d6d7dc',
   SPIKES: '#686573',
 };
@@ -29,15 +32,18 @@ export enum ImageNames {
 
   Background = 'background',
 }
-export const ImageResourcesMap: Record<ImageNames, string> = {
-  [ImageNames.PlayerStand]: '/assets/game/img/player_stand.png',
-  [ImageNames.PlayerWalk1]: '/assets/game/img/player_walk1.png',
-  [ImageNames.PlayerWalk2]: '/assets/game/img/player_walk2.png',
 
-  [ImageNames.Tree1]: '/assets/game/img/tree_1.png',
-  [ImageNames.Tree2]: '/assets/game/img/tree_2.png',
-  [ImageNames.Tree3]: '/assets/game/img/tree_3.png',
-  [ImageNames.Tree4]: '/assets/game/img/tree_4.png',
+export const ImageResourcesMap = (theme: string): Record<ImageNames, string> => {
+  return {
+    [ImageNames.PlayerStand]: `/assets/game/img/${theme}/player_stand.png`,
+    [ImageNames.PlayerWalk1]: `/assets/game/img/${theme}/player_walk1.png`,
+    [ImageNames.PlayerWalk2]: `/assets/game/img/${theme}/player_walk2.png`,
 
-  [ImageNames.Background]: '/assets/game/img/background.png',
-} as const;
+    [ImageNames.Tree1]: `/assets/game/img/${theme}/tree_1.png`,
+    [ImageNames.Tree2]: `/assets/game/img/${theme}/tree_2.png`,
+    [ImageNames.Tree3]: `/assets/game/img/${theme}/tree_3.png`,
+    [ImageNames.Tree4]: `/assets/game/img/${theme}/tree_4.png`,
+
+    [ImageNames.Background]: `/assets/game/img/${theme}/background.png`,
+  } as const;
+};

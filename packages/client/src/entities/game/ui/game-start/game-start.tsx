@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react';
 import { GAME_STATUS } from '@@entities/game/lib/constants/game-status';
 import { declOfNum } from '@@entities/game/lib/utils/decl-of-num';
-import { Button } from '@vkontakte/vkui';
+import { Button, Div, Group, Spacing, Text } from '@vkontakte/vkui';
 import { GameContext } from '../../lib/context/game-context';
 
 import './styles.scss';
@@ -14,24 +14,28 @@ export const GameStart = memo(() => {
   }
 
   return (
-    <div className="Game">
-      {gameStatus === GAME_STATUS.STOP && (
-        <>
-          <h1>
-            Рекорд: {record} {declOfNum(record)}
-          </h1>
-          <Button onClick={start}>Начать !</Button>
-        </>
-      )}
+    <Div className="GameWindowContainer">
+      <Group className="GameWindow" style={{ padding: '20px' }}>
+        {gameStatus === GAME_STATUS.STOP && (
+          <>
+            <Text weight="1" style={{ fontSize: '24px' }}>
+              Рекорд: {record} {declOfNum(record)}
+            </Text>
+            <Spacing size={1} />
+            <Button onClick={start}>Начать !</Button>
+          </>
+        )}
 
-      {gameStatus === GAME_STATUS.RESTART && (
-        <>
-          <h1>
-            Вы набрали: {score} {declOfNum(score)}
-          </h1>
-          <Button onClick={reset}>Начать заново</Button>
-        </>
-      )}
-    </div>
+        {gameStatus === GAME_STATUS.RESTART && (
+          <>
+            <Text weight="1" style={{ fontSize: '24px' }}>
+              Вы набрали: {score} {declOfNum(score)}
+            </Text>
+            <Spacing size={1} />
+            <Button onClick={reset}>Начать заново</Button>
+          </>
+        )}
+      </Group>
+    </Div>
   );
 });

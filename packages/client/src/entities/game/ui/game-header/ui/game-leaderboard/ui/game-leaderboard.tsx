@@ -22,7 +22,10 @@ export const GameLeaderBoard = ({ onClose }: GameLeaderBoardProps) => {
 
   return (
     <PopoutWrapper style={{ zIndex: 999 }} onClick={closeModal}>
-      <Div className={cnLeaderBoard({ open: !animateClose, close: animateClose })}>
+      <Div
+        style={{ background: 'var(--vkui--color_background_content)' }}
+        className={cnLeaderBoard({ open: !animateClose, close: animateClose })}
+      >
         <List>
           {recordList.map((player, i) => (
             <Cell key={i} before={<Avatar />} after={player.data.score}>
