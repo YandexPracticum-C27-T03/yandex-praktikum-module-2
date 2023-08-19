@@ -37,8 +37,6 @@ export const SingleTopic = () => {
     );
   }
 
-  // yurytest
-  // qwerty123
   return (
     <View activePanel="forum">
       <Panel id="forum">
