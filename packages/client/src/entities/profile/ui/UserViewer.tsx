@@ -1,7 +1,7 @@
 import { ReactNode, PropsWithChildren } from 'react';
 import { User } from '@@entities/user';
 import { cn } from '@@shared/lib/bem';
-import { Group, View, Panel, Gradient, Title, Header, SimpleCell } from '@vkontakte/vkui';
+import { Group, View, Panel, Gradient, Title, Header, SimpleCell, Div } from '@vkontakte/vkui';
 
 import './styles.scss';
 
@@ -11,6 +11,7 @@ type ProfileViewerProps = {
   avatarUpload: ReactNode;
   changePassoword: ReactNode;
   logoutButton: ReactNode;
+  switchTheme: ReactNode;
 };
 
 const userViewerCn = cn('UserViewer');
@@ -22,12 +23,13 @@ export const UserViewer = ({
   children,
   changePassoword,
   logoutButton,
+  switchTheme,
 }: PropsWithChildren<ProfileViewerProps>) => {
   if (!user) {
     return null;
   }
   return (
-    <>
+    <Div style={{ maxWidth: 600, width: '100%', margin: '0 auto' }}>
       <View activePanel="gradient">
         <Panel id="gradient" className={userViewerCn()}>
           <Group>
@@ -50,6 +52,7 @@ export const UserViewer = ({
               <SimpleCell indicator={user.second_name}>Фамилия</SimpleCell>
               <SimpleCell indicator={user.phone}>Номер телефона</SimpleCell>
               <SimpleCell indicator={user.email}>Email</SimpleCell>
+              {switchTheme}
             </Group>
           </Group>
 
@@ -59,6 +62,6 @@ export const UserViewer = ({
           {changePassoword}
         </Panel>
       </View>
-    </>
+    </Div>
   );
 };

@@ -4,7 +4,7 @@ import { cn } from '@@shared/lib/bem';
 import { STATUSES } from '@@shared/lib/constants/statuses-request';
 import { useTriggerRequest } from '@@shared/lib/model/hooks';
 import { Icon24Document } from '@vkontakte/icons';
-import { Avatar, FormItem, ModalDismissButton, PopoutWrapper, File, CardGrid, GridAvatar } from '@vkontakte/vkui';
+import { Avatar, FormItem, ModalDismissButton, PopoutWrapper, File, CardGrid, GridAvatar, Div } from '@vkontakte/vkui';
 import { updateAvatarThunk } from '../model/actions';
 
 import './styles.scss';
@@ -45,7 +45,7 @@ export const ProfileUploadAvatar = ({ user, onClose }: ProfileUploadAvatarProps)
 
   return (
     <PopoutWrapper onClick={onClose}>
-      <div className={cnUploadPopup()}>
+      <Div style={{ background: 'var(--vkui--color_background_content)' }} className={cnUploadPopup()}>
         <CardGrid>
           <GridAvatar>{user && <Avatar src={user.avatar || undefined} />}</GridAvatar>
 
@@ -61,7 +61,7 @@ export const ProfileUploadAvatar = ({ user, onClose }: ProfileUploadAvatarProps)
 
           <ModalDismissButton onClick={onClose} />
         </CardGrid>
-      </div>
+      </Div>
     </PopoutWrapper>
   );
 };

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
+import { Link } from 'react-router-dom';
+import { CardGrid, Card, Div, Button } from '@vkontakte/vkui';
 
 const TopicList = () => {
   const topics = [
@@ -16,7 +16,7 @@ const TopicList = () => {
             <h3>{topic.title}</h3>
             <p>{topic.summary}</p>
           </Div>
-          <Link href={`/forum/topic/${topic.id}`}>
+          <Link to={`/forum/topic/${topic.id}`}>
             <Button size="l" mode="tertiary">
               Добавить комментарий
             </Button>

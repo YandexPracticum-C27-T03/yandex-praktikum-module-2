@@ -6,6 +6,7 @@ import { logout } from '@@entities/user/model/reducers';
 import { ProfileAvatar } from '@@features/profile-avatar';
 import { ProfileChangePassword } from '@@features/profile-change-password';
 import { ProfileUploadAvatar } from '@@features/profile-uploader-avatar-popup';
+import { ToggleTheme } from '@@features/toggle-theme';
 import { Routes } from '@@shared/config';
 import { useControlledPopup } from '@@shared/hooks/useControlledPopup';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
@@ -57,6 +58,7 @@ export const ProfilePage = () => {
           </Button>
         </ButtonGroup>
       }
+      switchTheme={<ToggleTheme />}
     >
       <Button onClick={openPasswordPopup}>Изменить пароль</Button>
     </UserViewer>

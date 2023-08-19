@@ -13,10 +13,10 @@ export class ResourceLoader extends EventEmitter {
   private errorOccurred = false;
   private readonly _imageAssetMap: AssetMap;
 
-  constructor() {
+  constructor(theme: string) {
     super();
 
-    this._imageAssetMap = ImageResourcesMap;
+    this._imageAssetMap = ImageResourcesMap(theme);
   }
 
   async load(timeout = 5000) {
@@ -40,7 +40,7 @@ export class ResourceLoader extends EventEmitter {
     return this;
   }
 
-  getResourceByName(name: keyof typeof ImageResourcesMap): HTMLImageElement {
+  getResourceByName(name: string): HTMLImageElement {
     return this.imageList[name];
   }
 
@@ -67,4 +67,4 @@ export class ResourceLoader extends EventEmitter {
   }
 }
 
-export const resourceLoader = new ResourceLoader();
+export const resourceLoader = new ResourceLoader('dark');

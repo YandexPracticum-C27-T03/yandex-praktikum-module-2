@@ -1,10 +1,15 @@
 import { useContext } from 'react';
 import './styles.scss';
 
-import { GameContext } from '../../../../lib/context/game-context';
+import { GameContext } from '@@entities/game/lib/context/game-context';
+import { Group, Text } from '@vkontakte/vkui';
 
 export const GameScore = () => {
   const { score } = useContext(GameContext);
 
-  return <div className="Game-score">{score}</div>;
+  return (
+    <Group style={{ padding: '10px 20px' }}>
+      <Text weight="1">{score}</Text>
+    </Group>
+  );
 };

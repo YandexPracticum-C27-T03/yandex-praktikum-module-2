@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Panel, PanelHeader, Group, Link } from '@vkontakte/vkui';
+import { Link } from 'react-router-dom';
+import { View, Panel, PanelHeader, Group } from '@vkontakte/vkui';
 import TopicList from '../TopicList/topic-list';
 
 export const ForumPage = () => {
@@ -8,7 +9,7 @@ export const ForumPage = () => {
       <Panel id="forum">
         <PanelHeader>Форум</PanelHeader>
         <Group>
-          <Link href="/forum/create-topic">Создать топик</Link>
+          <Link to="/forum/create-topic">Создать топик</Link>
         </Group>
         <Group>
           <TopicList />
