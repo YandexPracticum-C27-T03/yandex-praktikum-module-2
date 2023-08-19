@@ -12,3 +12,4 @@ export const isNotNil = <T>(p: T): p is Exclude<T, undefined | null> => isDefine
 
 export const isClient = () => typeof document !== 'undefined';
 export const isProduction = () => import.meta.env.PROD;
+export const identity = <T>(args: T): T => args;

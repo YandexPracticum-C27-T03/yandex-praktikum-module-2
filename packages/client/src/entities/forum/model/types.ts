@@ -2,6 +2,7 @@ export type Topic = {
   id: number;
   title: string;
   summary: string;
+  reactions: string[];
 };
 
 export type Comment = {

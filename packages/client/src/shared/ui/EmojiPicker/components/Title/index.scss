@@ -1,0 +1,14 @@
+.Title {
+  align-items: center;
+
+  display: flex;
+  font-weight: 700;
+  height: 40px;
+
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+
+  background-color: var(--background-secondary);
+}

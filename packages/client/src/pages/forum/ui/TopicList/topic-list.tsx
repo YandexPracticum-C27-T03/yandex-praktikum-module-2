@@ -1,27 +1,25 @@
-import React, { useEffect } from 'react';
-import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
+import React from 'react';
+
+import { Topic } from '@@entities/forum/model/types';
+import { CardGrid } from '@vkontakte/vkui';
+import { TopicItem } from '../TopicItem';
 
 const TopicList = () => {
   const topics = [
-    { id: 1, title: 'Топик 1', summary: 'Краткое содержание топика 1' },
-    { id: 2, title: 'Топик 2', summary: 'Краткое содержание топика 2' },
-    { id: 3, title: 'Топик 3', summary: 'Краткое содержание топика 3' },
-  ];
+    {
+      id: 1,
+      title: 'Топик 1',
+      summary: 'Краткое содержание топика 1',
+      reactions: ['1f603', '1f601', '1f606', '1f605', '1f600', '1f600', '1f603', '1f604', '1f603', '1f603', '1f603'],
+    },
+    { id: 2, title: 'Топик 2', summary: 'Краткое содержание топика 2', reactions: [] },
+    { id: 3, title: 'Топик 3', summary: 'Краткое содержание топика 3', reactions: [] },
+  ] as Topic[];
 
   return (
     <CardGrid size="l">
       {topics.map((topic) => (
-        <Card key={topic.id} mode="shadow">
-          <Div>
-            <h3>{topic.title}</h3>
-            <p>{topic.summary}</p>
-          </Div>
-          <Link href={`/forum/topic/${topic.id}`}>
-            <Button size="l" mode="tertiary">
-              Добавить комментарий
-            </Button>
-          </Link>
-        </Card>
+        <TopicItem key={topic.id} topic={topic} />
       ))}
     </CardGrid>
   );
