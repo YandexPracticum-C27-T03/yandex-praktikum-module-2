@@ -19,6 +19,7 @@
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
     "strictPropertyInitialization": false,
+    "skipLibCheck": true,
     "lib": ["DOM", "es2019", "esnext.asynciterable"],
     "types": ["node", "jest", "reflect-metadata"],
     "baseUrl": ".",

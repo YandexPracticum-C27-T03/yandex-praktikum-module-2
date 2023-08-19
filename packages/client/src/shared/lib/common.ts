@@ -11,3 +11,4 @@ export const isDefined = <T>(p: T): p is Exclude<T, undefined> => p !== undefine
 export const isNotNil = <T>(p: T): p is Exclude<T, undefined | null> => isDefined(p) && p !== null;
 
 export const isClient = () => typeof document !== 'undefined';
+export const isProduction = () => import.meta.env.PROD;

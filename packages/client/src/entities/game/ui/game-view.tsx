@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import { updateScore } from '@@entities/leader-board/model/reducers';
-
 import { getLeaderBoardSelecotr } from '@@entities/leader-board/model/selectors';
 import { useAuth } from '@@entities/user';
+import { useNotificationContext } from '@@features/notifications';
 import { makeMapDispatch, makeMapState, useMapDispatch, useMapState } from '@@shared/lib/model/hooks';
 import { UserData } from '../../leader-board/api/leaderboard.service';
 import {
@@ -50,7 +50,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
   const progressRef = useRef<number>(0);
   const { user } = useAuth();
   const { updateScore } = useMapDispatch(mapDispatch);
-
+  const { showNotification } = useNotificationContext();
   const backgroundImg = resourceLoader.getResourceByName(ImageNames.Background);
   const playerWalk1Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk1);
   const playerWalk2Img = resourceLoader.getResourceByName(ImageNames.PlayerWalk2);
@@ -250,6 +250,11 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
         score,
       });
     }
+
+    if (gameStatus === GAME_STATUS.RESTART) {
+      showNotification('Игра окончена', `Вы набрали ${score.toString()}`);
+    }
+    //React Hook useEffect has missing dependencies: 'showNotification', 'updateScore', and 'user'. Either include them or remove the dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameStatus, record, score]);
 
@@ -262,6 +267,7 @@ export const GameView: React.FC<PropsWithChildren<GameViewProps>> = ({ resourceL
 
     setRecord(currentRecord?.data.score as number);
 
+    //React Hook useEffect has missing dependencies: 'recordList' and 'user'. Either include them or remove the dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 

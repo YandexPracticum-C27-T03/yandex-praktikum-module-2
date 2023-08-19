@@ -8,6 +8,7 @@ import { InternalErrorPage } from '@@pages/internal-error';
 import { LoginPage } from '@@pages/login';
 import { MainPage } from '@@pages/main';
 import { NotFoundPage } from '@@pages/not-found';
+import { OpenAuthPage } from '@@pages/open-auth';
 import { ProfilePage } from '@@pages/profile';
 import { RegistrationPage } from '@@pages/registration';
 import { Routes as Pages } from '../shared/config';
@@ -55,6 +56,10 @@ export const routerConfig: AppRoute[] = [
 
             element: <ProfilePage />,
           },
+          {
+            path: Pages.ROOT,
+            element: <MainPage />,
+          },
         ],
       },
       // Доступ только для авторизированных //
@@ -68,13 +73,16 @@ export const routerConfig: AppRoute[] = [
         path: Pages.REGISTRATION,
         element: <RegistrationPage />,
       },
-      // Блокирует роуты, если пользователь авторизирован //
+      // Блокирует доступ, если пользователь авторизирован //
+
+      // Технические роуты
+      {
+        path: Pages.OPEN_AUTH,
+        element: <OpenAuthPage />,
+      },
+      // Технические роуты
 
       // Публичные роуты
-      {
-        path: Pages.ROOT,
-        element: <MainPage />,
-      },
       {
         path: Pages.INTERNAL_ERROR,
         element: <InternalErrorPage />,

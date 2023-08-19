@@ -3,8 +3,8 @@ import { ServiceFactory } from '@@services/service-factory';
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer } from './root-reducer';
 
-export const configureReduxStore = <T = unknown>(repository: IRepository, intialState?: T) => {
-  const store = configureStore({
+export const configureReduxStore = <T = unknown>(repository: IRepository, initialState?: T) => {
+  return configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -15,10 +15,8 @@ export const configureReduxStore = <T = unknown>(repository: IRepository, intial
         },
       }),
     devTools: process.env.NODE_ENV === 'development',
-    ...(intialState && { preloadedState: intialState }),
+    ...(initialState && { preloadedState: initialState }),
   });
-
-  return store;
 };
 
 export type RootState = ReturnType<ReturnType<typeof configureReduxStore>['getState']>;

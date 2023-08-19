@@ -7,11 +7,10 @@ import { flatRouter, AppRouter, routerConfig } from '@@app/app-router';
 import { configureReduxStore } from '@@app/app-store';
 import { fetchUser } from '@@entities/user';
 import { ServerRepository } from '@@repositories/server.repository';
+import { isProduction } from '@@shared/lib/common';
 import { SSRWrapper } from '@vkontakte/vkui';
 import * as express from 'express';
 import { UserAgent } from 'express-useragent';
-
-const isDev = () => process.env.NODE_ENV === 'development';
 
 async function getUser(dispatch: AppDispatch) {
   try {
@@ -44,7 +43,9 @@ export async function render(
   // получаем начальное состояние и возвращем его вместе с статикой приложения в миддлвар для последующего рендера
   const initalState = appStore.getState();
 
-  if (isDev()) {
+  if (!isProduction()) {
+    // это работает только при DEV сборке
+    // eslint-disable-next-line no-console
     console.info('[initial-state-app]', initalState);
   }
 
