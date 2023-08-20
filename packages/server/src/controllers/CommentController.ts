@@ -18,9 +18,7 @@ export class CommentController {
 
   @Delete('/:id')
   async remove(@Param('id') id: number, @Req() request: { user: User }) {
-    const deletedComment = await CommentService.delete(id, request.user.id);
-
-    return deletedComment;
+    return CommentService.delete(id, request.user.id);
   }
 
   @Get('/:topicId')

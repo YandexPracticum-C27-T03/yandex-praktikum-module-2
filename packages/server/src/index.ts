@@ -11,8 +11,7 @@ import { TopicController } from './controllers/TopicController';
 
 import { dbConnect } from './init';
 
-import { AuthMiddleware, AuthGuard, ErrorHandler } from './middlewares';
-import ssr from './middlewares/ssr';
+import { AuthMiddleware, AuthGuard, ErrorHandler, ssr } from './middlewares';
 
 dotenv.config();
 
