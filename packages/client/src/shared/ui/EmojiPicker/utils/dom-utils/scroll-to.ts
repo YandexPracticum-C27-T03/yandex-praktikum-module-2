@@ -1,5 +1,5 @@
-export function scrollTo(node: HTMLDivElement, offset: number) {
+export function scrollTo(node: HTMLDivElement, offset: HTMLElement['offsetTop']) {
   requestAnimationFrame(() => {
-    node.scrollTop = offset + 1;
+    node.scrollTo({ top: offset });
   });
 }

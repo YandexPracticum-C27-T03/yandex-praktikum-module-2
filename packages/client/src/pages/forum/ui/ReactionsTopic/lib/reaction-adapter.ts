@@ -6,10 +6,12 @@ type ReactionEntity = Record<
   }
 >;
 
+export const MIN_COUNTER_REACTION = 1;
+
 export function reactionAdapter(reactions: string[]) {
   return reactions.reduce<ReactionEntity>((acc, reaction) => {
     acc[reaction] = {
-      count: acc[reaction] || 0 ? (acc[reaction].count += 1) : 1,
+      count: acc[reaction] ? acc[reaction].count + MIN_COUNTER_REACTION : MIN_COUNTER_REACTION,
       reaction: reaction,
     };
     return acc;

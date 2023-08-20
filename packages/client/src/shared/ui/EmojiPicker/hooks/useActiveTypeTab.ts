@@ -35,10 +35,17 @@ export function useActiveTypeTab(setActiveCallback: (flg: EmojiType['0']) => voi
       observer!.observe(el);
     });
 
-    return () => {
+    function cleanup() {
       clearTimeout(timer);
       visited.clear();
+
+      main?.querySelectorAll(withSelectorPrefix(EMOJI_CLASSES.EmojiSection)).forEach((el) => {
+        observer!.unobserve(el);
+      });
+
       observer = null;
-    };
+    }
+
+    return cleanup;
   }, [mainRef, setActiveCallback]);
 }

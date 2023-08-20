@@ -4,9 +4,7 @@ import { cn } from '@bem-react/classname';
 
 import './index.scss';
 import { ReactionsBadge } from '../ReactionsBadge';
-import { reactionAdapter } from './lib/reaction-adapter';
-
-const MIN_COUNTER_REACTION = 1;
+import { MIN_COUNTER_REACTION, reactionAdapter } from './lib/reaction-adapter';
 
 type ReactionsTopicProps = {
   reactions: Topic['reactions'];
