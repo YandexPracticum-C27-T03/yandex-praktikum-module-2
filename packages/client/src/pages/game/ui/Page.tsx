@@ -10,7 +10,7 @@ import { FullScreenContainer } from '@@shared/ui/Fullscreen';
 import { Button } from '@vkontakte/vkui';
 import { Div } from '@vkontakte/vkui';
 import { GamePreview } from './game-preview';
-
+import './styles.scss';
 const mapDispatch = makeMapDispatch((dispatch) => ({
   getTeamList: () => dispatch(getLeaderBoard()),
 }));
@@ -44,7 +44,7 @@ export const GamePage = () => {
 
   return (
     <FullScreenContainer controller={fullscreenController}>
-      <Div style={{ height: '100%', width: '100%', overflow: 'hidden', padding: 0 }}>
+      <Div className="Game-page">
         {gameStart ? (
           <GameView resourceLoader={resourceLoader.current}>
             <Button appearance="neutral" onClick={fullscreenController.enter}>

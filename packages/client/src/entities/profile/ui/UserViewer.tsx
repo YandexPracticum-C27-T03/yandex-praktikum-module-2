@@ -29,9 +29,9 @@ export const UserViewer = ({
     return null;
   }
   return (
-    <Div style={{ maxWidth: 600, width: '100%', margin: '0 auto' }}>
+    <Div className={userViewerCn()}>
       <View activePanel="gradient">
-        <Panel id="gradient" className={userViewerCn()}>
+        <Panel id="gradient">
           <Group>
             <Gradient mode="tint" className={userViewerCn('avatar')}>
               {avatar}

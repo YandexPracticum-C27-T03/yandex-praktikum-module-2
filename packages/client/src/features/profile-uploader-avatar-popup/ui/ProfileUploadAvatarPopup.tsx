@@ -45,6 +45,7 @@ export const ProfileUploadAvatar = ({ user, onClose }: ProfileUploadAvatarProps)
 
   return (
     <PopoutWrapper onClick={onClose}>
+      {/* Stylelint не пропускает переменную поэтому использую тут */}
       <Div style={{ background: 'var(--vkui--color_background_content)' }} className={cnUploadPopup()}>
         <CardGrid>
           <GridAvatar>{user && <Avatar src={user.avatar || undefined} />}</GridAvatar>

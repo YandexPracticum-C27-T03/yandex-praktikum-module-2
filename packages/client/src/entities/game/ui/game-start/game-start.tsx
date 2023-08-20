@@ -15,26 +15,28 @@ export const GameStart = memo(() => {
 
   return (
     <Div className="GameWindowContainer">
-      <Group className="GameWindow" style={{ padding: '20px' }}>
-        {gameStatus === GAME_STATUS.STOP && (
-          <>
-            <Text weight="1" style={{ fontSize: '24px' }}>
-              Рекорд: {record} {declOfNum(record)}
-            </Text>
-            <Spacing size={1} />
-            <Button onClick={start}>Начать !</Button>
-          </>
-        )}
+      <Group>
+        <Div className="GameWindow">
+          {gameStatus === GAME_STATUS.STOP && (
+            <>
+              <Text weight="1" className="GameWindow-start">
+                Рекорд: {record} {declOfNum(record)}
+              </Text>
+              <Spacing size={1} />
+              <Button onClick={start}>Начать !</Button>
+            </>
+          )}
 
-        {gameStatus === GAME_STATUS.RESTART && (
-          <>
-            <Text weight="1" style={{ fontSize: '24px' }}>
-              Вы набрали: {score} {declOfNum(score)}
-            </Text>
-            <Spacing size={1} />
-            <Button onClick={reset}>Начать заново</Button>
-          </>
-        )}
+          {gameStatus === GAME_STATUS.RESTART && (
+            <>
+              <Text weight="1">
+                Вы набрали: {score} {declOfNum(score)}
+              </Text>
+              <Spacing size={1} />
+              <Button onClick={reset}>Начать заново</Button>
+            </>
+          )}
+        </Div>
       </Group>
     </Div>
   );

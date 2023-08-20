@@ -21,7 +21,8 @@ export const GameLeaderBoard = ({ onClose }: GameLeaderBoardProps) => {
   };
 
   return (
-    <PopoutWrapper style={{ zIndex: 999 }} onClick={closeModal}>
+    <PopoutWrapper className="LeaderBoard-overlay" style={{ zIndex: 999 }} onClick={closeModal}>
+      {/* Stylelint не пропускает переменную поэтому использую тут */}
       <Div
         style={{ background: 'var(--vkui--color_background_content)' }}
         className={cnLeaderBoard({ open: !animateClose, close: animateClose })}

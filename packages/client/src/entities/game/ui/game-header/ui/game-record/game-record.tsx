@@ -6,7 +6,7 @@ export const GameRecord = () => {
   const { record } = useContext(GameContext);
 
   return (
-    <Group style={{ padding: '10px 20px' }}>
+    <Group mode="card" padding="m">
       <Text weight="1">РЕКОРД: {record}</Text>
     </Group>
   );
