@@ -7,7 +7,7 @@ import type { ViteDevServer } from 'vite';
 
 const isDev = () => process.env.NODE_ENV === 'development';
 
-export default async function ssr(app: Express) {
+export async function ssr(app: Express) {
   let vite: ViteDevServer | undefined;
 
   let distPath = '';
