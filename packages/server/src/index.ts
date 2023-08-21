@@ -19,13 +19,6 @@ async function startServer() {
   const app = express();
   app.use(cors());
   app.use(bodyParser.json());
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useExpressServer(app, {
-    routePrefix: '/api',
-    controllers: [TopicController, CommentController],
-    middlewares: [AuthMiddleware, AuthGuard, ErrorHandler],
-    defaultErrorHandler: false,
-  });
   app.use(
     '/api/v2',
     createProxyMiddleware({
@@ -36,6 +29,15 @@ async function startServer() {
       target: 'https://ya-praktikum.tech',
     }),
   );
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useExpressServer(app, {
+    routePrefix: '/api',
+    controllers: [TopicController, CommentController],
+    middlewares: [AuthMiddleware, AuthGuard, ErrorHandler],
+    defaultErrorHandler: false,
+  });
+
   const port = Number(process.env.SERVER_PORT) || 3000;
 
   const middlewareSsr = await ssr(app);
