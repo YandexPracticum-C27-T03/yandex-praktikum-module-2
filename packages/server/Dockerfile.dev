@@ -12,7 +12,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-RUN yarn lerna bootstrap
+RUN echo y | yarn lerna bootstrap
 
 EXPOSE $SERVER_PORT
 CMD [ "yarn", "dev:server" ]

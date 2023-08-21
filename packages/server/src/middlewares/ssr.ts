@@ -28,6 +28,8 @@ export async function ssr(app: Express) {
 
     app.use(vite.middlewares);
   } else {
+    console.log('LOOOOOG_1', path.dirname(require.resolve('.')));
+    console.log('LOOOOOG_2', path.dirname(require.resolve('..')));
     distPath = path.dirname(require.resolve('../client/dist/index.html'));
     ssrDist = require.resolve('../client/ssr-dist/ssr.cjs');
   }
