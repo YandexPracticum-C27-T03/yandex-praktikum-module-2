@@ -11,6 +11,7 @@ import { Button } from '@vkontakte/vkui';
 import { Div } from '@vkontakte/vkui';
 import { GamePreview } from './game-preview';
 import './styles.scss';
+import { cn } from '@@shared/lib/bem';
 const mapDispatch = makeMapDispatch((dispatch) => ({
   getTeamList: () => dispatch(getLeaderBoard()),
 }));
@@ -20,6 +21,7 @@ const mapState = makeMapState((state) => ({
 }));
 
 export const GamePage = () => {
+  const GamePage = cn('Game');
   const fullscreenController = useFullscreen();
   const { getTeamList } = useMapDispatch(mapDispatch);
   const [gameStart, setGameStart] = useState(false);
@@ -44,7 +46,7 @@ export const GamePage = () => {
 
   return (
     <FullScreenContainer controller={fullscreenController}>
-      <Div className="Game-page">
+      <div className={GamePage('page')}>
         {gameStart ? (
           <GameView resourceLoader={resourceLoader.current}>
             <Button appearance="neutral" onClick={fullscreenController.enter}>
@@ -54,7 +56,7 @@ export const GamePage = () => {
         ) : (
           <GamePreview handleStartGame={handleStartGame} startActive={resourceLoaded} />
         )}
-      </Div>
+      </div>
     </FullScreenContainer>
   );
 };
