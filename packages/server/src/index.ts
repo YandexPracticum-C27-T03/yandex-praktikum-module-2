@@ -1,8 +1,7 @@
-import bodyParser from 'body-parser';
 import cookieParser, { CookieParseOptions } from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { json } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { useExpressServer } from 'routing-controllers';
 
@@ -18,7 +17,6 @@ dotenv.config();
 async function startServer() {
   const app = express();
   app.use(cors());
-  app.use(bodyParser.json());
   app.use(
     '/api/v2',
     createProxyMiddleware({
@@ -30,6 +28,7 @@ async function startServer() {
     }),
   );
 
+  app.use(json());
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useExpressServer(app, {
     routePrefix: '/api',
