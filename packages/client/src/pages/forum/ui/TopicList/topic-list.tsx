@@ -1,16 +1,25 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getTopicListSelectors, getTopicReducer } from '@@entities/forum';
+import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
 
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  forum: () => dispatch(getTopicReducer()),
+}));
+
 const TopicList = () => {
-  const topics = [
-    { id: 1, title: 'Топик 1', summary: 'Краткое содержание топика 1' },
-    { id: 2, title: 'Топик 2', summary: 'Краткое содержание топика 2' },
-    { id: 3, title: 'Топик 3', summary: 'Краткое содержание топика 3' },
-  ];
+  const { forum } = useMapDispatch(mapDispatch);
+
+  const topicList = useSelector(getTopicListSelectors);
+
+  useEffect(() => {
+    forum();
+  }, [forum]);
 
   return (
     <CardGrid size="l">
-      {topics.map((topic) => (
+      {topicList.map((topic) => (
         <Card key={topic.id} mode="shadow">
           <Div>
             <h3>{topic.title}</h3>
