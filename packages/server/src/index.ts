@@ -1,8 +1,7 @@
-import bodyParser from 'body-parser';
 import cookieParser, { CookieParseOptions } from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { json } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { useExpressServer } from 'routing-controllers';
 
@@ -11,21 +10,13 @@ import { TopicController } from './controllers/TopicController';
 
 import { dbConnect } from './init';
 
-import { AuthMiddleware, AuthGuard, ErrorHandler, ssr } from './middlewares';
+import { AuthMiddleware, AuthGuard, ErrorHandler, ssr, ExitMiddleware } from './middlewares';
 
 dotenv.config();
 
 async function startServer() {
   const app = express();
   app.use(cors());
-  app.use(bodyParser.json());
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useExpressServer(app, {
-    routePrefix: '/api',
-    controllers: [TopicController, CommentController],
-    middlewares: [AuthMiddleware, AuthGuard, ErrorHandler],
-    defaultErrorHandler: false,
-  });
   app.use(
     '/api/v2',
     createProxyMiddleware({
@@ -36,6 +27,16 @@ async function startServer() {
       target: 'https://ya-praktikum.tech',
     }),
   );
+
+  app.use(json());
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useExpressServer(app, {
+    routePrefix: '/api',
+    controllers: [TopicController, CommentController],
+    middlewares: [AuthMiddleware, AuthGuard, ErrorHandler, ExitMiddleware],
+    defaultErrorHandler: false,
+  });
+
   const port = Number(process.env.SERVER_PORT) || 3000;
 
   const middlewareSsr = await ssr(app);

@@ -10,6 +10,7 @@ services:
     restart: always
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
+      - "24678:24678"
     environment:
       SERVER_PORT: ${SERVER_PORT}
     volumes:

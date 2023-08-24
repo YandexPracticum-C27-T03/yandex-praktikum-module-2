@@ -9,11 +9,9 @@ services:
             dockerfile: Dockerfile.server
             args:
               SERVER_PORT: ${SERVER_PORT}
-              CLIENT_PORT: ${CLIENT_PORT}
         restart: always
         ports:
             - "${SERVER_PORT}:${SERVER_PORT}"
-            - "${CLIENT_PORT}:${CLIENT_PORT}"
         environment:
           SERVER_PORT: ${SERVER_PORT}
 
