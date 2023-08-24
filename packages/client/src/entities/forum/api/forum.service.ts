@@ -5,7 +5,7 @@ import { CardProps, setCommentType } from '../types/types';
 class ForumService {
   http: AxiosInstance;
   constructor() {
-    this.http = axiosInstance(`/api/`, {});
+    this.http = axiosInstance('/api/', {});
   }
   public getTopics(id: number | null = null) {
     return this.http.get(`topics/${id ?? ''}`);
@@ -16,6 +16,12 @@ class ForumService {
 
   public setComment(data: setCommentType) {
     return this.http.post('comments', data);
+  }
+  public getComment(id: number) {
+    return this.http.get(`comments/${id}`);
+  }
+  public removeComment(id: number) {
+    return this.http.delete(`comments/${id}`);
   }
 }
 

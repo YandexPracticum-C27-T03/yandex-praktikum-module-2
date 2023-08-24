@@ -7,7 +7,15 @@ export type Topic = {
 
 export type Comment = {
   id: number;
-  text: string;
+  content: string;
+  user: {
+    avatar: string | null;
+    id: number;
+    login: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  parentId: number;
 };
 
 export type TopicWithComments = {

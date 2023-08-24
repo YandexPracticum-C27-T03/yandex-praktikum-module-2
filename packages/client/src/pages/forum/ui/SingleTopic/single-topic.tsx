@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Comment, getTopicSelectors, getTopicReducer } from '@@entities/forum';
+import { Comment, getTopicReducer, Topic } from '@@entities/forum';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { View, Panel, PanelHeader, Group, Card, Div, Spinner } from '@vkontakte/vkui';
 import { AddCommentForm } from '../AddCommentForm';
@@ -13,34 +12,36 @@ const mapDispatch = makeMapDispatch((dispatch) => ({
 
 export const SingleTopic = () => {
   const { getTopic } = useMapDispatch(mapDispatch);
-  const topicList = useSelector(getTopicSelectors);
-  const [topic, setTopic] = useState(topicList);
+  const [topic, setTopic] = useState<Topic>();
+  const [parent, setParent] = useState<number | undefined>();
   const { id } = useParams();
 
   useEffect(() => {
-    id && getTopic(Number(id));
+    const getTopicRequest = async () => {
+      const { payload } = await getTopic(Number(id));
+      setTopic(payload);
+    };
+    getTopicRequest();
   }, [getTopic, id]);
-
-  useEffect(() => {
-    setTopic(topicList);
-  }, [topicList]);
 
   return (
     <View activePanel="forum">
-      {topic && (
+      {topic ? (
         <Panel id="forum">
           <PanelHeader>{topic.title}</PanelHeader>
           <Group>
             <Card>
               <Div>
                 <h3>{topic.title}</h3>
-                <p>{topic.content}</p>
+                <p style={{ whiteSpace: 'pre' }}>{topic.content}</p>
               </Div>
             </Card>
-            <CommentList comments={topic.comments} />
-            <AddCommentForm topicId={topic.id} />
+            <CommentList topicId={topic.id} setParent={setParent} />
+            <AddCommentForm topicId={topic.id} parentId={parent} />
           </Group>
         </Panel>
+      ) : (
+        <Div>Топиков пока нет. Буть первым</Div>
       )}
     </View>
   );

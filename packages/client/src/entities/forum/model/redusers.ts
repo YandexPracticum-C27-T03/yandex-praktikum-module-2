@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { forumService } from '../api/forum.service';
 import { CardProps, setCommentType } from '../types/types';
-import { getTopics } from './slice';
+import { getComments, getTopics } from './slice';
 
 export const getTopicsReducer = createAsyncThunk('entities/forum/get-topics', async (_, { dispatch }) => {
   try {
@@ -12,10 +12,10 @@ export const getTopicsReducer = createAsyncThunk('entities/forum/get-topics', as
   }
 });
 
-export const getTopicReducer = createAsyncThunk('entities/forum/get-topic', async (id: number, { dispatch }) => {
+export const getTopicReducer = createAsyncThunk('entities/forum/get-topic', async (id: number) => {
   try {
     const { data } = await forumService.getTopics(id);
-    dispatch(getTopics(data));
+    return data;
   } catch (error) {
     return Promise.reject(error);
   }
@@ -37,10 +37,39 @@ export const setTopicRedusers = createAsyncThunk(
   },
 );
 
-export const setCommentRedusers = createAsyncThunk('entities/forum/set-comment', async (data: setCommentType) => {
+export const setCommentRedusers = createAsyncThunk(
+  'entities/forum/set-comment',
+  async (data: setCommentType, { dispatch }) => {
+    try {
+      await forumService.setComment(data);
+      dispatch(getCommentRedusers(Number(data.topicId)));
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+);
+
+export const getCommentRedusers = createAsyncThunk('entities/forum/get-comment', async (id: number, { dispatch }) => {
   try {
-    await forumService.setComment(data);
+    const { data } = await forumService.getComment(id);
+    dispatch(getComments(data));
   } catch (error) {
     return Promise.reject(error);
   }
 });
+
+type removeCommentProps = {
+  id: number;
+  topicId: number;
+};
+export const removeCommentReduser = createAsyncThunk(
+  'entities/forum/remove-comment',
+  async ({ id, topicId }: removeCommentProps, { dispatch }) => {
+    try {
+      await forumService.removeComment(id);
+      dispatch(getCommentRedusers(Number(topicId)));
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+);

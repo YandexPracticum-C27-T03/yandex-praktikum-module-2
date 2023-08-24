@@ -20,12 +20,12 @@ export const forumSlice = createSlice({
     getTopics(state, action: PayloadAction<Topic[]>) {
       state.topics = action.payload;
     },
-    getTopic(state, action: PayloadAction<Topic>) {
-      state.topic = action.payload;
+    getComments(state, action: PayloadAction<Comment[]>) {
+      state.comments = action.payload;
     },
   },
 });
 
-export const { getTopics } = forumSlice.actions;
+export const { getTopics, getComments } = forumSlice.actions;
 
 export default forumSlice.reducer;
