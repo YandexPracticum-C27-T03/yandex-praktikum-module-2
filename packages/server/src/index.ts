@@ -10,7 +10,7 @@ import { TopicController } from './controllers/TopicController';
 
 import { dbConnect } from './init';
 
-import { AuthMiddleware, AuthGuard, ErrorHandler, ssr } from './middlewares';
+import { AuthMiddleware, AuthGuard, ErrorHandler, ssr, ExitMiddleware } from './middlewares';
 
 dotenv.config();
 
@@ -33,7 +33,7 @@ async function startServer() {
   useExpressServer(app, {
     routePrefix: '/api',
     controllers: [TopicController, CommentController],
-    middlewares: [AuthMiddleware, AuthGuard, ErrorHandler],
+    middlewares: [AuthMiddleware, AuthGuard, ErrorHandler, ExitMiddleware],
     defaultErrorHandler: false,
   });
 
