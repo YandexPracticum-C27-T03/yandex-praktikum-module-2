@@ -1,57 +1,47 @@
-import React, { useState } from 'react';
-import { Comment } from '@@entities/forum';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { Comment, getTopicSelectors, getTopicReducer } from '@@entities/forum';
+import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { View, Panel, PanelHeader, Group, Card, Div, Spinner } from '@vkontakte/vkui';
 import { AddCommentForm } from '../AddCommentForm';
 import CommentList from '../CommentList';
 
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  getTopic: (id: number) => dispatch(getTopicReducer(id)),
+}));
+
 export const SingleTopic = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const { getTopic } = useMapDispatch(mapDispatch);
+  const topicList = useSelector(getTopicSelectors);
+  const [topic, setTopic] = useState(topicList);
+  const { id } = useParams();
 
-  // Заглушка для тестовых данных топика{}
-  const topic = {
-    id: 1,
-    title: 'Топик 1',
-    content: 'Содержание топика 1',
-  };
+  useEffect(() => {
+    id && getTopic(Number(id));
+  }, [getTopic, id]);
 
-  const [comments, setComments] = useState<Comment[]>([]); // Использование типа Comment[] для комментариев
-
-  const handleSubmitComment = (comment: string) => {
-    const newComment: Comment = {
-      id: comments.length + 1,
-      text: comment,
-    };
-    setComments([...comments, newComment]);
-  };
-
-  // Установка флага загрузки в false
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 2000);
-
-  if (isLoading) {
-    return (
-      <Group>
-        <Spinner size="large" />
-      </Group>
-    );
-  }
+  useEffect(() => {
+    setTopic(topicList);
+  }, [topicList]);
 
   return (
     <View activePanel="forum">
-      <Panel id="forum">
-        <PanelHeader>{topic.title}</PanelHeader>
-        <Group>
-          <Card>
-            <Div>
-              <h3>{topic.title}</h3>
-              <p>{topic.content}</p>
-            </Div>
-          </Card>
-          <CommentList comments={comments} />
-          <AddCommentForm />
-        </Group>
-      </Panel>
+      {topic && (
+        <Panel id="forum">
+          <PanelHeader>{topic.title}</PanelHeader>
+          <Group>
+            <Card>
+              <Div>
+                <h3>{topic.title}</h3>
+                <p>{topic.content}</p>
+              </Div>
+            </Card>
+            <CommentList comments={topic.comments} />
+            <AddCommentForm topicId={topic.id} />
+          </Group>
+        </Panel>
+      )}
     </View>
   );
 };

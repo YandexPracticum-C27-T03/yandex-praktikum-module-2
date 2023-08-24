@@ -1,7 +1,8 @@
 export type Topic = {
   id: number;
   title: string;
-  summary: string;
+  comments: Comment[];
+  content: string;
 };
 
 export type Comment = {
@@ -17,4 +18,10 @@ export type TopicWithComments = {
 export type CardProps = {
   title: string;
   content: string;
+};
+
+export type setCommentType = {
+  content: string;
+  topicId: number;
+  parentId?: number;
 };
