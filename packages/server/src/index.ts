@@ -40,7 +40,7 @@ async function startServer() {
   const port = Number(process.env.SERVER_PORT) || 3000;
 
   const middlewareSsr = await ssr(app);
-  // await dbConnect();
+  await dbConnect();
 
   app.use(
     '*',
