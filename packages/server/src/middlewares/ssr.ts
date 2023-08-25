@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
-import type { Express, NextFunction, Request } from 'express';
+import type { Express, NextFunction, Request, Response } from 'express';
 import type { ViteDevServer } from 'vite';
 
 const isDev = () => process.env.NODE_ENV === 'development';
@@ -28,8 +28,7 @@ export async function ssr(app: Express) {
 
     app.use(vite.middlewares);
   } else {
-    console.log('LOOOOOG_1', path.dirname(require.resolve('.')));
-    console.log('LOOOOOG_2', path.dirname(require.resolve('..')));
+    // Важно, чтобы docker писал файлы по этому пути
     distPath = path.dirname(require.resolve('../client/dist/index.html'));
     ssrDist = require.resolve('../client/ssr-dist/ssr.cjs');
   }
@@ -48,7 +47,7 @@ export async function ssr(app: Express) {
     app.use('/sw.js', express.static(path.resolve(distPath, 'assets')));
   }
 
-  return async (req: Request, res: any, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     let template: string;
     const url = req.originalUrl;
 
@@ -56,7 +55,7 @@ export async function ssr(app: Express) {
       if (isDev()) {
         template = await fs.readFileSync(path.resolve(srcPath, 'index.html'), 'utf-8');
 
-        template = await vite!.transformIndexHtml(url, template);
+        template = (await vite?.transformIndexHtml(url, template)) ?? '';
       } else {
         template = fs.readFileSync(path.resolve(distPath, 'index.html'), 'utf-8');
       }
@@ -64,14 +63,14 @@ export async function ssr(app: Express) {
       let mod;
 
       if (isDev()) {
-        mod = await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'));
+        mod = await vite?.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'));
       } else {
         mod = await import(ssrDist);
       }
 
-      const [serverApp, intialState] = await mod!.render(req);
+      const [serverApp, initialState] = (await mod?.render(req)) ?? [];
 
-      const state = JSON.stringify(intialState);
+      const state = JSON.stringify(initialState);
 
       const html = template.replace(`<!--ssr-outlet-->`, serverApp).replace('<!--ssr-store-->', state);
 

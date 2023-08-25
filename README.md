@@ -7,12 +7,14 @@
 1. Убедитесь что у вас установлен `node` и `docker`
 2. Выполните команду `yarn bootstrap` - это обязательный шаг, без него ничего работать не будет :)
 3. Выполните команду `yarn dev`
-4. Выполните команду `yarn dev --scope=client` чтобы запустить только клиент
-5. Выполните команду `yarn dev --scope=server` чтобы запустить только server
+   1. Выполните команду `yarn dev:client` чтобы запустить только клиент
+   2. Выполните команду `yarn dev:server` чтобы запустить только server
 
 #### Docker
 
-```docker compose -f docker-compose.dev.yml```
+Для запуска **dev** сборки в докере:
+
+```docker compose -f docker-compose.dev.yml up --build```
 
 
 ### Как добавить зависимости?
@@ -74,14 +76,9 @@
 ## Production окружение в докере
 Перед первым запуском выполните `node init.js`
 
+Для запуска **production** сборки в докере:
 
-`docker compose up` - запустит три сервиса
-1. nginx, раздающий клиентскую статику (client)
-2. node, ваш сервер (server)
-3. postgres, вашу базу данных (postgres)
-
-Если вам понадобится только один сервис, просто уточните какой в команде
-`docker compose up {sevice_name}`, например `docker compose up server`
+`docker compose up --build`
 
 ### Какие правила работы с кодом?
 Для клиента они описаны [ТУТ](./docs/CLIENT_CONTRIBUTING.md)
