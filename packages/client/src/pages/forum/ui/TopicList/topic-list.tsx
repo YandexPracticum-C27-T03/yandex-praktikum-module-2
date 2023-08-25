@@ -1,24 +1,35 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getTopicListSelectors, getTopicsReducer } from '@@entities/forum';
+import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
 
-const TopicList = () => {
-  const topics = [
-    { id: 1, title: 'Топик 1', summary: 'Краткое содержание топика 1' },
-    { id: 2, title: 'Топик 2', summary: 'Краткое содержание топика 2' },
-    { id: 3, title: 'Топик 3', summary: 'Краткое содержание топика 3' },
-  ];
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  getTopicList: () => dispatch(getTopicsReducer()),
+}));
 
+const TopicList = () => {
+  const { getTopicList } = useMapDispatch(mapDispatch);
+  const topicList = useSelector(getTopicListSelectors);
+  const [topics, setTopics] = useState(topicList);
+
+  useEffect(() => {
+    getTopicList();
+  }, [getTopicList]);
+  useEffect(() => {
+    setTopics(topicList);
+  }, [topicList]);
   return (
     <CardGrid size="l">
       {topics.map((topic) => (
         <Card key={topic.id} mode="shadow">
           <Div>
             <h3>{topic.title}</h3>
-            <p>{topic.summary}</p>
+            <p>{topic.content?.length > 50 ? topic.content?.substring(0, 50) + '...' : topic.content}</p>
           </Div>
           <Link href={`/forum/topic/${topic.id}`}>
             <Button size="l" mode="tertiary">
-              Добавить комментарий
+              Комментарии ({topic.comments?.length})
             </Button>
           </Link>
         </Card>

@@ -1,57 +1,48 @@
-import React, { useState } from 'react';
-import { Comment } from '@@entities/forum';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Comment, getTopicReducer, Topic } from '@@entities/forum';
+import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
 import { View, Panel, PanelHeader, Group, Card, Div, Spinner } from '@vkontakte/vkui';
 import { AddCommentForm } from '../AddCommentForm';
 import CommentList from '../CommentList';
 
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  getTopic: (id: number) => dispatch(getTopicReducer(id)),
+}));
+
 export const SingleTopic = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const { getTopic } = useMapDispatch(mapDispatch);
+  const [topic, setTopic] = useState<Topic>();
+  const [parent, setParent] = useState<number | undefined>();
+  const { id } = useParams();
 
-  // Заглушка для тестовых данных топика{}
-  const topic = {
-    id: 1,
-    title: 'Топик 1',
-    content: 'Содержание топика 1',
-  };
-
-  const [comments, setComments] = useState<Comment[]>([]); // Использование типа Comment[] для комментариев
-
-  const handleSubmitComment = (comment: string) => {
-    const newComment: Comment = {
-      id: comments.length + 1,
-      text: comment,
+  useEffect(() => {
+    const getTopicRequest = async () => {
+      const { payload } = await getTopic(Number(id));
+      setTopic(payload);
     };
-    setComments([...comments, newComment]);
-  };
-
-  // Установка флага загрузки в false
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 2000);
-
-  if (isLoading) {
-    return (
-      <Group>
-        <Spinner size="large" />
-      </Group>
-    );
-  }
+    getTopicRequest();
+  }, [getTopic, id]);
 
   return (
     <View activePanel="forum">
-      <Panel id="forum">
-        <PanelHeader>{topic.title}</PanelHeader>
-        <Group>
-          <Card>
-            <Div>
-              <h3>{topic.title}</h3>
-              <p>{topic.content}</p>
-            </Div>
-          </Card>
-          <CommentList comments={comments} />
-          <AddCommentForm />
-        </Group>
-      </Panel>
+      {topic ? (
+        <Panel id="forum">
+          <PanelHeader>{topic.title}</PanelHeader>
+          <Group>
+            <Card>
+              <Div>
+                <h3>{topic.title}</h3>
+                <p style={{ whiteSpace: 'pre' }}>{topic.content}</p>
+              </Div>
+            </Card>
+            <CommentList topicId={topic.id} setParent={setParent} />
+            <AddCommentForm topicId={topic.id} parentId={parent} />
+          </Group>
+        </Panel>
+      ) : (
+        <Div>Топиков пока нет. Буть первым</Div>
+      )}
     </View>
   );
 };
