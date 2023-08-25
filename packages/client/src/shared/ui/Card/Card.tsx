@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card as VKUICard, Div } from '@vkontakte/vkui';
-import { CardProps } from '@@entities/forum/model/types';
+import { CardProps } from '@@entities/forum/types/types';
 
 const Card: React.FC<CardProps> = ({ title, content }) => {
   return (

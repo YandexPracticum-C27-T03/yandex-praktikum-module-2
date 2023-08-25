@@ -1,6 +1,5 @@
 ARG NODE_VERSION=16
 ARG SERVER_PORT=3000
-ARG CLIENT_PORT=3000;
 
 FROM node:$NODE_VERSION-buster as base
 
@@ -28,5 +27,4 @@ COPY --from=builder /app/packages/server/package.json /app/package.json
 RUN yarn install --production=true
 
 EXPOSE $SERVER_PORT
-EXPOSE $CLIENT_PORT
 CMD [ "node", "/app/index.js" ]

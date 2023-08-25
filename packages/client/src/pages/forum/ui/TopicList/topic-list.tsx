@@ -1,25 +1,30 @@
-import React from 'react';
-
-import { Topic } from '@@entities/forum/model/types';
-import { CardGrid } from '@vkontakte/vkui';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getTopicListSelectors, getTopicsReducer } from '@@entities/forum';
+import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
+import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
 import { TopicItem } from '../TopicItem';
 
+const mapDispatch = makeMapDispatch((dispatch) => ({
+  getTopicList: () => dispatch(getTopicsReducer()),
+}));
+
 const TopicList = () => {
-  const topics = [
-    {
-      id: 1,
-      title: 'Топик 1',
-      summary: 'Краткое содержание топика 1',
-      reactions: ['1f603', '1f601', '1f606', '1f605', '1f600', '1f600', '1f603', '1f604', '1f603', '1f603', '1f603'],
-    },
-    { id: 2, title: 'Топик 2', summary: 'Краткое содержание топика 2', reactions: [] },
-    { id: 3, title: 'Топик 3', summary: 'Краткое содержание топика 3', reactions: [] },
-  ] as Topic[];
+  const { getTopicList } = useMapDispatch(mapDispatch);
+  const topicList = useSelector(getTopicListSelectors);
+  const [topics, setTopics] = useState(topicList);
+
+  useEffect(() => {
+    getTopicList();
+  }, [getTopicList]);
+  useEffect(() => {
+    setTopics(topicList);
+  }, [topicList]);
 
   return (
     <CardGrid size="l">
       {topics.map((topic) => (
-        <TopicItem key={topic.id} topic={topic} />
+        <TopicItem topic={topic} key={topic.id} />
       ))}
     </CardGrid>
   );

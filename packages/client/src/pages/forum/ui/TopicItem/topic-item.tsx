@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Topic } from '@@entities/forum/model/types';
+import { Topic } from '@@entities/forum/types/types';
 import { EmojiPicker } from '@@shared/ui/EmojiPicker';
 import { EmojiEntity } from '@@shared/ui/EmojiPicker/types';
 import { Icon12SmileFilled } from '@vkontakte/icons';
@@ -18,28 +18,27 @@ export function TopicItem({ topic }: TopicProps) {
   const onSelectEmoji = useCallback((emoji: EmojiEntity) => {
     setTopic((prev) => ({
       ...prev,
-      reactions: prev.reactions.concat(emoji.u),
+      reactions: (prev.reactions ?? []).concat(emoji.u),
     }));
   }, []);
 
   const onReactionClick = useCallback((emoji: string) => {
     setTopic((prev) => ({
       ...prev,
-      reactions: prev.reactions.concat(emoji),
+      reactions: (prev.reactions ?? []).concat(emoji),
     }));
   }, []);
 
   return (
     <Card key={topic.id} mode="shadow">
       <Div>
-        <h3>{topicState.title}</h3>
-        <p>{topicState.summary}</p>
-        <ReactionsTopic reactions={topicState.reactions} onReactionClick={onReactionClick} />
+        <h3>{topic.title}</h3>
+        <p>{topic.content?.length > 50 ? topic.content?.substring(0, 50) + '...' : topic.content}</p>
+        <ReactionsTopic reactions={topicState.reactions!} onReactionClick={onReactionClick} />
       </Div>
-
-      <Link to={`/forum/topic/${topicState.id}`}>
+      <Link to={`/forum/topic/${topic.id}`}>
         <Button size="l" mode="tertiary">
-          Добавить комментарий
+          Комментарии ({topic.comments?.length})
         </Button>
       </Link>
 
