@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getTopicListSelectors, getTopicsReducer } from '@@entities/forum';
 import { makeMapDispatch, useMapDispatch } from '@@shared/lib/model/hooks';
-import { CardGrid, Card, Div, Button, Link } from '@vkontakte/vkui';
+import { CardGrid } from '@vkontakte/vkui';
 import { TopicItem } from '../TopicItem';
 
 const mapDispatch = makeMapDispatch((dispatch) => ({
