@@ -1,0 +1,5 @@
+.EmojiList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--emoji-size-button));
+  justify-content: space-between;
+}

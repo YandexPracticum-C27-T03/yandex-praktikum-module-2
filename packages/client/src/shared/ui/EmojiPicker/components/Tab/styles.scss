@@ -1,0 +1,49 @@
+.Tab {
+  border: none;
+  background: transparent;
+
+  padding: 4px;
+
+  margin: 4px;
+
+  background-color: #fff;
+
+  border-radius: 4px;
+
+  width: var(--emoji-size-button);
+  height: var(--emoji-size-button);
+
+  background-repeat: no-repeat;
+
+  background-image: url('./svg/icon.svg');
+  background-position: 0 0;
+  background-size: 350px;
+
+  &_active {
+    border: 1px solid #6aa8de;
+  }
+
+  &_animals_nature_animals_nature {
+    background-position-x: -35px;
+  }
+
+  &_food_drink_food_drink {
+    background-position-x: -70px;
+  }
+
+  &_travel_places_travel_places {
+    background-position-x: -105px;
+  }
+
+  &_activities_activities {
+    background-position-x: -140px;
+  }
+
+  &_objects_objects {
+    background-position-x: -175px;
+  }
+
+  &_symbols_symbols {
+    background-position-x: -211px;
+  }
+}

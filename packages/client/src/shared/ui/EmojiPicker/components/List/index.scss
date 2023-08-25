@@ -1,0 +1,11 @@
+.List {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: relative;
+
+  scroll-behavior: smooth;
+
+  will-change: scroll-position;
+
+  height: calc(var(--height-emoji-container) - 80px);
+}

@@ -1,0 +1,18 @@
+.EmojiButton {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  outline: none;
+
+  border-radius: 8px;
+  box-sizing: border-box;
+
+  width: var(--emoji-size-button);
+  height: var(--emoji-size-button);
+
+  font-size: var(--emoji-size);
+
+  &:hover {
+    background-color: #fff;
+  }
+}

@@ -3,6 +3,7 @@ export type Topic = {
   title: string;
   comments: Comment[];
   content: string;
+  reactions?: string[];
 };
 
 export type Comment = {
