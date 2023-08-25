@@ -1,0 +1,35 @@
+ARG NODE_VERSION=16
+ARG SERVER_PORT=3000
+
+FROM node:$NODE_VERSION-buster as base
+
+WORKDIR /app
+
+FROM base as builder
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+COPY . .
+
+RUN yarn lerna bootstrap
+RUN rm -rf /app/packages/client/dist/ && yarn build:client
+RUN rm -rf /app/packages/server/dist/ && yarn build:server
+
+FROM node:$NODE_VERSION-buster-slim as production
+
+ENV NODE_ENV production
+
+WORKDIR /app
+
+COPY --from=builder /app/packages/server/dist/ /app/
+COPY --from=builder /app/packages/server/package.json /app/package.json
+# Корректные пути можно посмотреть в файле: packages/server/src/middlewares/ssr.ts
+COPY --from=builder /app/packages/client/package.json /app/src/client/package.json
+COPY --from=builder /app/packages/client/dist/ /app/src/client/dist/
+COPY --from=builder /app/packages/client/ssr-dist/ /app/src/client/ssr-dist/
+
+RUN yarn install --production --ignore-engines
+
+EXPOSE $SERVER_PORT
+CMD [ "node", "/app/src/index.js" ]

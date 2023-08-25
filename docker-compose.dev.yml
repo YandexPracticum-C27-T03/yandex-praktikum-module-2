@@ -2,17 +2,23 @@ version: "3.9"
 
 services:
   server:
-    container_name: prakticum-server
-    image: prackicum-server
+    container_name: papprika-prakticum-server
+    image: papprika-prakticum-server
     build:
       context: .
       dockerfile: packages/server/Dockerfile.dev
-    restart: always
+      args:
+        SERVER_PORT: ${SERVER_PORT}
+    depends_on:
+      - postgres
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
       - "24678:24678"
     environment:
       SERVER_PORT: ${SERVER_PORT}
+    restart: unless-stopped
+    networks:
+      - proj_network
     volumes:
       - .:/app:cached
       - /app/node_modules
@@ -20,13 +26,40 @@ services:
       - /app/packages/server/node_modules
 
   postgres:
-    image: postgres:14     
+    container_name: papprika-postgres
+    image: postgres:14
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - proj_network
     volumes:
       - ./tmp/pgdata:/var/lib/postgresql/data
 
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:4.18
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${PGADMIN_PORT}
+    ports:
+      - "${PGADMIN_PORT}:8080"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - proj_network
+
+volumes:
+  pgadmin-data:
+
+networks:
+  proj_network:
+    driver: bridge

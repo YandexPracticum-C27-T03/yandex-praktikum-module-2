@@ -2,21 +2,24 @@ version: "3.9"
 
 services:
     server:
-        container_name: prakticum-server
-        image: prackicum-server
+        container_name: papprika-prakticum-server
+        image: papprika-prakticum-server
         build:
             context: .
-            dockerfile: Dockerfile.server
+            dockerfile: packages/server/Dockerfile.prod
             args:
               SERVER_PORT: ${SERVER_PORT}
         restart: always
         ports:
             - "${SERVER_PORT}:${SERVER_PORT}"
+        depends_on:
+          - postgres
         environment:
           SERVER_PORT: ${SERVER_PORT}
 
     postgres:
-      image: postgres:14     
+      container_name: papprika-postgres
+      image: postgres:14
       ports:
         - "${POSTGRES_PORT}:${POSTGRES_PORT}"
       environment:
