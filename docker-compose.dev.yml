@@ -6,7 +6,7 @@ services:
     image: papprika-prakticum-server
     build:
       context: .
-      dockerfile: packages/server/Dockerfile.dev
+      dockerfile: Dockerfile.dev
       args:
         SERVER_PORT: ${SERVER_PORT}
     depends_on:

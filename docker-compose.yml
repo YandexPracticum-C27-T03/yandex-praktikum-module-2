@@ -6,7 +6,7 @@ services:
         image: papprika-prakticum-server
         build:
             context: .
-            dockerfile: packages/server/Dockerfile.prod
+            dockerfile: Dockerfile.prod
             args:
               SERVER_PORT: ${SERVER_PORT}
         restart: always
