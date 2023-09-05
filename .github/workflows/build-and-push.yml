@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: set lower case owner name
+      - name: papprika-game
         run: |
           echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
         env:
@@ -32,18 +32,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push client image
+      - name: Build and push dev image
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfile.client
+          file: Dockerfile.dev
           push: true
           tags: ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}/client:${{ github.sha }}
 
-      - name: Build and push server image
+      - name: Build and push prod image
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfile.server
+          file: Dockerfile.prod
           push: true
           tags: ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}/server:${{ github.sha }}
