@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - feature/pap-63
 
   # Позволяет запускать вручную из GitHub
   workflow_dispatch:
