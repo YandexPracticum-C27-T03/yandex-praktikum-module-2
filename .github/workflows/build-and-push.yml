@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: papprika-game
+      - name: set lower case owner name
         run: |
           echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
         env:
@@ -39,3 +39,18 @@ jobs:
           file: Dockerfile.prod
           push: true
           tags: ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}/prod:${{ github.sha }}
+#      - name: Deploy to remote server
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.SSH_DEPLOY_IP }}
+#          username: ${{ secrets.SSH_DEPLOY_USER }}
+#          key: ${{ secrets.SSH_DEPLOY_CERT }}
+#          passphrase: ${{ secrets.SSH_DEPLOY_CERT_PASSPHRASE}}
+#          script: |
+#            # Остановка и удаление текущих контейнеров (если нужно)
+#            docker stop papprika-prakticum-server || true
+#
+#            docker rm papprika-prakticum-server || true
+#
+#            # Запуск нового контейнера с использованием обновленного образа
+#            docker run -d --name papprika-prakticum-server ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}/prod:${{ github.sha }}

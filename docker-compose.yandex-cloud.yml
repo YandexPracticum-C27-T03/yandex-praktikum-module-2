@@ -1,0 +1,80 @@
+version: "3.9"
+
+services:
+  server:
+    image: ghcr.io/yandexpracticum-c27-t03/yandex-praktikum-module-2/prod:a42251835977cf12ecb555d61f73ed3a909e9304
+    container_name: papprika-prakticum-server
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        SERVER_PORT: 80
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SERVER_PORT: 80
+      LETSENCRYPT_HOST: papprika-just-runner-27.ya-praktikum.tech
+      VIRTUAL_HOST: papprika-just-runner-27.ya-praktikum.tech
+      VIRTUAL_PORT: 80
+    networks:
+      - app_network
+
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    depends_on:
+      - server
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - app_network
+
+  acme-companion:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    restart: always
+    depends_on:
+      - nginx-proxy
+    environment:
+      - DEFAULT_EMAIL=mail@papprika-just-runner-27.ya-praktikum.tech
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  postgres:
+    container_name: papprika-postgres
+    image: postgres:14
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  pg-data:
+  conf:
+  vhost:
+  html:
+  certs:
+  acme:
+
+networks:
+  app_network:
+    name: papprika_default
+    driver: bridge

@@ -35,7 +35,7 @@ export const config: IConfiguration = (function buildConfig(): IConfiguration {
 
   const OAUTH_CALLBACK_PATH = getValue('REACT_APP_OAUTH_CALLBACK_PATH', 'oauth');
 
-  const OAUTH_CALLBACK_URL_DEV = getValue('REACT_APP_OAUTH_CALLBACK_URL_DEV', `${defaultHostName}`);
+  const OAUTH_CALLBACK_URL_DEV = 'http://localhost:3000';
   const OAUTH_CALLBACK_URL_PROD = getValue('REACT_APP_OAUTH_CALLBACK_URL_PROD', `${defaultHostName}`);
 
   return {
